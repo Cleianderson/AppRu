@@ -1,14 +1,14 @@
 import styled from 'styled-components/native'
 import ViewPagerAndroid from '@react-native-community/viewpager'
 
-export const Container = styled(ViewPagerAndroid)`
+export const Content = styled(ViewPagerAndroid)`
   flex: 1;
   background-color: #1b2d4f;
   align-content: center;
   align-items: center;
 `
 
-export const Content = styled.View`
+export const Container = styled.View`
   flex: 1;
 `
 

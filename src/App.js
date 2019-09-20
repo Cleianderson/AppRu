@@ -1,16 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import moment from 'moment'
 import { View } from 'react-native'
 
 import api from './service/Api'
-import { Text, Container, Data, InfoDate } from './styles'
+import { Text, Container, Content, Data, InfoDate } from './styles'
 import Options from './components/Page'
 import Modals from './components/Modal'
+import Loading from './components/Loading'
 
 export default function App() {
   const [foods, setFoods] = useState(Array)
   const [action, setAction] = useState('')
   const [data, setData] = useState(JSON)
+  const [errorNetwork, setErrorNetwork] = useState(false)
+  const [loaded, setLoaded] = useState(false)
+  const Dale = useRef(Container)
 
   function getDate(inx) {
     const date = moment().isoWeekday(inx + 1)
@@ -32,38 +36,49 @@ export default function App() {
   }
 
   useEffect(() => {
-    async function request() {
-      const { data } = await api.get('/thisweek')
-      setFoods(data)
+    function request() {
+      api.get('/thisweek').then(({ data }) => {
+        setFoods(data)
+        Dale.current.setPageWithoutAnimation(
+          moment().weekday() > 5 ? 0 : moment().weekday() - 1)
+        setLoaded(true)
+      }).catch(() => {
+        setErrorNetwork(true)
+      })
     }
     request()
   }, [])
 
   return (
     <Container>
-      {foods.map((item, inx) => (
-        <View key={inx}>
-          <InfoDate>
-            <Text>{tranformNum2Day(inx)}</Text>
-            <Data>{getDate(inx)}</Data>
-          </InfoDate>
-          <Options
-            firstAction={() => {
-              setAction('Almoço')
-              setData(item.almoco)
-            }}
-            secondAction={() => {
-              setAction('Jantar')
-              setData(item.jantar)
-            }}
-          />
-        </View>
-      ))}
-      <Modals
-        visible={Boolean(action)}
-        close={() => setAction('')}
-        data={data}
-      />
+      <Content ref={Dale}>
+        {foods.map((item, inx) => (
+          <View key={inx}>
+            <InfoDate>
+              <Text>{tranformNum2Day(inx)}</Text>
+              <Data>{getDate(inx)}</Data>
+            </InfoDate>
+            <Options
+              firstAction={() => {
+                setAction('Almoço')
+                setData(item.almoco)
+              }}
+              secondAction={() => {
+                setAction('Jantar')
+                setData(item.jantar)
+              }}
+            />
+          </View>
+        ))}
+        <Modals
+          visible={Boolean(action)}
+          close={() => setAction('')}
+          data={data}
+        />
+      </Content>
+      <Loading vars={[errorNetwork, loaded]} title={
+        (!loaded && !errorNetwork) ? 'Carregando' : 'Erro na rede'
+      } />
     </Container>
   )
 }
