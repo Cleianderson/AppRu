@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import moment from 'moment'
 import { View } from 'react-native'
+import Storage from '@react-native-community/async-storage'
 
 import api from './service/Api'
 import { Text, Container, Content, Data, InfoDate } from './styles'
@@ -36,17 +37,30 @@ export default function App() {
   }
 
   useEffect(() => {
-    function request() {
-      api.get('/thisweek').then(({ data }) => {
-        setFoods(data)
-        Dale.current.setPageWithoutAnimation(
-          moment().weekday() > 5 ? 0 : moment().weekday() - 1)
-        setLoaded(true)
-      }).catch(() => {
-        setErrorNetwork(true)
-      })
-    }
-    request()
+    const nowWeek = moment().weeksInYear()
+      
+    Storage.getItem('@week').then((dataLocal)=>{
+      const localData = JSON.parse(dataLocal)
+      if (localData === null || localData.week !== nowWeek){
+        api.get('/thisweek').then(({ data }) => {
+          setFoods(data)
+          Storage.setItem('@week',JSON.stringify({
+            week:nowWeek,
+            foods:data
+          }))
+        }).catch(() => {
+          setErrorNetwork(true)
+        })
+      }else{
+        setFoods(localData.foods)
+      }
+      Dale.current.setPageWithoutAnimation(
+        moment().weekday() > 5 ? 0 : moment().weekday() - 1)
+      setLoaded(true)
+    }).catch(()=>{
+      alert('Houve um erro!')
+    })
+
   }, [])
 
   return (
