@@ -11,12 +11,17 @@ export default function Page(props) {
   }
 
   return (
-    <View>
+    <View
+      style={{
+        flex: 1,
+        justifyContent:'center'
+      }}
+    >
       <Button onPress={() => props.firstAction()}>
-        <TextButton>Almoço</TextButton>
+        <TextButton>ALMOÇO</TextButton>
       </Button>
       <Button onPress={() => props.secondAction()}>
-        <TextButton>Jantar</TextButton>
+        <TextButton>JANTAR</TextButton>
       </Button>
     </View>
   )

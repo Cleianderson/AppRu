@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import moment from 'moment'
-import { View } from 'react-native'
+import { View, TouchableOpacity } from 'react-native'
 import Storage from '@react-native-community/async-storage'
 
 import api from './service/Api'
@@ -9,13 +9,15 @@ import Options from './components/Page'
 import Modals from './components/Modal'
 import Loading from './components/Loading'
 
+const nowWeek = moment().weeksInYear()
+
 export default function App() {
   const [foods, setFoods] = useState(Array)
   const [action, setAction] = useState('')
   const [data, setData] = useState(JSON)
   const [errorNetwork, setErrorNetwork] = useState(false)
   const [loaded, setLoaded] = useState(false)
-  const Dale = useRef(Container)
+  const Component = useRef(Container)
 
   function getDate(inx) {
     const date = moment().isoWeekday(inx + 1)
@@ -25,47 +27,60 @@ export default function App() {
   function tranformNum2Day(inx) {
     switch (inx) {
     case 1:
-      return 'Terça'
+      return 'TERÇA'
     case 2:
-      return 'Quarta'
+      return 'QUARTA'
     case 3:
-      return 'Quinta'
+      return 'QUINTA'
     case 4:
-      return 'Sexta'
+      return 'SEXTA'
     }
-    return 'Segunda'
+    return 'SEGUNDA'
+  }
+
+  function getAndSetData() {
+    setLoaded(false)
+    setErrorNetwork(false)
+    api
+      .get('/thisweek')
+      .then(({ data }) => {
+        setFoods(data)
+        Storage.setItem(
+          '@week',
+          JSON.stringify({
+            week: nowWeek,
+            foods: data
+          })
+        )
+        setLoaded(true)
+      })
+      .catch(() => {
+        setErrorNetwork(true)
+      })
   }
 
   useEffect(() => {
-    const nowWeek = moment().weeksInYear()
-      
-    Storage.getItem('@week').then((dataLocal)=>{
-      const localData = JSON.parse(dataLocal)
-      if (localData === null || localData.week !== nowWeek){
-        api.get('/thisweek').then(({ data }) => {
-          setFoods(data)
-          Storage.setItem('@week',JSON.stringify({
-            week:nowWeek,
-            foods:data
-          }))
-        }).catch(() => {
-          setErrorNetwork(true)
-        })
-      }else{
-        setFoods(localData.foods)
-      }
-      Dale.current.setPageWithoutAnimation(
-        moment().weekday() > 5 ? 0 : moment().weekday() - 1)
-      setLoaded(true)
-    }).catch(()=>{
-      alert('Houve um erro!')
-    })
-
+    Storage.getItem('@week')
+      .then(dataLocal => {
+        const localData = JSON.parse(dataLocal)
+        if (localData === null || localData.week !== nowWeek) {
+          getAndSetData()
+        } else {
+          setFoods(localData.foods)
+          setLoaded(true)
+        }
+        Component.current.setPageWithoutAnimation(
+          moment().weekday() > 5 ? 0 : moment().weekday() - 1
+        )
+      })
+      .catch(() => {
+        alert('Houve um erro!')
+      })
   }, [])
 
   return (
     <Container>
-      <Content ref={Dale}>
+      <Content ref={Component}>
         {foods.map((item, inx) => (
           <View key={inx}>
             <InfoDate>
@@ -82,6 +97,11 @@ export default function App() {
                 setData(item.jantar)
               }}
             />
+            <TouchableOpacity onPress={() => getAndSetData()}>
+              <Text style={{ fontSize: 16, marginVertical: 10, color: 'gray' }}>
+                ATUALIZAR
+              </Text>
+            </TouchableOpacity>
           </View>
         ))}
         <Modals
@@ -90,9 +110,11 @@ export default function App() {
           data={data}
         />
       </Content>
-      <Loading vars={[errorNetwork, loaded]} title={
-        (!loaded && !errorNetwork) ? 'Carregando' : 'Erro na rede'
-      } />
+      <Loading
+        var2error={errorNetwork}
+        var2load={loaded}
+        title={!loaded && !errorNetwork ? 'Carregando' : 'Erro na rede'}
+      />
     </Container>
   )
 }
