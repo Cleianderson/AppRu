@@ -1,22 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react'
 import moment from 'moment'
-import { View, TouchableOpacity } from 'react-native'
+import { View, TouchableOpacity, StatusBar, ToastAndroid } from 'react-native'
 import Storage from '@react-native-community/async-storage'
 
 import api from './service/Api'
 import { Text, Container, Content, Data, InfoDate } from './styles'
 import Options from './components/Page'
 import Modals from './components/Modal'
-import Loading from './components/Loading'
 
 const nowWeek = moment().weeksInYear()
 
 export default function App() {
   const [foods, setFoods] = useState(Array)
+  const [names, setNames] = useState(Array)
   const [action, setAction] = useState('')
   const [data, setData] = useState(JSON)
-  const [errorNetwork, setErrorNetwork] = useState(false)
-  const [loaded, setLoaded] = useState(false)
   const Component = useRef(Container)
 
   function getDate(inx) {
@@ -39,8 +37,6 @@ export default function App() {
   }
 
   function getAndSetData() {
-    setLoaded(false)
-    setErrorNetwork(false)
     api
       .get('/thisweek')
       .then(({ data }) => {
@@ -52,11 +48,9 @@ export default function App() {
             foods: data
           })
         )
-        setLoaded(true)
+        ToastAndroid.show('Requisição feita ao servidor', ToastAndroid.LONG)
       })
-      .catch(() => {
-        setErrorNetwork(true)
-      })
+      .catch(() => {})
   }
 
   useEffect(() => {
@@ -67,7 +61,7 @@ export default function App() {
           getAndSetData()
         } else {
           setFoods(localData.foods)
-          setLoaded(true)
+          ToastAndroid.show('Requisição feita localmente', ToastAndroid.LONG)
         }
         Component.current.setPageWithoutAnimation(
           moment().weekday() > 5 ? 0 : moment().weekday() - 1
@@ -80,6 +74,7 @@ export default function App() {
 
   return (
     <Container>
+      <StatusBar backgroundColor="#1b2d4f" />
       <Content ref={Component}>
         {foods.map((item, inx) => (
           <View key={inx}>
@@ -90,31 +85,51 @@ export default function App() {
             <Options
               firstAction={() => {
                 setAction('Almoço')
+                setNames([
+                  'p1',
+                  'p2',
+                  'gre',
+                  'fag',
+                  'veg',
+                  'gua',
+                  'sal',
+                  'sco',
+                  'sob',
+                  'suc'
+                ])
                 setData(item.almoco)
               }}
               secondAction={() => {
                 setAction('Jantar')
+                setNames([
+                  'p1',
+                  'p2',
+                  'gre',
+                  'fag',
+                  'veg',
+                  'gua',
+                  'sal',
+                  'sopa',
+                  'sob',
+                  'suc'
+                ])
                 setData(item.jantar)
               }}
             />
-            <TouchableOpacity onPress={() => getAndSetData()}>
-              <Text style={{ fontSize: 16, marginVertical: 10, color: 'gray' }}>
-                ATUALIZAR
-              </Text>
-            </TouchableOpacity>
           </View>
         ))}
         <Modals
           visible={Boolean(action)}
           close={() => setAction('')}
           data={data}
+          names={names}
         />
       </Content>
-      <Loading
-        var2error={errorNetwork}
-        var2load={loaded}
-        title={!loaded && !errorNetwork ? 'Carregando' : 'Erro na rede'}
-      />
+      <TouchableOpacity onPress={() => getAndSetData()}>
+        <Text style={{ fontSize: 16, marginVertical: 10, color: 'gray' }}>
+          ATUALIZAR
+        </Text>
+      </TouchableOpacity>
     </Container>
   )
 }

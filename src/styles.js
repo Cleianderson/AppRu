@@ -1,7 +1,9 @@
 import styled from 'styled-components/native'
 import ViewPagerAndroid from '@react-native-community/viewpager'
 
-const LARGE=50,MEDIUM=30,NORMAL=12
+const LARGE = 50,
+  MEDIUM = 30,
+  NORMAL = 12
 
 export const Content = styled(ViewPagerAndroid)`
   flex: 1;
@@ -12,19 +14,20 @@ export const Content = styled(ViewPagerAndroid)`
 
 export const Container = styled.View`
   flex: 1;
+  background-color: #1b2d4f;
 `
 
 export const Text = styled.Text`
   width: 100%;
   color: #fff;
-  font-size: ${LARGE-5};
+  font-size: ${LARGE - 5};
   font-family: Akzidenz-Grotesk;
   text-align: center;
 `
 
 export const Data = styled.Text`
   width: 100%;
-  font-size: ${MEDIUM-10};
+  font-size: ${MEDIUM - 10};
   text-align: center;
   color: #eee;
 `
@@ -62,14 +65,20 @@ export const FoodDescription = styled.Text`
   border-bottom-right-radius: 7px;
 `
 export const Button = styled.TouchableOpacity`
-  background: #ddd;
+  background: transparent;
+  border: 1px solid #ddd;
   border-radius: 7px;
   padding: 10px 2px;
   margin: 5px 40px;
-  elevation:2;
 `
 
 export const TextButton = styled.Text`
   font-size: 20px;
   text-align: center;
+  color: #ddd;
+`
+export const ButtonDetails = styled.Text`
+  font-size: 12px;
+  text-align: center;
+  color: #ddd;
 `
