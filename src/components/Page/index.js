@@ -14,16 +14,16 @@ export default function Page(props) {
     <View
       style={{
         flex: 1,
-        justifyContent:'center'
+        justifyContent: 'center',
       }}
     >
       <Button onPress={() => props.firstAction()}>
         <TextButton>ALMOÇO</TextButton>
-        <ButtonDetails>12:00h - 14:00h</ButtonDetails>
+        <ButtonDetails>10:30h - 14:00h</ButtonDetails>
       </Button>
       <Button onPress={() => props.secondAction()}>
         <TextButton>JANTAR</TextButton>
-        <ButtonDetails>16:30h - 18:00h</ButtonDetails>
+        <ButtonDetails>16:30h - 19:00h</ButtonDetails>
       </Button>
     </View>
   )

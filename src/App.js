@@ -8,8 +8,6 @@ import { Text, Container, Content, Data, InfoDate } from './styles'
 import Options from './components/Page'
 import Modals from './components/Modal'
 
-const nowWeek = moment().weeksInYear()
-
 export default function App() {
   const [foods, setFoods] = useState(Array)
   const [names, setNames] = useState(Array)
@@ -36,40 +34,39 @@ export default function App() {
     return 'SEGUNDA'
   }
 
-  function getAndSetData() {
-    api
-      .get('/thisweek')
-      .then(({ data }) => {
-        setFoods(data)
-        Storage.setItem(
+  useEffect(() => {
+    const nowWeek = moment().isoWeek()
+    async function asyncStorage() {
+      const storage = await Storage.getItem('@week')
+      const jsonStorage = JSON.parse(storage)
+
+      if (jsonStorage === null || jsonStorage.number_week !== nowWeek) {
+        const { data } = await api.get('/thisweek')
+        setFoods(data.data)
+        await Storage.setItem(
           '@week',
           JSON.stringify({
-            week: nowWeek,
-            foods: data
+            number_week: data.number_week,
+            foods: data.data,
           })
         )
-        ToastAndroid.show('Requisição feita ao servidor', ToastAndroid.LONG)
-      })
-      .catch(() => {})
-  }
-
-  useEffect(() => {
-    Storage.getItem('@week')
-      .then(dataLocal => {
-        const localData = JSON.parse(dataLocal)
-        if (localData === null || localData.week !== nowWeek) {
-          getAndSetData()
-        } else {
-          setFoods(localData.foods)
-          ToastAndroid.show('Requisição feita localmente', ToastAndroid.LONG)
-        }
-        Component.current.setPageWithoutAnimation(
-          moment().weekday() > 5 ? 0 : moment().weekday() - 1
+        ToastAndroid.show(
+          'Requisição feita ao servidor',
+          ToastAndroid.LONG
         )
-      })
-      .catch(() => {
-        alert('Houve um erro!')
-      })
+      } else {
+        setFoods(jsonStorage.foods)
+        ToastAndroid.show(
+          'Requisição feita localmente',
+          ToastAndroid.LONG
+        )
+      }
+
+      Component.current.setPageWithoutAnimation(
+        moment().weekday() > 5 ? 0 : moment().weekday() - 1
+      )
+    }
+    asyncStorage()
   }, [])
 
   return (
@@ -95,7 +92,7 @@ export default function App() {
                   'sal',
                   'sco',
                   'sob',
-                  'suc'
+                  'suc',
                 ])
                 setData(item.almoco)
               }}
@@ -111,7 +108,7 @@ export default function App() {
                   'sal',
                   'sopa',
                   'sob',
-                  'suc'
+                  'suc',
                 ])
                 setData(item.jantar)
               }}
@@ -126,8 +123,10 @@ export default function App() {
         />
       </Content>
       <TouchableOpacity onPress={() => getAndSetData()}>
-        <Text style={{ fontSize: 16, marginVertical: 10, color: 'gray' }}>
-          ATUALIZAR
+        <Text
+          style={{ fontSize: 16, marginVertical: 10, color: 'gray' }}
+        >
+					ATUALIZAR
         </Text>
       </TouchableOpacity>
     </Container>
