@@ -1,11 +1,11 @@
 import styled from 'styled-components/native'
-import ViewPagerAndroid from '@react-native-community/viewpager'
+import ViewPager from '@react-native-community/viewpager'
 
 const LARGE = 50,
   MEDIUM = 30,
   NORMAL = 12
 
-export const Content = styled(ViewPagerAndroid)`
+export const Content = styled(ViewPager)`
   flex: 1;
   background-color: #1b2d4f;
   align-content: center;

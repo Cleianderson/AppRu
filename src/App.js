@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import moment from 'moment'
-import { View, TouchableOpacity, StatusBar, ToastAndroid } from 'react-native'
+import {
+  View,
+  TouchableOpacity,
+  StatusBar,
+  ToastAndroid,
+  Linking,
+} from 'react-native'
 import Storage from '@react-native-community/async-storage'
 
 import api from './service/Api'
@@ -50,19 +56,13 @@ export default function App() {
             foods: data.data,
           })
         )
-        ToastAndroid.show(
-          'Requisição feita ao servidor',
-          ToastAndroid.LONG
-        )
+        ToastAndroid.show('Requisição feita ao servidor', ToastAndroid.LONG)
       } else {
         setFoods(jsonStorage.foods)
-        ToastAndroid.show(
-          'Requisição feita localmente',
-          ToastAndroid.LONG
-        )
+        ToastAndroid.show('Requisição feita localmente', ToastAndroid.LONG)
       }
 
-      Component.current.setPageWithoutAnimation(
+      Component.current.setPage(
         moment().weekday() > 5 ? 0 : moment().weekday() - 1
       )
     }
@@ -71,7 +71,7 @@ export default function App() {
 
   return (
     <Container>
-      <StatusBar backgroundColor="#1b2d4f" />
+      <StatusBar backgroundColor='#1b2d4f' />
       <Content ref={Component}>
         {foods.map((item, inx) => (
           <View key={inx}>
@@ -122,11 +122,11 @@ export default function App() {
           names={names}
         />
       </Content>
-      <TouchableOpacity onPress={() => getAndSetData()}>
-        <Text
-          style={{ fontSize: 16, marginVertical: 10, color: 'gray' }}
-        >
-					ATUALIZAR
+      <TouchableOpacity
+        onPress={() => Linking.openURL('https://github.com/Cleianderson/RUral')}
+      >
+        <Text style={{ fontSize: 16, marginVertical: 10, color: 'gray' }}>
+					SOBRE
         </Text>
       </TouchableOpacity>
     </Container>
