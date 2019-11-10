@@ -1,13 +1,11 @@
 import styled from 'styled-components/native'
 
 export const Info = styled.View`
-	flex: 1;
-	margin: 10px;
+	margin: 5%;
 	background-color: #fff;
 	paddingHorizontal: 10px;
 	paddingVertical: 15px;
 	border-radius: 7px;
-	justify-content: center;
 `
 export const FoodType = styled.Text`
 	font-size: 18px;

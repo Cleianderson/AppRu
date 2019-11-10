@@ -7,72 +7,76 @@ import {
   ToastAndroid,
   Linking,
 } from 'react-native'
-import Storage from '@react-native-community/async-storage'
+
+import { Text, Container, Content, Data, InfoDate } from './styles'
 
 import api from './service/Api'
-import { Text, Container, Content, Data, InfoDate } from './styles'
+import { getDate, tranformNum2Day } from './service/DateUtils'
+import { getWeek, setWeek } from './service/Storage'
+
 import Options from './components/Page'
 import Modals from './components/Modal'
+import Details from './components/Details'
+
+const ARRAY_LAUNCH = [
+  'p1',
+  'p2',
+  'gre',
+  'fag',
+  'veg',
+  'gua',
+  'sal',
+  'sco',
+  'sob',
+  'suc',
+]
+const ARRAY_DINNER = [
+  'p1',
+  'p2',
+  'gre',
+  'fag',
+  'veg',
+  'gua',
+  'sal',
+  'sopa',
+  'sob',
+  'suc',
+]
 
 export default function App() {
   const [foods, setFoods] = useState(Array)
   const [names, setNames] = useState(Array)
   const [action, setAction] = useState('')
   const [data, setData] = useState(JSON)
-  const Component = useRef(Container)
+  const Page = useRef(Container)
 
-  function getDate(inx) {
-    const date = moment().isoWeekday(inx + 1)
-    return date.format('DD/MM/YY')
-  }
+  async function checkWeekAndSetFoods() {
+    const nowWeek = moment().isoWeek()
 
-  function tranformNum2Day(inx) {
-    switch (inx) {
-    case 1:
-      return 'TERÇA'
-    case 2:
-      return 'QUARTA'
-    case 3:
-      return 'QUINTA'
-    case 4:
-      return 'SEXTA'
+    const storage = await getWeek('@week')
+    const jsonStorage = JSON.parse(storage)
+
+    if (jsonStorage === null || jsonStorage.number_week !== nowWeek) {
+      const { data } = await api.get('/thisweek')
+      setFoods(data.data)
+      await setWeek('@week', data.number_week, data.data)
+      ToastAndroid.show('Requisição feita ao servidor', ToastAndroid.LONG)
+    } else {
+      setFoods(jsonStorage.foods)
+      ToastAndroid.show('Requisição feita localmente', ToastAndroid.LONG)
     }
-    return 'SEGUNDA'
+
+    Page.current.setPage(moment().weekday() > 5 ? 0 : moment().weekday() - 1)
   }
 
   useEffect(() => {
-    const nowWeek = moment().isoWeek()
-    async function asyncStorage() {
-      const storage = await Storage.getItem('@week')
-      const jsonStorage = JSON.parse(storage)
-
-      if (jsonStorage === null || jsonStorage.number_week !== nowWeek) {
-        const { data } = await api.get('/thisweek')
-        setFoods(data.data)
-        await Storage.setItem(
-          '@week',
-          JSON.stringify({
-            number_week: data.number_week,
-            foods: data.data,
-          })
-        )
-        ToastAndroid.show('Requisição feita ao servidor', ToastAndroid.LONG)
-      } else {
-        setFoods(jsonStorage.foods)
-        ToastAndroid.show('Requisição feita localmente', ToastAndroid.LONG)
-      }
-
-      Component.current.setPage(
-        moment().weekday() > 5 ? 0 : moment().weekday() - 1
-      )
-    }
-    asyncStorage()
+    checkWeekAndSetFoods()
   }, [])
 
   return (
     <Container>
       <StatusBar backgroundColor='#1b2d4f' />
-      <Content ref={Component}>
+      <Content ref={Page}>
         {foods.map((item, inx) => (
           <View key={inx}>
             <InfoDate>
@@ -82,34 +86,12 @@ export default function App() {
             <Options
               firstAction={() => {
                 setAction('Almoço')
-                setNames([
-                  'p1',
-                  'p2',
-                  'gre',
-                  'fag',
-                  'veg',
-                  'gua',
-                  'sal',
-                  'sco',
-                  'sob',
-                  'suc',
-                ])
+                setNames(ARRAY_LAUNCH)
                 setData(item.almoco)
               }}
               secondAction={() => {
                 setAction('Jantar')
-                setNames([
-                  'p1',
-                  'p2',
-                  'gre',
-                  'fag',
-                  'veg',
-                  'gua',
-                  'sal',
-                  'sopa',
-                  'sob',
-                  'suc',
-                ])
+                setNames(ARRAY_DINNER)
                 setData(item.jantar)
               }}
             />
@@ -118,8 +100,7 @@ export default function App() {
         <Modals
           visible={Boolean(action)}
           close={() => setAction('')}
-          data={data}
-          names={names}
+          component={<Details item={data} names={names} />}
         />
       </Content>
       <TouchableOpacity
