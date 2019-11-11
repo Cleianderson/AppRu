@@ -1,12 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import moment from 'moment'
-import {
-  View,
-  TouchableOpacity,
-  StatusBar,
-  ToastAndroid,
-  Linking,
-} from 'react-native'
+import { View, TouchableOpacity, StatusBar, ToastAndroid } from 'react-native'
 
 import { Text, Container, Content, Data, InfoDate } from './styles'
 
@@ -17,6 +11,7 @@ import { getWeek, setWeek } from './service/Storage'
 import Options from './components/Page'
 import Modals from './components/Modal'
 import Details from './components/Details'
+import About from './components/About'
 
 const ARRAY_LAUNCH = [
   'p1',
@@ -45,9 +40,9 @@ const ARRAY_DINNER = [
 
 export default function App() {
   const [foods, setFoods] = useState(Array)
-  const [names, setNames] = useState(Array)
   const [action, setAction] = useState('')
-  const [data, setData] = useState(JSON)
+  const [contentModal, setContentModal] = useState()
+
   const Page = useRef(Container)
 
   async function checkWeekAndSetFoods() {
@@ -69,6 +64,11 @@ export default function App() {
     Page.current.setPage(moment().weekday() > 5 ? 0 : moment().weekday() - 1)
   }
 
+  function about() {
+    setContentModal(About)
+    setAction('about')
+  }
+
   useEffect(() => {
     checkWeekAndSetFoods()
   }, [])
@@ -85,14 +85,16 @@ export default function App() {
             </InfoDate>
             <Options
               firstAction={() => {
+                setContentModal(
+                  <Details names={ARRAY_LAUNCH} item={item.almoco} />
+                )
                 setAction('Almoço')
-                setNames(ARRAY_LAUNCH)
-                setData(item.almoco)
               }}
               secondAction={() => {
+                setContentModal(
+                  <Details names={ARRAY_DINNER} item={item.jantar} />
+                )
                 setAction('Jantar')
-                setNames(ARRAY_DINNER)
-                setData(item.jantar)
               }}
             />
           </View>
@@ -100,12 +102,10 @@ export default function App() {
         <Modals
           visible={Boolean(action)}
           close={() => setAction('')}
-          component={<Details item={data} names={names} />}
+          component={contentModal}
         />
       </Content>
-      <TouchableOpacity
-        onPress={() => Linking.openURL('https://github.com/Cleianderson/RUral')}
-      >
+      <TouchableOpacity onPress={() => about()}>
         <Text style={{ fontSize: 16, marginVertical: 10, color: 'gray' }}>
 					SOBRE
         </Text>

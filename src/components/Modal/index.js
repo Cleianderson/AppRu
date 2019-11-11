@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, ScrollView } from 'react-native'
+import { Modal, View } from 'react-native'
 
 export default function Modals(props) {
   return (
@@ -7,11 +7,17 @@ export default function Modals(props) {
       visible={props.visible}
       transparent={true}
       animationType='slide'
-      onRequestClose={() => {
-        props.close()
-      }}
+      onRequestClose={props.close}
     >
-      <ScrollView>{props.component}</ScrollView>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignContent: 'center',
+        }}
+      >
+        {props.component}
+      </View>
     </Modal>
   )
 }
