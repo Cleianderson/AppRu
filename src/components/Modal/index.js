@@ -6,7 +6,7 @@ export default function Modals(props) {
     <Modal
       visible={props.visible}
       transparent={true}
-      animationType='slide'
+      animationType='fade'
       onRequestClose={props.close}
     >
       <View

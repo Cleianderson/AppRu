@@ -19,7 +19,9 @@ const extensive = {
 
 export default function Details(props) {
   return (
-    <ScrollView>
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+    >
       <Info>
         <FoodType style={{ borderTopWidth: 0 }}>
           {extensive[props.names[0]]}
