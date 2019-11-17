@@ -1,7 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react'
 import moment from 'moment'
-import { View, TouchableOpacity, StatusBar, ToastAndroid } from 'react-native'
+import {
+  View,
+  TouchableOpacity,
+  StatusBar,
+  ToastAndroid,
+  Linking,
+} from 'react-native'
 
+import packageJSON from '../package.json'
 import { Text, Container, Content, Data, InfoDate } from './styles'
 
 import api from './service/Api'
@@ -11,7 +18,6 @@ import { getWeek, setWeek } from './service/Storage'
 import Options from './components/Page'
 import Modals from './components/Modal'
 import Details from './components/Details'
-import About from './components/About'
 
 const ARRAY_LAUNCH = [
   'p1',
@@ -64,11 +70,6 @@ export default function App() {
     Page.current.setPage(moment().weekday() > 5 ? 0 : moment().weekday() - 1)
   }
 
-  function about() {
-    setContentModal(About)
-    setAction('about')
-  }
-
   useEffect(() => {
     checkWeekAndSetFoods()
   }, [])
@@ -105,11 +106,22 @@ export default function App() {
           component={contentModal}
         />
       </Content>
-      <TouchableOpacity onPress={() => about()}>
-        <Text style={{ fontSize: 16, marginVertical: 10, color: 'gray' }}>
-					SOBRE
+      <TouchableOpacity
+        onPress={() => Linking.openURL('https://github.com/Cleianderson/RUral')}
+      >
+        <Text
+          style={{
+            fontSize: 16,
+            color: '#57f',
+            textDecorationLine: 'underline',
+          }}
+        >
+					CÓDIGO
         </Text>
       </TouchableOpacity>
+      <Text style={{ fontSize: 12, color: 'gray' }}>
+				Versão {packageJSON.version}
+      </Text>
     </Container>
   )
 }
