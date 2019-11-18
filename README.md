@@ -13,7 +13,7 @@ Aplicativo de cardápio para o Restaurante Universitário da UFRPE.
   - Design: contribuindo com ideias de UX e design de aplicativos em geral, acesse o [Figma](https://www.figma.com/file/w2u7Z3MAA8tDXvoJHWaoe8/RUral?node-id=0%3A1)
     .
 
-  - Programação: contribuindo com novas funcionalidades ou correções de código.
+  - Programação: contribuindo com novas funcionalidades ou correções no código.
 
   - Sugestões: criando issues para criação de novas funcionalidades.
 
