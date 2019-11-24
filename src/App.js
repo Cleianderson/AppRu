@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   StatusBar,
   ToastAndroid,
-  Linking,
+  Linking
 } from 'react-native'
 
 import packageJSON from '../package.json'
@@ -17,7 +17,7 @@ import {
   InfoDate,
   Button,
   ButtonDetails,
-  TextButton,
+  TextButton
 } from './styles'
 
 import api from './service/Api'
@@ -37,7 +37,7 @@ const ARRAY_LAUNCH = [
   'sal',
   'sco',
   'sob',
-  'suc',
+  'suc'
 ]
 const ARRAY_DINNER = [
   'p1',
@@ -49,7 +49,7 @@ const ARRAY_DINNER = [
   'sal',
   'sopa',
   'sob',
-  'suc',
+  'suc'
 ]
 
 /*
@@ -70,16 +70,27 @@ export default function App() {
 
   const Page = useRef(Container)
 
-  // Função que faz requisição ao servidor e
-  // atualiza as variáveis foods e @week
-  async function checkWeekAndSetFoods() {
+  // Atualiza as variáveis food e @week
+  async function updateFoodOrWeek(foods, week = null, strToast) {
+    setFoods(foods)
+    ToastAndroid.show(strToast, ToastAndroid.LONG)
+    if (week !== null) {
+      await setWeek('@week', week.number_week, week.data)
+    }
+  }
+
+  // Função que faz requisição ao servidor
+  async function checkWeek() {
+    const isoWeekOfTomorrow = moment()
+      .add(1, 'days')
+      .isoWeek()
 
     const storage = await getWeek('@week')
     const jsonStorage = JSON.parse(storage)
 
-    if (jsonStorage === null || jsonStorage.number_week + 1 !== moment().add(1,'days').isoWeek()) {
+    if (jsonStorage === null || isoWeekOfTomorrow !== jsonStorage.number_week) {
       // Faz o request ao servidor por uma nova semana
-      const { data } = await api.get('/thisweek')
+      const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
 
       // Se a semana não estiver disponível
       if (data === null) {
@@ -89,30 +100,29 @@ export default function App() {
               backgroundColor: '#a00',
               padding: 10,
               flex: 1,
-              justifyContent: 'center',
+              justifyContent: 'center'
             }}
           >
             <Text
               style={{
-                fontSize: 25,
+                fontSize: 25
               }}
             >
-							O cardápio dessa semana ainda não está disponível
+              O cardápio dessa semana ainda não está disponível
             </Text>
             <Text>:(</Text>
           </View>
         )
         setAction('dataNull')
       } else {
-        // Se a semana estiver disponível, atualiza as variáveis foods e @week
-        setFoods(data.data)
-        await setWeek('@week', data.number_week, data.data)
-        ToastAndroid.show('Requisição feita ao servidor', ToastAndroid.LONG)
+        updateFoodOrWeek(
+          data.data,
+          { number_week: data.number_week, data: data.data },
+          'Requisição feita ao servidor'
+        )
       }
     } else {
-      // Faz o request localmente e atualiza as variáveis foods e @week
-      setFoods(jsonStorage.foods)
-      ToastAndroid.show('Requisição feita localmente', ToastAndroid.LONG)
+      updateFoodOrWeek(jsonStorage.foods, null, 'Requisição feita localmente')
     }
 
     // Muda a página para o dia da semana atual
@@ -125,7 +135,7 @@ export default function App() {
   }
 
   useEffect(() => {
-    checkWeekAndSetFoods()
+    checkWeek()
   }, [])
 
   return (
@@ -141,7 +151,7 @@ export default function App() {
             <View
               style={{
                 flex: 1,
-                justifyContent: 'center',
+                justifyContent: 'center'
               }}
             >
               <Button
@@ -182,14 +192,14 @@ export default function App() {
           style={{
             fontSize: 16,
             color: '#57f',
-            textDecorationLine: 'underline',
+            textDecorationLine: 'underline'
           }}
         >
-					CÓDIGO
+          CÓDIGO
         </Text>
       </TouchableOpacity>
       <Text style={{ fontSize: 12, color: 'gray' }}>
-				Versão {packageJSON.version}
+        Versão {packageJSON.version}
       </Text>
     </Container>
   )

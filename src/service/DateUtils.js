@@ -1,8 +1,18 @@
 import moment from 'moment'
 
 export function getDate(inx) {
-  const date = moment().isoWeekday(inx + 1)
-  return date.format('DD/MM/YY')
+
+  let dateToReturn
+
+  if(moment().add(1, 'days').isoWeek() !== moment().isoWeek()){
+    const date = moment().add(1, 'days').isoWeekday(inx + 1)
+    dateToReturn = date.format('DD/MM/YY')
+  }else{
+    const date = moment().isoWeekday(inx + 1)
+    dateToReturn = date.format('DD/MM/YY')
+  }
+  
+  return dateToReturn
 }
 
 export function tranformNum2Day(inx) {
