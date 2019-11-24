@@ -77,7 +77,7 @@ export default function App() {
     const storage = await getWeek('@week')
     const jsonStorage = JSON.parse(storage)
 
-    if (jsonStorage === null || jsonStorage.number_week + 1 === moment().add(1,'days').isoWeek()) {
+    if (jsonStorage === null || jsonStorage.number_week + 1 !== moment().add(1,'days').isoWeek()) {
       // Faz o request ao servidor por uma nova semana
       const { data } = await api.get('/thisweek')
 
