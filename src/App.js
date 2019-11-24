@@ -73,12 +73,11 @@ export default function App() {
   // Função que faz requisição ao servidor e
   // atualiza as variáveis foods e @week
   async function checkWeekAndSetFoods() {
-    const currentWeek = moment().isoWeek()
 
     const storage = await getWeek('@week')
     const jsonStorage = JSON.parse(storage)
 
-    if (jsonStorage === null || jsonStorage.number_week !== currentWeek) {
+    if (jsonStorage === null || jsonStorage.number_week + 1 === moment().add(1,'days').isoWeek()) {
       // Faz o request ao servidor por uma nova semana
       const { data } = await api.get('/thisweek')
 
