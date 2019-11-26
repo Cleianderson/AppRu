@@ -4,11 +4,9 @@ import {
   View,
   TouchableOpacity,
   StatusBar,
-  ToastAndroid,
-  Linking
+  ActivityIndicator
 } from 'react-native'
 
-import packageJSON from '../package.json'
 import {
   Text,
   Container,
@@ -71,11 +69,58 @@ export default function App() {
   const Page = useRef(Container)
 
   // Atualiza as variáveis food e @week
-  async function updateFoodOrWeek(foods, week = null, strToast) {
+  async function updateFoodOrWeek(foods, week = null) {
     setFoods(foods)
-    ToastAndroid.show(strToast, ToastAndroid.LONG)
     if (week !== null) {
-      await setWeek('@week', week.number_week, week.data)
+      await setWeek('@week', week.number_week, foods)
+    }
+  }
+
+  async function requestCurrentWeek() {
+    setContentModal(
+      <View
+        style={{
+          backgroundColor: '#fff',
+          padding: 10,
+          justifyContent: 'center',
+          margin: 20,
+          borderRadius: 4
+        }}
+      >
+        <ActivityIndicator color='#f9b233' size={72} />
+        <Text style={{ color: '#000', fontSize: 16 }}>
+          FAZENDO REQUISIÇÃO AO SERVIDOR
+        </Text>
+      </View>
+    )
+    setAction('requestToServer')
+
+    const { data } = await api.get('/thisweek')
+
+    if (data === null) {
+      setContentModal(
+        <View
+          style={{
+            backgroundColor: '#a00',
+            padding: 10,
+            flex: 1,
+            justifyContent: 'center'
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 25
+            }}
+          >
+            O cardápio dessa semana ainda não está disponível
+          </Text>
+          <Text>:(</Text>
+        </View>
+      )
+      setAction('dataNull')
+    } else {
+      updateFoodOrWeek(data.data, { number_week: moment().isoWeek() })
+      setAction('')
     }
   }
 
@@ -117,7 +162,7 @@ export default function App() {
       } else {
         updateFoodOrWeek(
           data.data,
-          { number_week: data.number_week, data: data.data },
+          { number_week: data.number_week },
           'Requisição feita ao servidor'
         )
       }
@@ -185,22 +230,17 @@ export default function App() {
           component={contentModal}
         />
       </Content>
-      <TouchableOpacity
-        onPress={() => Linking.openURL('https://github.com/Cleianderson/RUral')}
-      >
+      <TouchableOpacity onPress={requestCurrentWeek}>
         <Text
           style={{
             fontSize: 16,
-            color: '#57f',
-            textDecorationLine: 'underline'
+            color: '#fff',
+            margin: 7
           }}
         >
-          CÓDIGO
+          ATUALIZAR
         </Text>
       </TouchableOpacity>
-      <Text style={{ fontSize: 12, color: 'gray' }}>
-        Versão {packageJSON.version}
-      </Text>
     </Container>
   )
 }
