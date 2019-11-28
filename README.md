@@ -17,6 +17,14 @@ Aplicativo de cardápio para o Restaurante Universitário da UFRPE.
 
   - Sugestões: criando issues para criação de novas funcionalidades.
 
+# Bibliotecas Usadas:
+- [React-Native](https://facebook.github.io/react-native/)
+  - [Async-Storage](https://github.com/react-native-community/async-storage)
+  - [ViewPager](https://github.com/react-native-community/react-native-viewpager)
+- [Momentjs](https://momentjs.com/)
+- [Axios](https://github.com/axios/axios)
+- [Styled-Component](https://www.styled-components.com/)
+
 # Lista de Colaboradores:
 
 - [Cleianderson Paz](https://github.com/Cleianderson)
