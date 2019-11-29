@@ -27,4 +27,4 @@ Aplicativo de cardápio para o Restaurante Universitário da UFRPE.
 
 # Lista de Colaboradores:
 
-- [Cleianderson Paz](https://github.com/Cleianderson)
+- [Cleianderson Paz](https://github.com/Cleianderson) [<img src="https://cdn3.iconfinder.com/data/icons/transparent-on-dark-grey/500/icon-04-512.png" style="width: 20px; vertical-align: middle; margin-left:10px;"/>](https://www.instagram.com/cleiandersonpaz/?hl=pt-br)
