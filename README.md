@@ -1,12 +1,3 @@
-<style>
-img[src*="#thumbnail"] {
-   width:20px;
-   height:20px;
-   vertical-align:middle;
-   margin-left: 10px;
-}
-</style>
-
 # Aplicativo RUral
 
 Aplicativo de cardápio para o Restaurante Universitário da UFRPE.
@@ -36,4 +27,4 @@ Aplicativo de cardápio para o Restaurante Universitário da UFRPE.
 
 # Lista de Colaboradores:
 
-- [Cleianderson Paz](https://github.com/Cleianderson) [<img src="https://cdn3.iconfinder.com/data/icons/transparent-on-dark-grey/500/icon-04-512.png#thumbnail" />](https://www.instagram.com/cleiandersonpaz/?hl=pt-br)
+- [Cleianderson Paz](https://github.com/Cleianderson) [<img src="https://cdn3.iconfinder.com/data/icons/transparent-on-dark-grey/500/icon-04-512.png" width="15"/>](https://www.instagram.com/cleiandersonpaz/?hl=pt-br)
