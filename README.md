@@ -35,4 +35,4 @@
 
 # Lista de Colaboradores:
 
-- [Cleianderson Paz](https://github.com/Cleianderson) [![insta](https://cdn3.iconfinder.com/data/icons/transparent-on-dark-grey/500/icon-04-512.png)](https://github.com/algorithm-visualizer/algorithm-visualizer/graphs/contributors)
+- [Cleianderson Paz](https://github.com/Cleianderson) [![insta](https://cdn.icon-icons.com/icons2/2037/PNG/128/ig_instagram_media_social_icon_124260.png)](https://github.com/algorithm-visualizer/algorithm-visualizer/graphs/contributors)
