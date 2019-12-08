@@ -77,27 +77,80 @@ export default function App() {
   }
 
   async function requestCurrentWeek() {
-    setContentModal(
-      <View
-        style={{
-          backgroundColor: '#fff',
-          padding: 10,
-          justifyContent: 'center',
-          margin: 20,
-          borderRadius: 4
-        }}
-      >
-        <ActivityIndicator color='#f9b233' size={72} />
-        <Text style={{ color: '#000', fontSize: 16 }}>
-          FAZENDO REQUISIÇÃO AO SERVIDOR
-        </Text>
-      </View>
-    )
+
     setAction('requestToServer')
 
     const { data } = await api.get('/thisweek')
 
     if (data === null) {
+      
+      setAction('dataNull')
+
+    } else {
+      updateFoodOrWeek(data.data, { number_week: moment().isoWeek() })
+      setAction('')
+    }
+  }
+
+  // Função que faz requisição ao servidor
+  async function checkWeek() {
+    const isoWeekOfTomorrow = moment()
+      .add(1, 'days')
+      .isoWeek()
+
+    const storage = await getWeek('@week')
+    const jsonStorage = JSON.parse(storage)
+
+    if (jsonStorage === null || isoWeekOfTomorrow !== jsonStorage.number_week) {
+      // Faz o request ao servidor por uma nova semana
+      const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
+      setAction('requestToServer')
+
+      // Se a semana não estiver disponível
+      if (data === null) {
+        setAction('dataNull')
+      } else {
+        setAction('')
+        updateFoodOrWeek(
+          data.data,
+          { number_week: data.number_week },
+          'Requisição feita ao servidor'
+        )
+      }
+    } else {
+      updateFoodOrWeek(jsonStorage.foods, null, 'Requisição feita localmente')
+    }
+
+    // Muda a página para o dia da semana atual
+    Page.current.setPage(moment().weekday() > 5 ? 0 : moment().weekday() - 1)
+  }
+
+  function modifyModal(content, typeAction) {
+    setContentModal(content)
+    setAction(typeAction)
+  }
+
+  useEffect(() => {
+    switch (action) {
+    case 'requestToServer':
+      setContentModal(
+        <View
+          style={{
+            backgroundColor: '#fff',
+            padding: 10,
+            justifyContent: 'center',
+            margin: 20,
+            borderRadius: 7
+          }}
+        >
+          <ActivityIndicator color='#f9b233' size={72} />
+          <Text style={{ color: '#000', fontSize: 16 }}>
+            FAZENDO REQUISIÇÃO AO SERVIDOR
+          </Text>
+        </View>
+      )
+      break
+    case 'dataNull':
       setContentModal(
         <View
           style={{
@@ -117,67 +170,11 @@ export default function App() {
           <Text>:(</Text>
         </View>
       )
-      setAction('dataNull')
-    } else {
-      updateFoodOrWeek(data.data, { number_week: moment().isoWeek() })
-      setAction('')
+      break
+    default:
+      break
     }
-  }
-
-  // Função que faz requisição ao servidor
-  async function checkWeek() {
-    const isoWeekOfTomorrow = moment()
-      .add(1, 'days')
-      .isoWeek()
-
-    const storage = await getWeek('@week')
-    const jsonStorage = JSON.parse(storage)
-
-    if (jsonStorage === null || isoWeekOfTomorrow !== jsonStorage.number_week) {
-      // Faz o request ao servidor por uma nova semana
-      const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
-
-      // Se a semana não estiver disponível
-      if (data === null) {
-        setContentModal(
-          <View
-            style={{
-              backgroundColor: '#a00',
-              padding: 10,
-              flex: 1,
-              justifyContent: 'center'
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 25
-              }}
-            >
-              O cardápio dessa semana ainda não está disponível
-            </Text>
-            <Text>:(</Text>
-          </View>
-        )
-        setAction('dataNull')
-      } else {
-        updateFoodOrWeek(
-          data.data,
-          { number_week: data.number_week },
-          'Requisição feita ao servidor'
-        )
-      }
-    } else {
-      updateFoodOrWeek(jsonStorage.foods, null, 'Requisição feita localmente')
-    }
-
-    // Muda a página para o dia da semana atual
-    Page.current.setPage(moment().weekday() > 5 ? 0 : moment().weekday() - 1)
-  }
-
-  function modifyModal(content, typeAction) {
-    setContentModal(content)
-    setAction(typeAction)
-  }
+  }, [action])
 
   useEffect(() => {
     checkWeek()
