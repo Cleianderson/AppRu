@@ -6,6 +6,7 @@ import {
   StatusBar,
   ActivityIndicator
 } from 'react-native'
+import OneSignal from 'react-native-onesignal'
 
 import {
   Text,
@@ -177,6 +178,7 @@ export default function App() {
   }, [action])
 
   useEffect(() => {
+    OneSignal.init('85b3451d-6f7d-481f-b66e-1f93fe069135')
     checkWeek()
   }, [])
 
