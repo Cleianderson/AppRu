@@ -91,7 +91,13 @@ export default function App() {
   async function refreshWarn() {
     const warnsResolve = await api.get('/warn')
     const warnStorage = JSON.parse(await getItem('@warns'))
-    if (warnsResolve.data.length !== warnStorage.data.length) {
+    if (warnStorage !== null) {
+      if (warnsResolve.data.length !== warnStorage.data.length) {
+        setItem('@warns', { data: warnsResolve.data })
+        setWarns(warnsResolve.data)
+        setViewedWarn(false)
+      }
+    } else {
       setItem('@warns', { data: warnsResolve.data })
       setWarns(warnsResolve.data)
       setViewedWarn(false)
@@ -100,7 +106,7 @@ export default function App() {
 
   async function checkWarn() {
     const warnStorage = JSON.parse(await getItem('@warns'))
-    setWarns(warnStorage?warnStorage.data:[])
+    setWarns(warnStorage ? warnStorage.data : [])
     setInterval(refreshWarn, 10 * 1000)
   }
 
