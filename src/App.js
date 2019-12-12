@@ -1,11 +1,7 @@
+/* eslint-disable indent */
 import React, { useState, useEffect, useRef } from 'react'
 import moment from 'moment'
-import {
-  View,
-  TouchableOpacity,
-  StatusBar,
-  ActivityIndicator
-} from 'react-native'
+import { View, ScrollView, TouchableOpacity, StatusBar } from 'react-native'
 import OneSignal from 'react-native-onesignal'
 
 import {
@@ -16,15 +12,20 @@ import {
   InfoDate,
   Button,
   ButtonDetails,
-  TextButton
+  TextButton,
+  ButtonBar,
+  IconStyled,
 } from './styles'
 
 import api from './service/Api'
 import { getDate, tranformNum2Day } from './service/DateUtils'
-import { getWeek, setWeek } from './service/Storage'
+import { updateWeekStorage, getItem, setItem } from './service/Storage'
 
 import Modals from './components/Modal'
 import Details from './components/Details'
+import Warn from './components/Warn'
+import Requesting from './components/Requesting'
+import DataNull from './components/DataNull'
 
 const ARRAY_LAUNCH = [
   'p1',
@@ -36,7 +37,7 @@ const ARRAY_LAUNCH = [
   'sal',
   'sco',
   'sob',
-  'suc'
+  'suc',
 ]
 const ARRAY_DINNER = [
   'p1',
@@ -48,78 +49,84 @@ const ARRAY_DINNER = [
   'sal',
   'sopa',
   'sob',
-  'suc'
+  'suc',
 ]
-
+const isoWeekOfTomorrow = moment()
+  .add(1, 'days')
+  .isoWeek()
 /*
 		A variável contentModal é usada pelo componente Modals 
-		como conteúdo a ser exibido, use setContentModal para alterar seu valor
 
 		A variável action é usada pelo componente Modals como 
-		controle de visibilidade, use setAction para mudar-la
+		controle de visibilidade
 
 		A variável foods armazena os dados do cardápio a serem 
-		exibidos, use setFoods para alterar seu valor
+		exibidos
 */
 
 export default function App() {
+
   const [foods, setFoods] = useState(Array)
+  const [warns, setWarns] = useState(Array)
   const [action, setAction] = useState('')
+  const [viewedWarn, setViewedWarn] = useState(true)
   const [contentModal, setContentModal] = useState()
 
   const Page = useRef(Container)
 
-  // Atualiza as variáveis food e @week
-  async function updateFoodOrWeek(foods, week = null) {
-    setFoods(foods)
-    if (week !== null) {
-      await setWeek('@week', week.number_week, foods)
-    }
-  }
-
-  async function requestCurrentWeek() {
-
+  async function requestAndSetWeek() {
     setAction('requestToServer')
 
     const { data } = await api.get('/thisweek')
 
     if (data === null) {
-      
       setAction('dataNull')
-
     } else {
-      updateFoodOrWeek(data.data, { number_week: moment().isoWeek() })
+      updateWeekStorage(data.data, { number_week: moment().isoWeek() })
+      setFoods(data.data)
       setAction('')
     }
   }
 
+  async function refreshWarn() {
+    const warnsResolve = await api.get('/warn')
+    const warnStorage = JSON.parse(await getItem('@warns'))
+    if (warnsResolve.data.length !== warnStorage.data.length) {
+      setItem('@warns', { data: warnsResolve.data })
+      setWarns(warnsResolve.data)
+      setViewedWarn(false)
+    }
+  }
+
+  async function checkWarn() {
+    const warnStorage = JSON.parse(await getItem('@warns'))
+    setWarns(warnStorage.data)
+    setInterval(refreshWarn, 1 * 10 * 1000)
+  }
+
   // Função que faz requisição ao servidor
   async function checkWeek() {
-    const isoWeekOfTomorrow = moment()
-      .add(1, 'days')
-      .isoWeek()
-
-    const storage = await getWeek('@week')
-    const jsonStorage = JSON.parse(storage)
+    const jsonStorage = JSON.parse(await getItem('@week'))
 
     if (jsonStorage === null || isoWeekOfTomorrow !== jsonStorage.number_week) {
       // Faz o request ao servidor por uma nova semana
-      const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
       setAction('requestToServer')
+      const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
 
-      // Se a semana não estiver disponível
       if (data === null) {
         setAction('dataNull')
       } else {
         setAction('')
-        updateFoodOrWeek(
+        updateWeekStorage(
           data.data,
           { number_week: data.number_week },
           'Requisição feita ao servidor'
         )
+        setFoods(data.data)
       }
     } else {
-      updateFoodOrWeek(jsonStorage.foods, null, 'Requisição feita localmente')
+      updateWeekStorage(jsonStorage.foods, null, 'Requisição feita localmente')
+      setFoods(jsonStorage.foods)
     }
 
     // Muda a página para o dia da semana atual
@@ -131,55 +138,48 @@ export default function App() {
     setAction(typeAction)
   }
 
+  function showWarnings() {
+    setAction('showWarnings')
+    setViewedWarn(true)
+  }
+
   useEffect(() => {
     switch (action) {
-    case 'requestToServer':
-      setContentModal(
-        <View
-          style={{
+      case 'requestToServer':
+        setContentModal(<Requesting />)
+        break
+      case 'dataNull':
+        setContentModal(<DataNull />)
+        break
+      case 'showWarnings':
+        setContentModal(
+          <View style={{
             backgroundColor: '#fff',
             padding: 10,
-            justifyContent: 'center',
             margin: 20,
-            borderRadius: 7
-          }}
-        >
-          <ActivityIndicator color='#f9b233' size={72} />
-          <Text style={{ color: '#000', fontSize: 16 }}>
-            FAZENDO REQUISIÇÃO AO SERVIDOR
-          </Text>
-        </View>
-      )
-      break
-    case 'dataNull':
-      setContentModal(
-        <View
-          style={{
-            backgroundColor: '#a00',
-            padding: 10,
-            flex: 1,
-            justifyContent: 'center'
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 25
-            }}
-          >
-            O cardápio dessa semana ainda não está disponível
-          </Text>
-          <Text>:(</Text>
-        </View>
-      )
-      break
-    default:
-      break
+            borderRadius: 7,
+          }}>
+            <ScrollView
+              contentContainerStyle={{ justifyContent: 'center' }}
+              showsVerticalScrollIndicator={false}
+            >
+              {warns.map((warn, inx) => (
+                <Warn key={inx} title={warn.title} content={warn.content} />
+              ))}
+            </ScrollView>
+          </View>
+        )
+        break
+      default:
+        break
     }
   }, [action])
 
   useEffect(() => {
     OneSignal.init('85b3451d-6f7d-481f-b66e-1f93fe069135')
     checkWeek()
+    checkWarn()
+    return clearInterval()
   }, [])
 
   return (
@@ -195,7 +195,7 @@ export default function App() {
             <View
               style={{
                 flex: 1,
-                justifyContent: 'center'
+                justifyContent: 'center',
               }}
             >
               <Button
@@ -229,17 +229,16 @@ export default function App() {
           component={contentModal}
         />
       </Content>
-      <TouchableOpacity onPress={requestCurrentWeek}>
-        <Text
-          style={{
-            fontSize: 16,
-            color: '#fff',
-            margin: 7
-          }}
-        >
-          ATUALIZAR
-        </Text>
-      </TouchableOpacity>
+      <ButtonBar>
+        <TouchableOpacity onPress={showWarnings}>
+          <IconStyled name='message-alert' color='#fff' size={30}
+            style={{ borderBottomColor: '#f00', borderBottomWidth: viewedWarn ? 0 : 1 }}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={requestAndSetWeek}>
+          <IconStyled name='reload' color='#fff' size={30} />
+        </TouchableOpacity>
+      </ButtonBar>
     </Container>
   )
 }

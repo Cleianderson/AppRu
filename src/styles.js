@@ -1,5 +1,6 @@
 import styled from 'styled-components/native'
 import ViewPager from '@react-native-community/viewpager'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 export const LARGE = 50
 export const MEDIUM = 30
@@ -101,4 +102,12 @@ export const ButtonDetails = styled.Text`
 	text-align: center;
 
 	color: ${STROKE};
+`
+
+export const ButtonBar = styled.View`
+	flex-direction: row;
+	justify-content: space-around;
+`
+export const IconStyled = styled(Icon)`
+	margin-bottom: 5;
 `
