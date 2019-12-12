@@ -100,8 +100,8 @@ export default function App() {
 
   async function checkWarn() {
     const warnStorage = JSON.parse(await getItem('@warns'))
-    setWarns(warnStorage.data)
-    setInterval(refreshWarn, 1 * 10 * 1000)
+    setWarns(warnStorage?warnStorage.data:[])
+    setInterval(refreshWarn, 10 * 1000)
   }
 
   // Função que faz requisição ao servidor
