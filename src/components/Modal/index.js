@@ -14,6 +14,7 @@ export default function Modals(props) {
           flex: 1,
           justifyContent: 'center',
           alignContent: 'center',
+          backgroundColor: 'rgba(27, 45, 79, .85)'
         }}
       >
         {props.component}

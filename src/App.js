@@ -51,9 +51,7 @@ const ARRAY_DINNER = [
   'sob',
   'suc',
 ]
-const isoWeekOfTomorrow = moment()
-  .add(1, 'days')
-  .isoWeek()
+const isoWeekOfTomorrow = moment().add(1, 'days').isoWeek()
 /*
 		A variável contentModal é usada pelo componente Modals 
 
@@ -71,6 +69,7 @@ export default function App() {
   const [action, setAction] = useState('')
   const [viewedWarn, setViewedWarn] = useState(true)
   const [contentModal, setContentModal] = useState()
+  const [modalVisible, setModalVisible] = useState(false)
 
   const Page = useRef(Container)
 
@@ -151,11 +150,19 @@ export default function App() {
 
   useEffect(() => {
     switch (action) {
+      case 'Almoço':
+        setModalVisible(true)
+        break
+      case 'Jantar':
+        setModalVisible(true)
+        break
       case 'requestToServer':
         setContentModal(<Requesting />)
+        setModalVisible(true)
         break
       case 'dataNull':
         setContentModal(<DataNull />)
+        setModalVisible(true)
         break
       case 'showWarnings':
         setContentModal(
@@ -166,17 +173,26 @@ export default function App() {
             borderRadius: 7,
           }}>
             <ScrollView
-              contentContainerStyle={{ justifyContent: 'center' }}
+              contentContainerStyle={{
+                justifyContent: 'center',
+                flexDirection: 'column-reverse'
+              }}
               showsVerticalScrollIndicator={false}
             >
-              {warns.map((warn, inx) => (
+              {warns.length !== 0 ? warns.map((warn, inx) => (
                 <Warn key={inx} title={warn.title} content={warn.content} />
-              ))}
+              ))
+                : <Text style={{ color: '#000', fontSize: 18 }}
+                >
+                  Nenhum aviso!
+                </Text>}
             </ScrollView>
           </View>
         )
+        setModalVisible(true)
         break
       default:
+        setModalVisible(false)
         break
     }
   }, [action])
@@ -230,7 +246,7 @@ export default function App() {
           </View>
         ))}
         <Modals
-          visible={Boolean(action)}
+          visible={modalVisible}
           close={() => setAction('')}
           component={contentModal}
         />
@@ -238,7 +254,10 @@ export default function App() {
       <ButtonBar>
         <TouchableOpacity onPress={showWarnings}>
           <IconStyled name='message-alert' color='#fff' size={30}
-            style={{ borderBottomColor: '#f00', borderBottomWidth: viewedWarn ? 0 : 1 }}
+            style={{
+              borderBottomColor: '#f00',
+              borderBottomWidth: viewedWarn ? 0 : 1
+            }}
           />
         </TouchableOpacity>
         <TouchableOpacity onPress={requestAndSetWeek}>
