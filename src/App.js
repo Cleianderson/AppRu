@@ -52,6 +52,7 @@ const ARRAY_DINNER = [
   'suc',
 ]
 const isoWeekOfTomorrow = moment().add(1, 'days').isoWeek()
+const isHermes = () => global.HermesInternal != null
 /*
 		A variável contentModal é usada pelo componente Modals 
 
@@ -198,6 +199,7 @@ export default function App() {
   }, [action])
 
   useEffect(() => {
+    console.info(`Hermes is ${isHermes()}`);
     OneSignal.init('85b3451d-6f7d-481f-b66e-1f93fe069135')
     checkWeek()
     checkWarn()
