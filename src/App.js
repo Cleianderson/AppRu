@@ -76,7 +76,7 @@ export default function App() {
   async function requestAndSetWeek() {
     setAction('requestToServer')
 
-    const { data } = await api.get('/thisweek')
+    const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
 
     if (data === null) {
       setAction('dataNull')

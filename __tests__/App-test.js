@@ -12,9 +12,37 @@ import mockAsyncStorage from '@react-native-community/async-storage/jest/async-s
 import renderer from 'react-test-renderer'
 
 import App from '../src/App'
+import DataNull from '../src/components/DataNull'
+import Requesting from '../src/components/Requesting'
+import Modal from '../src/components/Modal'
+import Details from '../src/components/Details'
 
 jest.mock('@react-native-community/async-storage', () => mockAsyncStorage)
 
-it('App rendered correctly', () => {
-  renderer.create(<App />)
+describe('Rendering Components', () => {
+
+  // it('App', () => {
+  //   renderer.create(<App />)
+  // })
+
+  it('DataNull', () => {
+    renderer.create(<DataNull />)
+  })
+
+  it('Requesting', () => {
+    renderer.create(<Requesting />)
+  })
+
+  it('Modal', () => {
+    renderer.create(<Modal />)
+  })
+
+  it('Details', () => {
+    renderer.create(
+      <Details
+        names={['p1', 'p2']}
+        item={{ p1: 'C t1', p2: 'C t2' }}
+      />)
+  })
+
 })
