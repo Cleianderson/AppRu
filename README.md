@@ -1,31 +1,20 @@
 
-# Aplicativo RUral
+# RUral
 
-> Aplicativo de cardápio para o Restaurante Universitário da UFRPE.
+> Cardápio para o Restaurante Universitário da UFRPE.
+
+<img width="200" src="./screenshots/tela1.png" style="border-radius: 7px;" />
+<img width="200" src="./screenshots/tela2.png" style="border-radius: 7px;" />
 
 ## O Projeto
 
-- #### O aplicativo não tem fins lucrativos
+- O aplicativo não tem fins lucrativos
 
-- #### O aplicativo é destinado a todos que fazem parte da UFRPE
+- Qualquer estudante da UFRPE pode contribuir com o app das seguintes formas:
 
-* #### Qualquer estudante da UFRPE pode contribuir com o app das seguintes formas:
-
-  - Design: contribuindo com ideias de UX e design de aplicativos em geral, acesse o [Figma](https://www.figma.com/file/w2u7Z3MAA8tDXvoJHWaoe8/RUral?node-id=0%3A1)
+  - **Design:** contribuindo com ideias de UX e design de aplicativos em geral, acesse o [Figma](https://www.figma.com/file/w2u7Z3MAA8tDXvoJHWaoe8/RUral?node-id=0%3A1)
     .
 
-  - Programação: contribuindo com novas funcionalidades ou correções no código.
+  - **Programação:** contribuindo com novas funcionalidades ou correções no código.
 
-  - Sugestões: criando issues para criação de novas funcionalidades.
-
-# Bibliotecas Usadas:
-- [React-Native](https://facebook.github.io/react-native/)
-  - [Async-Storage](https://github.com/react-native-community/async-storage)
-  - [ViewPager](https://github.com/react-native-community/react-native-viewpager)
-- [Momentjs](https://momentjs.com/)
-- [Axios](https://github.com/axios/axios)
-- [Styled-Component](https://www.styled-components.com/)
-
-# Lista de Colaboradores:
-
-- [Cleianderson Paz](https://github.com/Cleianderson)
+  - **Sugestões:** criando issues para criação de novas funcionalidades.
