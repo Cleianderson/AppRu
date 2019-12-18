@@ -3,8 +3,6 @@
 
 > Cardápio para o Restaurante Universitário da UFRPE.
 
-<img align="left" width="200" src="./screenshots/tela1.png" style="border-radius: 7px;" />
-<img align="left" width="200" src="./screenshots/tela2.png" style="border-radius: 7px;" />
 
 ## O Projeto
 
@@ -18,3 +16,6 @@
   - **Programação:** contribuindo com novas funcionalidades ou correções no código.
 
   - **Sugestões:** criando issues para criação de novas funcionalidades.
+
+<img align="left" width="200" src="./screenshots/tela1.png" style="border-radius: 7px;" />
+<img align="right" width="200" src="./screenshots/tela2.png" style="border-radius: 7px;" />
