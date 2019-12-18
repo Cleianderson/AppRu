@@ -4,7 +4,7 @@
 > Cardápio para o Restaurante Universitário da UFRPE.
 
 <img align="left" width="200" src="./screenshots/tela1.png" style="border-radius: 7px;" />
-<img align="right" width="200" src="./screenshots/tela2.png" style="border-radius: 7px;" />
+<img align="left" width="200" src="./screenshots/tela2.png" style="border-radius: 7px;" />
 
 ## O Projeto
 
