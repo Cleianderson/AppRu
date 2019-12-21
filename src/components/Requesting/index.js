@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, ActivityIndicator, Text, StyleSheet } from 'react-native'
+import constants from '../../constants'
 
 // import { Container } from './styles';
 
@@ -8,7 +9,7 @@ export default function Requesting() {
     <View
       style={style.container}
     >
-      <ActivityIndicator color='#f9b233' size={72} />
+      <ActivityIndicator color={constants.SECOND_COLOR} size={72} />
       <Text style={style.text}>Fazendo requisição ao servidor</Text>
     </View>
 
@@ -22,7 +23,7 @@ const style = StyleSheet.create({
     alignItems:'center',
     padding: 10,
     margin: 20,
-    borderRadius: 7,
+    borderRadius: constants.RADIUS_NUM,
   },
   text: { color: '#000', fontSize: 16 }
 })

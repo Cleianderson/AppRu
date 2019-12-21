@@ -1,7 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-
-// import { Container } from './styles';
+import constants from '../../constants'
 
 export default function DataNull() {
   return (
@@ -18,7 +17,7 @@ export default function DataNull() {
 
 const style = StyleSheet.create({
   container: {
-    backgroundColor: '#a00',
+    backgroundColor: constants.DATANULL_BG_COLOR,
     padding: 10,
     flex: 1,
     justifyContent: 'center',

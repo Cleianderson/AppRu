@@ -1,25 +1,11 @@
 import styled from 'styled-components/native'
 import ViewPager from '@react-native-community/viewpager'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
-export const LARGE = 50
-export const MEDIUM = 30
-export const NORMAL = 12
-
-export const TEXT_COLOR = '#fff'
-export const STROKE = '#fff'
-
-export const PRIMARY_COLOR = '#1b2d4f'
-export const SECONDARY_COLOR = '#f9b233'
-
-export const ONE_BG_COLOR = '#fff'
-export const TWO_BG_COLOR = '#ddd'
-
-export const RADIUS = '7px'
+import constants from './constants'
 
 export const Content = styled(ViewPager)`
 	flex: 1;
-	background-color: ${PRIMARY_COLOR};
+	background-color: ${constants.PRIMARY_COLOR};
 	align-content: center;
 	align-items: center;
 `
@@ -27,7 +13,7 @@ export const Content = styled(ViewPager)`
 export const Container = styled.View`
 	flex: 1;
 
-	background-color: ${PRIMARY_COLOR};
+	background-color: ${constants.PRIMARY_COLOR};
 `
 
 export const Text = styled.Text`
@@ -35,16 +21,16 @@ export const Text = styled.Text`
 	font-family: Akzidenz-Grotesk;
 	text-align: center;
 
-	color: ${TEXT_COLOR};
-	font-size: ${LARGE - 5};
+	color: ${constants.TEXT_COLOR};
+	font-size: ${constants.LARGE - 5};
 `
 
 export const Data = styled.Text`
 	width: 100%;
 	text-align: center;
 
-	font-size: ${MEDIUM - 10};
-	color: ${TEXT_COLOR};
+	font-size: ${constants.MEDIUM - 10};
+	color: ${constants.TEXT_COLOR};
 `
 
 export const InfoDate = styled.View`
@@ -53,7 +39,7 @@ export const InfoDate = styled.View`
 	padding: 5px 2px;
 	background: transparent;
 
-	border-radius: ${RADIUS};
+	border-radius: ${constants.RADIUS};
 `
 export const Info = styled.ScrollView`
 	flex: 1;
@@ -66,9 +52,9 @@ export const FoodType = styled.Text`
 	margin-right: 30px;
 	elevation: 2px;
 
-	background: ${SECONDARY_COLOR};
-	border-top-left-radius: ${RADIUS};
-	border-top-right-radius: ${RADIUS};
+	background: ${constants.SECOND_COLOR};
+	border-top-left-radius: ${constants.RADIUS};
+	border-top-right-radius: ${constants.RADIUS};
 `
 
 export const FoodDescription = styled.Text`
@@ -79,35 +65,32 @@ export const FoodDescription = styled.Text`
 	margin-right: 30px;
 	margin-bottom: 7px;
 
-	border-bottom-left-radius: ${RADIUS};
-	border-bottom-right-radius: ${RADIUS};
+	border-bottom-left-radius: ${constants.RADIUS};
+	border-bottom-right-radius: ${constants.RADIUS};
 `
 export const Button = styled.TouchableOpacity`
 	background: transparent;
 	padding: 10px 2px;
 	margin: 5px 40px;
 
-	border: 1px solid ${STROKE};
-	border-radius: ${RADIUS};
+	border: 1px solid ${constants.STROKE};
+	border-radius: ${constants.RADIUS};
 `
 
 export const TextButton = styled.Text`
-	font-size: ${NORMAL + 8}px;
+	font-size: ${constants.NORMAL + 8}px;
 	text-align: center;
 
-	color: ${STROKE};
+	color: ${constants.STROKE};
 `
 export const ButtonDetails = styled.Text`
-	font-size: ${NORMAL}px;
+	font-size: ${constants.NORMAL}px;
 	text-align: center;
 
-	color: ${STROKE};
+	color: ${constants.STROKE};
 `
 
 export const ButtonBar = styled.View`
 	flex-direction: row;
 	justify-content: space-around;
-`
-export const IconStyled = styled(Icon)`
-	margin-bottom: 5;
 `

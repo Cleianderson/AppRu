@@ -1,7 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-
-// import { Container } from './styles';
+import constants from '../../constants'
 
 export default function Warn({ title, content }) {
   return (
@@ -26,7 +25,7 @@ const style = StyleSheet.create({
     alignItems: 'center',
     borderColor: '#666',
     borderWidth: 1,
-    borderRadius: 7,
+    borderRadius: constants.RADIUS_NUM,
     padding: 10,
     marginTop: 5
   },

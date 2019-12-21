@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 import React, { useState, useEffect, useRef } from 'react'
+import { View, ScrollView, StatusBar } from 'react-native'
 import moment from 'moment'
-import { View, ScrollView, TouchableOpacity, StatusBar } from 'react-native'
 import OneSignal from 'react-native-onesignal'
 
 import {
@@ -14,7 +14,6 @@ import {
   ButtonDetails,
   TextButton,
   ButtonBar,
-  IconStyled,
 } from './styles'
 
 import api from './service/Api'
@@ -26,6 +25,9 @@ import Details from './components/Details'
 import Warn from './components/Warn'
 import Requesting from './components/Requesting'
 import DataNull from './components/DataNull'
+import Favorite from './components/Favorite'
+import Suggestion from './components/Suggestion'
+import Icon from './components/Icon'
 
 const ARRAY_LAUNCH = [
   'p1',
@@ -52,7 +54,7 @@ const ARRAY_DINNER = [
   'suc',
 ]
 const isoWeekOfTomorrow = moment().add(1, 'days').isoWeek()
-const isHermes = () => global.HermesInternal != null
+// const isHermes = () => global.HermesInternal != null
 /*
 		A variável contentModal é usada pelo componente Modals 
 
@@ -66,6 +68,7 @@ const isHermes = () => global.HermesInternal != null
 export default function App() {
 
   const [foods, setFoods] = useState(Array)
+  const [favorites, setFavorites] = useState(Array)
   const [warns, setWarns] = useState(Array)
   const [action, setAction] = useState('')
   const [viewedWarn, setViewedWarn] = useState(true)
@@ -73,6 +76,17 @@ export default function App() {
   const [modalVisible, setModalVisible] = useState(false)
 
   const Page = useRef(Container)
+
+  function showSuggestion() {
+    setAction('showSuggestion')
+  }
+
+  function arrIncludesFavorites(item) {
+    let a = favorites.filter(fav =>
+      JSON.stringify(item).includes(fav.toUpperCase())
+    )
+    return a.length > 0
+  }
 
   async function requestAndSetWeek() {
     setAction('requestToServer')
@@ -139,6 +153,11 @@ export default function App() {
     Page.current.setPage(moment().weekday() > 5 ? 0 : moment().weekday() - 1)
   }
 
+  async function checkFavorites() {
+    const { data } = JSON.parse(await getItem('@favorites'))
+    setFavorites(data)
+  }
+
   function modifyModal(content, typeAction) {
     setContentModal(content)
     setAction(typeAction)
@@ -149,21 +168,23 @@ export default function App() {
     setViewedWarn(true)
   }
 
+  function showFavorites() {
+    setAction('showFavorites')
+  }
+
   useEffect(() => {
     switch (action) {
-      case 'Almoço':
-        setModalVisible(true)
+      case 'showSuggestion':
+        setContentModal(<Suggestion />)
         break
-      case 'Jantar':
-        setModalVisible(true)
+      case 'showFavorites':
+        setContentModal(<Favorite />)
         break
       case 'requestToServer':
         setContentModal(<Requesting />)
-        setModalVisible(true)
         break
       case 'dataNull':
         setContentModal(<DataNull />)
-        setModalVisible(true)
         break
       case 'showWarnings':
         setContentModal(
@@ -190,19 +211,22 @@ export default function App() {
             </ScrollView>
           </View>
         )
-        setModalVisible(true)
         break
-      default:
-        setModalVisible(false)
-        break
+    }
+    if (action !== '') {
+      setModalVisible(true)
+    } else {
+      checkFavorites()
+      setModalVisible(false)
     }
   }, [action])
 
   useEffect(() => {
-    console.info(`Hermes is ${isHermes()}`);
+    // console.info(`Hermes is ${isHermes()}`)
     OneSignal.init('85b3451d-6f7d-481f-b66e-1f93fe069135')
     checkWeek()
     checkWarn()
+    checkFavorites()
     return clearInterval()
   }, [])
 
@@ -223,6 +247,10 @@ export default function App() {
               }}
             >
               <Button
+                style={
+                  // eslint-disable-next-line max-len
+                  arrIncludesFavorites(item.almoco) ? { borderColor: '#f9b233' } : {}
+                }
                 onPress={() => {
                   modifyModal(
                     <Details names={ARRAY_LAUNCH} item={item.almoco} />,
@@ -234,6 +262,10 @@ export default function App() {
                 <ButtonDetails>10:30h - 14:00h</ButtonDetails>
               </Button>
               <Button
+                style={
+                  // eslint-disable-next-line max-len
+                  arrIncludesFavorites(item.jantar) ? { borderColor: '#f9b233' } : {}
+                }
                 onPress={() => {
                   modifyModal(
                     <Details names={ARRAY_DINNER} item={item.jantar} />,
@@ -254,17 +286,14 @@ export default function App() {
         />
       </Content>
       <ButtonBar>
-        <TouchableOpacity onPress={showWarnings}>
-          <IconStyled name='message-alert' color='#fff' size={30}
-            style={{
-              borderBottomColor: '#f00',
-              borderBottomWidth: viewedWarn ? 0 : 1
-            }}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={requestAndSetWeek}>
-          <IconStyled name='reload' color='#fff' size={30} />
-        </TouchableOpacity>
+        <Icon style={{
+          borderBottomColor: '#f00',
+          borderBottomWidth: viewedWarn ? 0 : 1
+        }}
+          onPress={showWarnings} name='message-alert' text='Avisos' />
+        <Icon onPress={showFavorites} name='account-star' text='Favoritos' />
+        <Icon onPress={showSuggestion} name='voice' text='Sugerir' />
+        <Icon onPress={requestAndSetWeek} name='reload' text='Renovar' />
       </ButtonBar>
     </Container>
   )
