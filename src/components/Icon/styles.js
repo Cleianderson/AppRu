@@ -1,6 +1,6 @@
 import styled from 'styled-components/native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import constants from '../../constants'
+import constants from '../../service/constants'
 
 
 export const Container = styled.TouchableOpacity`

@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import constants from '../../constants'
+import constants from '../../service/constants'
 
 export default function Warn({ title, content }) {
   return (

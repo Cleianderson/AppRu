@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import constants from '../../constants'
+import constants from '../../service/constants'
 
 export default function DataNull() {
   return (
@@ -9,7 +9,7 @@ export default function DataNull() {
       <Text style={style.text}>
         O cardápio dessa semana ainda não está disponível
       </Text>
-      <Text style={style.text}>:(</Text>
+      <Text accessibilityLabel='Carinha triste' style={style.text}>:(</Text>
     </View>
 
   )

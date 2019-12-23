@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, ActivityIndicator, Text, StyleSheet } from 'react-native'
-import constants from '../../constants'
+import constants from '../../service/constants'
 
 // import { Container } from './styles';
 

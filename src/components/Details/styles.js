@@ -1,6 +1,6 @@
 import styled from 'styled-components/native'
 
-import constants from '../../constants'
+import constants from '../../service/constants'
 
 export const Info = styled.View`
 	margin: 20px;

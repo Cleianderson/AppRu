@@ -5,7 +5,6 @@
 import 'react-native'
 import React from 'react'
 
-// eslint-disable-next-line max-len
 import mockAsyncStorage from '@react-native-community/async-storage/jest/async-storage-mock'
 
 // Note: test renderer must be required after react-native.

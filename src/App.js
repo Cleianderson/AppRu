@@ -65,12 +65,11 @@ export default function App() {
   const [viewedWarn, setViewedWarn] = useState(true)
   const [contentModal, setContentModal] = useState()
   const [modalVisible, setModalVisible] = useState(false)
-  
+
 
   const Page = useRef(Container)// -> Referência para a PageView
   /*   FIM DECLARAÇÃO DE VARIÁVEIS    */
 
-  // eslint-disable-next-line max-len
   function arrIncludesFavorites(item) { // -> Verifica quais itens favoritos estão no cardápio
     let a = favorites.filter(fav =>
       JSON.stringify(item).includes(fav.toUpperCase())
@@ -92,7 +91,6 @@ export default function App() {
     }
   }
 
-  // eslint-disable-next-line max-len
   async function refreshWarn() { // -> Verifica se as notificações locais e do servidor são iguais
     const warnsResolve = await api.get('/warn')
     const warnStorage = JSON.parse(await getItem('@warns'))
@@ -115,7 +113,6 @@ export default function App() {
     setInterval(refreshWarn, 10 * 1000)
   }
 
-  // eslint-disable-next-line max-len
   async function checkWeek() {// -> Método responsável por iniciar os dados do cardápio
     const jsonStorage = JSON.parse(await getItem('@week'))
 
@@ -143,11 +140,11 @@ export default function App() {
     // Muda a página para o dia da semana atual
     Page.current.setPage(moment().weekday() > 5 ? 0 : moment().weekday() - 1)
   }
-  
-  // eslint-disable-next-line max-len
+
+  // 
   async function checkFavorites() {// -> Método responsável por iniciar a lista de favoritos
-    const { data } = JSON.parse(await getItem('@favorites'))
-    setFavorites(data)
+    const favorites = JSON.parse(await getItem('@favorites'))
+    setFavorites(favorites !== null ? favorites.data : [])
   }
 
   function modifyModal(content, typeAction) {
@@ -155,7 +152,6 @@ export default function App() {
     setAction(typeAction)
   }
 
-  // eslint-disable-next-line max-len
   useEffect(() => {// -> Método responsável por mudar o contéudo do modal se a variável action mudar
     switch (action) {
       case 'showSuggestion':
@@ -232,7 +228,6 @@ export default function App() {
             >
               <Button
                 style={
-                  // eslint-disable-next-line max-len
                   arrIncludesFavorites(item.almoco) ? { borderColor: '#f9b233' } : {}
                 }
                 onPress={() => {
@@ -247,7 +242,6 @@ export default function App() {
               </Button>
               <Button
                 style={
-                  // eslint-disable-next-line max-len
                   arrIncludesFavorites(item.jantar) ? { borderColor: '#f9b233' } : {}
                 }
                 onPress={() => {

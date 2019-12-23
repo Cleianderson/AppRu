@@ -1,7 +1,7 @@
 import styled from 'styled-components/native'
 import ViewPager from '@react-native-community/viewpager'
 
-import constants from './constants'
+import constants from './service/constants'
 
 export const Content = styled(ViewPager)`
 	flex: 1;
