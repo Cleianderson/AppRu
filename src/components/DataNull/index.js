@@ -5,24 +5,28 @@ import constants from '../../constants'
 export default function DataNull() {
   return (
 
-    <View style={style.container}>
+    <View style={style.view}>
       <Text style={style.text}>
         O cardápio dessa semana ainda não está disponível
       </Text>
-      <Text>:(</Text>
+      <Text style={style.text}>:(</Text>
     </View>
 
   )
 }
 
 const style = StyleSheet.create({
-  container: {
+  text: {
+    fontSize: 25,
+    color: constants.TEXT_COLOR,
+    textAlign: 'center'
+  },
+  view: {
     backgroundColor: constants.DATANULL_BG_COLOR,
     padding: 10,
     flex: 1,
     justifyContent: 'center',
-  },
-  text: {
-    fontSize: 25,
+    alignContent: 'center',
+    alignItems: 'center'
   }
 })

@@ -55,18 +55,9 @@ const ARRAY_DINNER = [
 ]
 const isoWeekOfTomorrow = moment().add(1, 'days').isoWeek()
 // const isHermes = () => global.HermesInternal != null
-/*
-		A variável contentModal é usada pelo componente Modals 
-
-		A variável action é usada pelo componente Modals como 
-		controle de visibilidade
-
-		A variável foods armazena os dados do cardápio a serem 
-		exibidos
-*/
 
 export default function App() {
-
+  /*   DECLARAÇÃO DE VARIÁVEIS    */
   const [foods, setFoods] = useState(Array)
   const [favorites, setFavorites] = useState(Array)
   const [warns, setWarns] = useState(Array)
@@ -74,21 +65,20 @@ export default function App() {
   const [viewedWarn, setViewedWarn] = useState(true)
   const [contentModal, setContentModal] = useState()
   const [modalVisible, setModalVisible] = useState(false)
+  
 
-  const Page = useRef(Container)
+  const Page = useRef(Container)// -> Referência para a PageView
+  /*   FIM DECLARAÇÃO DE VARIÁVEIS    */
 
-  function showSuggestion() {
-    setAction('showSuggestion')
-  }
-
-  function arrIncludesFavorites(item) {
+  // eslint-disable-next-line max-len
+  function arrIncludesFavorites(item) { // -> Verifica quais itens favoritos estão no cardápio
     let a = favorites.filter(fav =>
       JSON.stringify(item).includes(fav.toUpperCase())
     )
     return a.length > 0
   }
 
-  async function requestAndSetWeek() {
+  async function requestAndSetWeek() { // -> Requisita uma semana
     setAction('requestToServer')
 
     const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
@@ -102,7 +92,8 @@ export default function App() {
     }
   }
 
-  async function refreshWarn() {
+  // eslint-disable-next-line max-len
+  async function refreshWarn() { // -> Verifica se as notificações locais e do servidor são iguais
     const warnsResolve = await api.get('/warn')
     const warnStorage = JSON.parse(await getItem('@warns'))
     if (warnStorage !== null) {
@@ -118,14 +109,14 @@ export default function App() {
     }
   }
 
-  async function checkWarn() {
+  async function checkWarn() { // -> Método responsável por iniciar os avisos
     const warnStorage = JSON.parse(await getItem('@warns'))
     setWarns(warnStorage ? warnStorage.data : [])
     setInterval(refreshWarn, 10 * 1000)
   }
 
-  // Função que faz requisição ao servidor
-  async function checkWeek() {
+  // eslint-disable-next-line max-len
+  async function checkWeek() {// -> Método responsável por iniciar os dados do cardápio
     const jsonStorage = JSON.parse(await getItem('@week'))
 
     if (jsonStorage === null || isoWeekOfTomorrow !== jsonStorage.number_week) {
@@ -152,8 +143,9 @@ export default function App() {
     // Muda a página para o dia da semana atual
     Page.current.setPage(moment().weekday() > 5 ? 0 : moment().weekday() - 1)
   }
-
-  async function checkFavorites() {
+  
+  // eslint-disable-next-line max-len
+  async function checkFavorites() {// -> Método responsável por iniciar a lista de favoritos
     const { data } = JSON.parse(await getItem('@favorites'))
     setFavorites(data)
   }
@@ -163,16 +155,8 @@ export default function App() {
     setAction(typeAction)
   }
 
-  function showWarnings() {
-    setAction('showWarnings')
-    setViewedWarn(true)
-  }
-
-  function showFavorites() {
-    setAction('showFavorites')
-  }
-
-  useEffect(() => {
+  // eslint-disable-next-line max-len
+  useEffect(() => {// -> Método responsável por mudar o contéudo do modal se a variável action mudar
     switch (action) {
       case 'showSuggestion':
         setContentModal(<Suggestion />)
@@ -221,7 +205,7 @@ export default function App() {
     }
   }, [action])
 
-  useEffect(() => {
+  useEffect(() => { // -> Método responsável por iniciar o app
     // console.info(`Hermes is ${isHermes()}`)
     OneSignal.init('85b3451d-6f7d-481f-b66e-1f93fe069135')
     checkWeek()
@@ -286,13 +270,28 @@ export default function App() {
         />
       </Content>
       <ButtonBar>
-        <Icon style={{
-          borderBottomColor: '#f00',
-          borderBottomWidth: viewedWarn ? 0 : 1
-        }}
-          onPress={showWarnings} name='message-alert' text='Avisos' />
-        <Icon onPress={showFavorites} name='account-star' text='Favoritos' />
-        <Icon onPress={showSuggestion} name='voice' text='Sugerir' />
+        <Icon
+          style={{
+            borderBottomColor: '#f00',
+            borderBottomWidth: viewedWarn ? 0 : 1
+          }}
+          onPress={() => {
+            setAction('showWarnings')
+            setViewedWarn(true)
+          }}
+          name='message-alert'
+          text='Avisos'
+        />
+        <Icon
+          onPress={() => setAction('showFavorites')}
+          name='account-star'
+          text='Favoritos'
+        />
+        <Icon
+          onPress={() => setAction('showSuggestion')}
+          name='voice'
+          text='Sugerir'
+        />
         <Icon onPress={requestAndSetWeek} name='reload' text='Renovar' />
       </ButtonBar>
     </Container>
