@@ -16,7 +16,6 @@ export default function Modals(props) {
           alignContent: 'center',
           backgroundColor: 'rgba(27, 45, 79, .85)'
         }}
-        onTouchStart={props.close}
       >
         {props.component}
       </View>

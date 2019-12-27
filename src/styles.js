@@ -5,7 +5,7 @@ import constants from './service/constants'
 
 export const Content = styled(ViewPager)`
 	flex: 1;
-	background-color: ${constants.PRIMARY_COLOR};
+	/* background-color: ${constants.PRIMARY_COLOR}; */
 	align-content: center;
 	align-items: center;
 `

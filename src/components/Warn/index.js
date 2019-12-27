@@ -20,7 +20,7 @@ const style = StyleSheet.create({
     width: '100%',
     textAlign: 'center',
   },
-  content: { color: '#444', fontSize: 16,textAlign:'center' },
+  content: { color: '#444', fontSize: 16, textAlign: 'center' },
   view: {
     alignItems: 'center',
     borderColor: '#666',

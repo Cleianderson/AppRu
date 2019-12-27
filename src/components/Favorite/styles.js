@@ -10,6 +10,8 @@ export const Container = styled.View`
 export const ContainerInput = styled.View`
   flex-direction: row;
   align-items: center;
+  border-top-color: ${constants.SECOND_BG_COLOR};
+  border-top-width: 1.5;
 `
 
 export const Button = styled.TouchableOpacity`

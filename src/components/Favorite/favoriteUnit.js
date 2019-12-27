@@ -10,6 +10,7 @@ export default function FavoriteUnit(props) {
       <TouchableOpacity
         onPress={props.onPress}
         accessibilityLabel='Remover item dos favoritos'
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       >
         <Icon name='close-circle-outline' color='#c00' size={30} />
       </TouchableOpacity>

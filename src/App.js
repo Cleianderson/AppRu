@@ -95,7 +95,7 @@ export default function App() {
     const warnsResolve = await api.get('/warn')
     const warnStorage = JSON.parse(await getItem('@warns'))
     if (warnStorage !== null) {
-      if (warnsResolve.data.length !== warnStorage.data.length) {
+      if (JSON.stringify(warnsResolve.data) !== JSON.stringify(warnStorage.data)) {
         setItem('@warns', { data: warnsResolve.data })
         setWarns(warnsResolve.data)
         setViewedWarn(false)
@@ -110,6 +110,7 @@ export default function App() {
   async function checkWarn() { // -> Método responsável por iniciar os avisos
     const warnStorage = JSON.parse(await getItem('@warns'))
     setWarns(warnStorage ? warnStorage.data : [])
+    refreshWarn()
     setInterval(refreshWarn, 10 * 1000)
   }
 
@@ -212,7 +213,7 @@ export default function App() {
 
   return (
     <Container>
-      <StatusBar backgroundColor='#1b2d4f' animated barStyle='light-content' />
+      <StatusBar animated barStyle='light-content' />
       <Content ref={Page}>
         {foods.map((item, inx) => (
           <View key={inx}>

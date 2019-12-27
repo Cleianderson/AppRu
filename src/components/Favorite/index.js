@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { TextInput, Alert } from 'react-native'
+import { TextInput, Alert, ScrollView } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import { Container, ContainerInput, Button } from './styles'
@@ -22,18 +22,21 @@ export default function Favorite() {
       await setItem('@favorites', { data: [...listFavorites, txtFavorite] })
       populateList()
       setTxtFavorite('')
-    }else{
+    } else {
       Alert.alert(
         'Caracteres insuficientes',
         'O número mínimo de caracteres é 3',
-        [{text:'Certo',style:'default'}]
+        [{ text: 'Certo', style: 'default' }]
       )
     }
   }
 
   async function populateList() {
-    let { data } = JSON.parse(await getItem('@favorites'))
-    setListFavorites(data)
+    const favs = await getItem('@favorites')
+    if (favs !== null) {
+      let { data } = JSON.parse(favs)
+      setListFavorites(data)
+    }
   }
 
   useEffect(() => {
@@ -42,25 +45,35 @@ export default function Favorite() {
 
   return (
     <Container>
-      {
-        listFavorites.map((item, inx) => (
-          <FavoriteUnit
-            key={inx}
-            text={item}
-            onPress={() => removeFavorite(item)}
-          />
-        ))
-      }
+      <ScrollView showsVerticalScrollIndicator={false} style={{ maxHeight: 300 }} >
+        {
+          listFavorites.map((item, inx) => (
+            <FavoriteUnit
+              key={inx}
+              text={item}
+              onPress={() => removeFavorite(item)}
+            />
+          ))
+        }
+      </ScrollView>
       <ContainerInput>
         <TextInput
-          style={{ flex: 1 }}
+          style={{
+            flex: 1,
+            fontSize: 16,
+            padding: 7
+          }}
+          placeholderTextColor='#888'
           placeholder='Comida'
           onChangeText={setTxtFavorite}
           value={txtFavorite}
+          returnKeyType='send'
+          onSubmitEditing={addFavorite}
         />
         <Button
           onPress={addFavorite}
           accessibilityLabel='Adicionar aos favoritos'
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Icon
             name='send'
