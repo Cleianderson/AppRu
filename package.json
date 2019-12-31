@@ -7,7 +7,8 @@
     "test": "jest",
     "lint": "eslint . --ignore-pattern \"node-modules/\"",
     "build": "react-native run-android",
-    "compile-android": "cd android & ./gradlew bundleRelease"
+    "bundle": "cd android & ./gradlew bundleRelease",
+    "apk": "cd android & ./gradlew assembleRelease"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.1",
