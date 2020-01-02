@@ -1,7 +1,7 @@
 
 # RUral
 
-> Cardápio para o Restaurante Universitário da UFRPE.
+> Cardápio do melhor RU do Brasil.
 
 
 ## O Projeto
@@ -10,12 +10,9 @@
 
 - Qualquer estudante da UFRPE pode contribuir com o app das seguintes formas:
 
-  - **Design:** contribuindo com ideias de UX e design de aplicativos em geral, acesse o [Figma](https://www.figma.com/file/w2u7Z3MAA8tDXvoJHWaoe8/RUral?node-id=0%3A1)
+  - **Design:** contribuindo com UX e design de aplicativos em geral, acesse o [Figma](https://www.figma.com/file/w2u7Z3MAA8tDXvoJHWaoe8/RUral?node-id=0%3A1)
     .
 
   - **Programação:** contribuindo com novas funcionalidades ou correções no código.
 
   - **Sugestões:** criando issues para criação de novas funcionalidades.
-
-<img align="left" width="200" src="./screenshots/tela1.png" style="border-radius: 7px;" />
-<img align="right" width="200" src="./screenshots/tela2.png" style="border-radius: 7px;" />
