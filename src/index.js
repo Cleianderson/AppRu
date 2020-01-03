@@ -80,7 +80,7 @@ export default function RUral() {
           },
           {
             backgroundColor: constants.PRIMARY_COLOR,
-            image: (<Image style={{ width: 350, height: 200 }} source={require('./assets/icon.png')} />),
+            image: (<Image style={{ width: 200, height: 200 }} source={require('./assets/icon.png')} />),
             title: 'É isso...',
             subtitle: 'Não esqueça de nos dar sua opinião/sugestão, pois é o modo mais fácil de sabermos aonde e no que devemos melhorar',
           },
