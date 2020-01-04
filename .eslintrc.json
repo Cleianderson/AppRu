@@ -18,7 +18,7 @@
   "plugins": ["react"],
   "rules": {
     "indent": ["error", 2],
-    "max-len": "error",
+    "max-len": ["error", {"code":100}],
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single"],
     "semi": ["error", "never"],

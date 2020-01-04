@@ -38,48 +38,54 @@ export default function RUral() {
         pages={[
           {
             backgroundColor: constants.PRIMARY_COLOR,
-            image: (<Image style={{ width: 200, height: 200 }} source={{ uri: 'https://raw.githubusercontent.com/Cleianderson/RUral/master/android/app/src/main/res/mipmap/icon.png' }} />),
-            title: 'Olá',
-            subtitle: 'Bem-vind@ ao app do melhor RU do Brasil, o app RUral',
+            image: (<Image style={{ width: 200, height: 200 }} source={require('./assets/icon.png')} />),
+            title: 'Olá!',
+            subtitle: 'Bem-vindx ao app do melhor RU do Brasil, o app RUral, vamos conhecê-lo?',
           },
           {
             backgroundColor: constants.PRIMARY_COLOR,
-            image: (<Image style={{ width: 300, height: 100 }} source={{ uri: 'https://raw.githubusercontent.com/Cleianderson/RUral.img/master/imagem_botoes.jpeg' }} />),
+            image: (<Image style={{ width: 300, height: 100 }} source={require('./assets/imagem_botoes.jpeg')} />),
             title: 'Funcionalidades',
-            subtitle: 'Estas são as funcionalidades do app, além de mostrar o cardápio, vou lhe apresentar cada uma delas',
+            subtitle: 'Existem algumas funcionalidades no app além de mostrar o cardápio, vou te apresentar cada uma delas',
           },
           {
             backgroundColor: constants.PRIMARY_COLOR,
-            image: (<Image style={{ width: 75, height: 75 }} source={{ uri: 'https://raw.githubusercontent.com/Cleianderson/RUral.img/master/avisos.png' }} />),
+            image: (<Image style={{ width: 75, height: 75 }} source={require('./assets/avisos.png')} />),
             title: 'Avisos',
-            subtitle: 'Aqui serão mostrados todos os avisos que a CGARU tem pra você, quando houver um novo aviso o botão irá ficar vermelhinho e também chegará uma notificação',
+            subtitle: 'Aqui serão mostrados todos os avisos que a CGARU tem pra você. Se houver um novo aviso o botão ficará vermelhinho e você também receberá uma notificação',
           },
           {
             backgroundColor: constants.PRIMARY_COLOR,
-            image: (<Image style={{ width: 75, height: 75 }} source={{ uri: 'https://raw.githubusercontent.com/Cleianderson/RUral.img/master/favoritos.png' }} />),
+            image: (<Image style={{ width: 75, height: 75 }} source={require('./assets/favoritos.png')} />),
             title: 'Favoritos',
-            subtitle: 'Nesse você pode inserir comidas e se houver alguma delas no cardápio o botão ficará amarelado',
+            subtitle: 'Nesse você pode inserir comidas e se houver alguma delas no cardápio o botão do almoço e/ou jantar ficará amarelinho',
           },
           {
             backgroundColor: constants.PRIMARY_COLOR,
-            image: (<Image style={{ width: 75, height: 75 }} source={{ uri: 'https://raw.githubusercontent.com/Cleianderson/RUral.img/master/sugerir.png' }} />),
+            image: (<Image style={{ width: 75, height: 75 }} source={require('./assets/sugerir.png')} />),
             title: 'Sugerir',
-            subtitle: 'Aqui você pode nos dar sua sugestão sobre o RU, sobre o app, sobre o que você quiser',
+            subtitle: 'Aqui você pode nos dar sua sugestão sobre o RU, sobre o app ou sobre o que você quiser, simples, porém importantíssimo',
           },
           {
             backgroundColor: constants.PRIMARY_COLOR,
-            image: (<Image style={{ width: 75, height: 75 }} source={{ uri: 'https://raw.githubusercontent.com/Cleianderson/RUral.img/master/renovar.png' }} />),
+            image: (<Image style={{ width: 75, height: 75 }} source={require('./assets/renovar.png')} />),
             title: 'Renovar',
-            subtitle: 'Esse é simples, ele apenas contata o servidor pra ver se a semana que tá no seu celular é a mesma que tá no servidor',
+            subtitle: 'Esse é simples, ele apenas contata o servidor pra checar se a semana no seu celular é a mesma do servidor',
           },
           {
             backgroundColor: constants.PRIMARY_COLOR,
-            image: (<Image style={{ width: 350, height: 200 }} source={{ uri: 'https://raw.githubusercontent.com/Cleianderson/RUral.img/master/botoes.png' }} />),
+            image: (<Image style={{ width: 350, height: 200 }} source={require('./assets/botoes.png')} />),
             title: 'A cereja do bolo',
-            subtitle: 'Cada dia útil da semana tem um par de botões que mostram o cardápio do almoço e do jantar. Tá vendo ali o botão amarelado?? Isso significa que naquele horário tem algum dos itens favoritos',
+            subtitle: 'Cada dia útil da semana tem um par de botões que mostram o cardápio do almoço e do jantar. Repare no botão amarelinho, isso significa que naquele horário tem algum dos itens favoritos',
+          },
+          {
+            backgroundColor: constants.PRIMARY_COLOR,
+            image: (<Image style={{ width: 200, height: 200 }} source={require('./assets/icon.png')} />),
+            title: 'É isso...',
+            subtitle: 'Não esqueça de nos dar sua opinião/sugestão, pois é o modo mais fácil de sabermos aonde e no que devemos melhorar',
           },
         ]}
-        nextLabel='Entendi'
+        nextLabel='Próximo'
         skipLabel='Pular'
         onSkip={finalizeOnboaring}
         onDone={finalizeOnboaring}
