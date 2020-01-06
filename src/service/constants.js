@@ -1,3 +1,5 @@
+import {Alert} from 'react-native'
+
 export default {
   LARGE: 50,
   MEDIUM: 30,
@@ -15,4 +17,12 @@ export default {
 
   RADIUS: '7px',
   RADIUS_NUM: 7,
+
+  showAlert: (errDesc, errContent) => {
+    Alert.alert(
+      errDesc,
+      errContent,
+      [{ text: 'Certo', style: 'default' }]
+    )
+  }
 }

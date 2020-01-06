@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { View, ScrollView, StatusBar } from 'react-native'
 import moment from 'moment'
 import OneSignal from 'react-native-onesignal'
+import NetInfo from '@react-native-community/netinfo'
 
 import {
   Text,
@@ -28,6 +29,8 @@ import DataNull from './components/DataNull'
 import Favorite from './components/Favorite'
 import Suggestion from './components/Suggestion'
 import Icon from './components/Icon'
+
+import constants from './service/constants'
 
 const ARRAY_LAUNCH = [
   'p1',
@@ -80,30 +83,36 @@ export default function App() {
   async function requestAndSetWeek() { // -> Requisita uma semana
     setAction('requestToServer')
 
-    const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
+    if ((await NetInfo.fetch()).isConnected) {
+      const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
 
-    if (data === null) {
-      setAction('dataNull')
+      if (data === null) {
+        setAction('dataNull')
+      } else {
+        updateWeekStorage(data.data, { number_week: moment().isoWeek() })
+        setFoods(data.data)
+        setAction('')
+      }
     } else {
-      updateWeekStorage(data.data, { number_week: moment().isoWeek() })
-      setFoods(data.data)
-      setAction('')
+      setAction('networkError')
     }
   }
 
   async function refreshWarn() { // -> Verifica se as notificações locais e do servidor são iguais
-    const warnsResolve = await api.get('/warn')
-    const warnStorage = JSON.parse(await getItem('@warns'))
-    if (warnStorage !== null) {
-      if (JSON.stringify(warnsResolve.data) !== JSON.stringify(warnStorage.data)) {
+    if (await (await NetInfo.fetch()).isConnected) {
+      const warnsResolve = await api.get('/warn')
+      const warnStorage = JSON.parse(await getItem('@warns'))
+      if (warnStorage !== null) {
+        if (JSON.stringify(warnsResolve.data) !== JSON.stringify(warnStorage.data)) {
+          setItem('@warns', { data: warnsResolve.data })
+          setWarns(warnsResolve.data)
+          setViewedWarn(false)
+        }
+      } else {
         setItem('@warns', { data: warnsResolve.data })
         setWarns(warnsResolve.data)
         setViewedWarn(false)
       }
-    } else {
-      setItem('@warns', { data: warnsResolve.data })
-      setWarns(warnsResolve.data)
-      setViewedWarn(false)
     }
   }
 
@@ -116,22 +125,25 @@ export default function App() {
 
   async function checkWeek() {// -> Método responsável por iniciar os dados do cardápio
     const jsonStorage = JSON.parse(await getItem('@week'))
-
     if (jsonStorage === null || isoWeekOfTomorrow !== jsonStorage.number_week) {
       // Faz o request ao servidor por uma nova semana
       setAction('requestToServer')
-      const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
+      if (await (await NetInfo.fetch()).isConnected) {
+        const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
 
-      if (data === null) {
-        setAction('dataNull')
-      } else {
-        setAction('')
-        updateWeekStorage(
-          data.data,
-          { number_week: data.number_week },
-          'Requisição feita ao servidor'
-        )
-        setFoods(data.data)
+        if (data === null) {
+          setAction('dataNull')
+        } else {
+          setAction('')
+          updateWeekStorage(
+            data.data,
+            { number_week: data.number_week },
+            'Requisição feita ao servidor'
+          )
+          setFoods(data.data)
+        }
+      }else{
+        setAction('networkError')
       }
     } else {
       updateWeekStorage(jsonStorage.foods, null, 'Requisição feita localmente')
@@ -153,8 +165,12 @@ export default function App() {
     setAction(typeAction)
   }
 
-  useEffect(() => {// -> Método responsável por mudar o contéudo do modal se a variável action mudar
+  useEffect(() => {// -> Método responsável por mudar o contéudo do modal se a variárvel action mudar
     switch (action) {
+      case 'networkError':
+        setAction('')
+        constants.showAlert('Falha na conexão', 'Por favor verifique a conexão com a internet')
+        break
       case 'showSuggestion':
         setContentModal(<Suggestion />)
         break
