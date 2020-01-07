@@ -123,11 +123,13 @@ export default function App() {
       if ((await NetInfo.fetch()).isConnected) {
         const warnsResolve = await api.get('/warn')
         const warnStorage = JSON.parse(await getItem('@warns'))
-        if (warnStorage === null ||
-          JSON.stringify(warnsResolve.data).length > JSON.stringify(warnStorage.data).length) {
+        const warnResolveDataString = JSON.stringify(warnsResolve.data)
+        const warnStorageDataString = warnStorage ? JSON.stringify(warnStorage.data) : '{data:[]}'
+
+        if (warnStorage === null || warnResolveDataString !== warnStorageDataString) {
           setItem('@warns', { data: warnsResolve.data })
           setWarns(warnsResolve.data)
-          setViewedWarn(false)
+          if (warnResolveDataString.length > warnStorageDataString.length) setViewedWarn(false)
         }
       }
     },
