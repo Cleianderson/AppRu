@@ -24,9 +24,8 @@ const style = StyleSheet.create({
   view: {
     backgroundColor: constants.DATANULL_BG_COLOR,
     padding: 10,
-    flex: 1,
     justifyContent: 'center',
-    alignContent: 'center',
-    alignItems: 'center'
+    margin: 20,
+    borderRadius: constants.RADIUS_NUM
   }
 })

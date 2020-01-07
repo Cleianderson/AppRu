@@ -93,7 +93,5 @@ export const ButtonDetails = styled.Text`
 export const ButtonBar = styled.View`
 	flex-direction: row;
 	justify-content: space-around;
-	borderTopWidth: 1px;
-	borderTopColor: #666;
 	padding-top:5px;
 `

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, TouchableOpacity } from 'react-native'
+import { Modal, View } from 'react-native'
 
 export default function Modals(props) {
   return (
@@ -9,9 +9,7 @@ export default function Modals(props) {
       animationType='fade'
       onRequestClose={props.close}
     >
-      <TouchableOpacity
-        activeOpacity={1}
-        onPress={props.close}
+      <View
         style={{
           flex: 1,
           justifyContent: 'center',
@@ -19,7 +17,7 @@ export default function Modals(props) {
           backgroundColor: 'rgba(27, 45, 79, .85)'
         }} >
         {props.component}
-      </TouchableOpacity>
+      </View>
     </Modal>
   )
 }

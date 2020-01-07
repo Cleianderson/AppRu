@@ -17,3 +17,4 @@ export const Button = styled.TouchableOpacity`
   padding: 5px;
   border-color: ${constants.SECOND_COLOR};
 `
+export const ChooseBox = styled.Picker``
