@@ -80,81 +80,66 @@ export default function App() {
     return a.length > 0
   }
 
-  async function requestAndSetWeek() { // -> Requisita uma semana
-    setAction('requestToServer')
-
-    if ((await NetInfo.fetch()).isConnected) {
-      const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
-
-      if (data === null) {
-        setAction('dataNull')
+  const controllerWeek = {
+    requestAndSetWeek: async () => {
+      setAction('requestToServer')
+      controllerWeek.verifyConnectionAndGetWeek(moment().isoWeek())
+    },
+    checkWeek: async () => {
+      // -> Método responsável por iniciar os dados do cardápio
+      const jsonStorage = JSON.parse(await getItem('@week'))
+      if (jsonStorage === null || isoWeekOfTomorrow !== jsonStorage.number_week) {
+        setAction('requestToServer')
+        controllerWeek.verifyConnectionAndGetWeek()
       } else {
-        updateWeekStorage(data.data, { number_week: moment().isoWeek() })
-        setFoods(data.data)
-        setAction('')
+        setFoods(jsonStorage.foods)
       }
-    } else {
-      setAction('networkError')
+
+      // Muda a página para o dia da semana atual
+      Page.current.setPage(moment().weekday() > 5 ? 0 : moment().weekday() - 1)
+
+    },
+    verifyConnectionAndGetWeek: async (number_week) => {
+      if ((await NetInfo.fetch()).isConnected) {
+        const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
+
+        number_week = number_week || data.number_week
+        if (data === null) {
+          setAction('dataNull')
+        } else {
+          updateWeekStorage(data.data, { number_week })
+          setFoods(data.data)
+          setAction('')
+        }
+      } else {
+        setAction('networkError')
+      }
     }
   }
 
-  async function refreshWarn() { // -> Verifica se as notificações locais e do servidor são iguais
-    if (await (await NetInfo.fetch()).isConnected) {
-      const warnsResolve = await api.get('/warn')
-      const warnStorage = JSON.parse(await getItem('@warns'))
-      if (warnStorage !== null) {
-        if (JSON.stringify(warnsResolve.data) !== JSON.stringify(warnStorage.data)) {
+  const controllerWarn = {
+    verifyWarn: async () => {
+      // -> Verifica se as notificações locais e do servidor são iguais
+      if ((await NetInfo.fetch()).isConnected) {
+        const warnsResolve = await api.get('/warn')
+        const warnStorage = JSON.parse(await getItem('@warns'))
+        if (warnStorage === null ||
+          JSON.stringify(warnsResolve.data).length > JSON.stringify(warnStorage.data).length) {
           setItem('@warns', { data: warnsResolve.data })
           setWarns(warnsResolve.data)
           setViewedWarn(false)
         }
-      } else {
-        setItem('@warns', { data: warnsResolve.data })
-        setWarns(warnsResolve.data)
-        setViewedWarn(false)
       }
+    },
+    getWarnsAndStartInterval: async () => {
+      // -> Método responsável por iniciar os avisos
+      const warnStorage = JSON.parse(await getItem('@warns'))
+      setWarns(warnStorage ? warnStorage.data : [])
+      controllerWarn.verifyWarn()
+      setInterval(controllerWarn.verifyWarn, 10 * 1000)
     }
   }
 
-  async function checkWarn() { // -> Método responsável por iniciar os avisos
-    const warnStorage = JSON.parse(await getItem('@warns'))
-    setWarns(warnStorage ? warnStorage.data : [])
-    refreshWarn()
-    setInterval(refreshWarn, 10 * 1000)
-  }
-
-  async function checkWeek() {// -> Método responsável por iniciar os dados do cardápio
-    const jsonStorage = JSON.parse(await getItem('@week'))
-    if (jsonStorage === null || isoWeekOfTomorrow !== jsonStorage.number_week) {
-      // Faz o request ao servidor por uma nova semana
-      setAction('requestToServer')
-      if (await (await NetInfo.fetch()).isConnected) {
-        const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
-
-        if (data === null) {
-          setAction('dataNull')
-        } else {
-          setAction('')
-          updateWeekStorage(
-            data.data,
-            { number_week: data.number_week },
-            'Requisição feita ao servidor'
-          )
-          setFoods(data.data)
-        }
-      }else{
-        setAction('networkError')
-      }
-    } else {
-      updateWeekStorage(jsonStorage.foods, null, 'Requisição feita localmente')
-      setFoods(jsonStorage.foods)
-    }
-
-    // Muda a página para o dia da semana atual
-    Page.current.setPage(moment().weekday() > 5 ? 0 : moment().weekday() - 1)
-  }
-
-  // 
   async function checkFavorites() {// -> Método responsável por iniciar a lista de favoritos
     const favorites = JSON.parse(await getItem('@favorites'))
     setFavorites(favorites !== null ? favorites.data : [])
@@ -165,7 +150,8 @@ export default function App() {
     setAction(typeAction)
   }
 
-  useEffect(() => {// -> Método responsável por mudar o contéudo do modal se a variárvel action mudar
+  // Método responsável por mudar o contéudo do modal se a variárvel action mudar
+  useEffect(() => {
     switch (action) {
       case 'networkError':
         setAction('')
@@ -208,6 +194,7 @@ export default function App() {
             </ScrollView>
           </View>
         )
+        setViewedWarn(true)
         break
     }
     if (action !== '') {
@@ -221,8 +208,8 @@ export default function App() {
   useEffect(() => { // -> Método responsável por iniciar o app
     // console.info(`Hermes is ${isHermes()}`)
     OneSignal.init('85b3451d-6f7d-481f-b66e-1f93fe069135')
-    checkWeek()
-    checkWarn()
+    controllerWeek.checkWeek()
+    controllerWarn.getWarnsAndStartInterval()
     checkFavorites()
     return clearInterval()
   }, [])
@@ -286,24 +273,13 @@ export default function App() {
             borderBottomColor: '#f00',
             borderBottomWidth: viewedWarn ? 0 : 1
           }}
-          onPress={() => {
-            setAction('showWarnings')
-            setViewedWarn(true)
-          }}
+          onPress={() => setAction('showWarnings')}
           name='message-alert'
           text='Avisos'
         />
-        <Icon
-          onPress={() => setAction('showFavorites')}
-          name='account-star'
-          text='Favoritos'
-        />
-        <Icon
-          onPress={() => setAction('showSuggestion')}
-          name='voice'
-          text='Sugerir'
-        />
-        <Icon onPress={requestAndSetWeek} name='reload' text='Renovar' />
+        <Icon onPress={() => setAction('showFavorites')} name='account-star' text='Favoritos' />
+        <Icon onPress={() => setAction('showSuggestion')} name='voice' text='Sugerir' />
+        <Icon onPress={controllerWeek.requestAndSetWeek} name='reload' text='Renovar' />
       </ButtonBar>
     </Container>
   )
