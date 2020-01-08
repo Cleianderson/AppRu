@@ -1,4 +1,4 @@
-import {Alert} from 'react-native'
+import { Alert } from 'react-native'
 
 export default {
   LARGE: 50,
@@ -24,5 +24,30 @@ export default {
       errContent,
       [{ text: 'Certo', style: 'default' }]
     )
-  }
+  },
+
+  ARRAY_LAUNCH: [
+    'p1',
+    'p2',
+    'gre',
+    'fag',
+    'veg',
+    'gua',
+    'sal',
+    'sco',
+    'sob',
+    'suc',
+  ],
+  ARRAY_DINNER: [
+    'p1',
+    'p2',
+    'gre',
+    'fag',
+    'veg',
+    'gua',
+    'sal',
+    'sopa',
+    'sob',
+    'suc',
+  ]
 }

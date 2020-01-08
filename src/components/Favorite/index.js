@@ -7,7 +7,7 @@ import FavoriteUnit from './favoriteUnit'
 import { getItem, setItem } from '../../service/Storage'
 import constants from '../../service/constants'
 
-export default function Favorite() {
+export default function Favorite(props) {
   const [txtFavorite, setTxtFavorite] = useState('')
   const [listFavorites, setListFavorites] = useState([])
 
@@ -19,8 +19,8 @@ export default function Favorite() {
 
   async function addFavorite() {
     if (txtFavorite.trim().length > 2) {
-      await setItem('@favorites', { data: [...listFavorites, txtFavorite] })
-      populateList()
+      await setItem('@favorites', { data: [...listFavorites, txtFavorite.trim()] })
+      setListFavorites(JSON.parse(await getItem('@favorites')).data)
       setTxtFavorite('')
     } else {
       Alert.alert(
@@ -32,11 +32,7 @@ export default function Favorite() {
   }
 
   async function populateList() {
-    const favs = await getItem('@favorites')
-    if (favs !== null) {
-      let { data } = JSON.parse(favs)
-      setListFavorites(data)
-    }
+    await setListFavorites(props.favorites)
   }
 
   useEffect(() => {

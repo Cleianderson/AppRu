@@ -22,7 +22,7 @@ import { getDate, tranformNum2Day } from './service/DateUtils'
 import { updateWeekStorage, getItem, setItem } from './service/Storage'
 
 import Modals from './components/Modal'
-import Details from './components/Details'
+import Menu from './components/Menu'
 import Warn from './components/Warn'
 import Requesting from './components/Requesting'
 import DataNull from './components/DataNull'
@@ -32,30 +32,6 @@ import Icon from './components/Icon'
 
 import constants from './service/constants'
 
-const ARRAY_LAUNCH = [
-  'p1',
-  'p2',
-  'gre',
-  'fag',
-  'veg',
-  'gua',
-  'sal',
-  'sco',
-  'sob',
-  'suc',
-]
-const ARRAY_DINNER = [
-  'p1',
-  'p2',
-  'gre',
-  'fag',
-  'veg',
-  'gua',
-  'sal',
-  'sopa',
-  'sob',
-  'suc',
-]
 const isoWeekOfTomorrow = moment().add(1, 'days').isoWeek()
 // const isHermes = () => global.HermesInternal != null
 
@@ -66,7 +42,7 @@ export default function App() {
   const [warns, setWarns] = useState(Array)
   const [action, setAction] = useState('')
   const [viewedWarn, setViewedWarn] = useState(true)
-  const [contentModal, setContentModal] = useState()
+  const [contentModal, setContentModal] = useState(null)
   const [modalVisible, setModalVisible] = useState(false)
 
 
@@ -82,15 +58,15 @@ export default function App() {
 
   const controllerWeek = {
     requestAndSetWeek: async () => {
-      setAction('requestToServer')
-      controllerWeek.verifyConnectionAndGetWeek(moment().isoWeek())
+      setContentModal(<Requesting />)
+      await controllerWeek.verifyConnectionAndGetWeek(moment().isoWeek())
     },
     checkWeek: async () => {
       // -> Método responsável por iniciar os dados do cardápio
       const jsonStorage = JSON.parse(await getItem('@week'))
       if (jsonStorage === null || isoWeekOfTomorrow !== jsonStorage.number_week) {
-        setAction('requestToServer')
-        controllerWeek.verifyConnectionAndGetWeek()
+        setAction(<Requesting />)
+        await controllerWeek.verifyConnectionAndGetWeek()
       } else {
         setFoods(jsonStorage.foods)
       }
@@ -105,11 +81,11 @@ export default function App() {
 
         number_week = number_week || data.number_week
         if (data === null) {
-          setAction('dataNull')
+          setContentModal(<DataNull />)
         } else {
           updateWeekStorage(data.data, { number_week })
           setFoods(data.data)
-          setAction('')
+          setContentModal(null)
         }
       } else {
         setAction('networkError')
@@ -127,8 +103,8 @@ export default function App() {
         const warnStorageDataString = warnStorage ? JSON.stringify(warnStorage.data) : '{data:[]}'
 
         if (warnStorage === null || warnResolveDataString !== warnStorageDataString) {
-          setItem('@warns', { data: warnsResolve.data })
-          setWarns(warnsResolve.data)
+          await setItem('@warns', { data: warnsResolve.data })
+          await setWarns(warnsResolve.data)
           if (warnResolveDataString.length > warnStorageDataString.length) setViewedWarn(false)
         }
       }
@@ -147,29 +123,12 @@ export default function App() {
     setFavorites(favorites !== null ? favorites.data : [])
   }
 
-  function modifyModal(content, typeAction) {
-    setContentModal(content)
-    setAction(typeAction)
-  }
-
   // Método responsável por mudar o contéudo do modal se a variárvel action mudar
   useEffect(() => {
     switch (action) {
       case 'networkError':
         setAction('')
         constants.showAlert('Falha na conexão', 'Por favor verifique a conexão com a internet')
-        break
-      case 'showSuggestion':
-        setContentModal(<Suggestion />)
-        break
-      case 'showFavorites':
-        setContentModal(<Favorite />)
-        break
-      case 'requestToServer':
-        setContentModal(<Requesting />)
-        break
-      case 'dataNull':
-        setContentModal(<DataNull />)
         break
       case 'showWarnings':
         setContentModal(
@@ -199,13 +158,13 @@ export default function App() {
         setViewedWarn(true)
         break
     }
-    if (action !== '') {
+    if (contentModal !== null) {
       setModalVisible(true)
     } else {
       checkFavorites()
       setModalVisible(false)
     }
-  }, [action])
+  }, [contentModal, action])
 
   useEffect(() => { // -> Método responsável por iniciar o app
     // console.info(`Hermes is ${isHermes()}`)
@@ -237,10 +196,7 @@ export default function App() {
                   arrIncludesFavorites(item.almoco) ? { borderColor: '#f9b233' } : {}
                 }
                 onPress={() => {
-                  modifyModal(
-                    <Details names={ARRAY_LAUNCH} item={item.almoco} />,
-                    'Almoço'
-                  )
+                  setContentModal(<Menu type='launch' item={item.almoco} />)
                 }}
               >
                 <TextButton>ALMOÇO</TextButton>
@@ -251,10 +207,7 @@ export default function App() {
                   arrIncludesFavorites(item.jantar) ? { borderColor: '#f9b233' } : {}
                 }
                 onPress={() => {
-                  modifyModal(
-                    <Details names={ARRAY_DINNER} item={item.jantar} />,
-                    'Jantar'
-                  )
+                  setContentModal(<Menu type='dinner' item={item.jantar} />)
                 }}
               >
                 <TextButton>JANTAR</TextButton>
@@ -265,7 +218,7 @@ export default function App() {
         ))}
         <Modals
           visible={modalVisible}
-          close={() => setAction('')}
+          close={() => setContentModal(null)}
           component={contentModal}
         />
       </Content>
@@ -279,8 +232,8 @@ export default function App() {
           name='message-alert'
           text='Avisos'
         />
-        <Icon onPress={() => setAction('showFavorites')} name='account-star' text='Favoritos' />
-        <Icon onPress={() => setAction('showSuggestion')} name='voice' text='Sugerir' />
+        <Icon onPress={() => setContentModal(<Favorite favorites={favorites} />)} name='account-star' text='Favoritos' />
+        <Icon onPress={() => setContentModal(<Suggestion />)} name='voice' text='Sugerir' />
         <Icon onPress={controllerWeek.requestAndSetWeek} name='reload' text='Renovar' />
       </ButtonBar>
     </Container>
