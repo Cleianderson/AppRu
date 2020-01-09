@@ -2,6 +2,7 @@ import React from 'react'
 
 import { Info, FoodDescription, FoodType } from './styles'
 import { ScrollView,View } from 'react-native'
+import constants from '../../service/constants'
 
 const extensive = {
   p1: 'Principal 1',
@@ -17,14 +18,17 @@ const extensive = {
   suc: 'Suco',
 }
 
-export default function Details(props) {
+export default function Menu(props) {
+
+  const dynamicArray = props.type === 'launch' ? constants.ARRAY_LAUNCH : constants.ARRAY_DINNER
+  
   return (
     <Info>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
       >
-        {props.names.map((strFood, inx) => (
+        {dynamicArray.map((strFood, inx) => (
           <View key={inx}>
             <FoodType>
               {extensive[strFood]}

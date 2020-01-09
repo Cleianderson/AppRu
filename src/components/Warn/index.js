@@ -1,32 +1,31 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import constants from '../../service/constants'
+import { View, ScrollView, Text } from 'react-native'
 
-export default function Warn({ title, content }) {
+import WarnUnit from './warnUnit'
+
+export default function Warn(props) {
   return (
-    <View style={style.view}>
-      <Text style={style.title}>{title}</Text>
-      <Text style={style.content}>{content}</Text>
+    <View style={{
+      backgroundColor: '#fff',
+      padding: 10,
+      margin: 20,
+      borderRadius: 7,
+    }}>
+      <ScrollView
+        contentContainerStyle={{
+          justifyContent: 'center',
+          flexDirection: 'column-reverse'
+        }}
+        showsVerticalScrollIndicator={false}
+      >
+        {props.warns.length !== 0 ? props.warns.map((warn, inx) => (
+          <WarnUnit key={inx} title={warn.title} content={warn.content} />
+        ))
+          : <Text style={{ color: '#000', fontSize: 18 }}
+          >
+            Nenhum aviso!
+          </Text>}
+      </ScrollView>
     </View>
   )
 }
-
-const style = StyleSheet.create({
-  title: {
-    color: '#000',
-    fontSize: 16,
-    borderBottomColor: '#f9b233',
-    borderBottomWidth: 2,
-    width: '100%',
-    textAlign: 'center',
-  },
-  content: { color: '#444', fontSize: 16, textAlign: 'center' },
-  view: {
-    alignItems: 'center',
-    borderColor: '#666',
-    borderWidth: 1,
-    borderRadius: constants.RADIUS_NUM,
-    padding: 10,
-    marginTop: 5
-  },
-})
