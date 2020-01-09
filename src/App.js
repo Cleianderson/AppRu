@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import React, { useState, useEffect, useRef } from 'react'
-import { View, ScrollView, StatusBar } from 'react-native'
+import { View, StatusBar } from 'react-native'
 import moment from 'moment'
 import OneSignal from 'react-native-onesignal'
 import NetInfo from '@react-native-community/netinfo'
@@ -11,9 +11,6 @@ import {
   Content,
   Data,
   InfoDate,
-  Button,
-  ButtonDetails,
-  TextButton,
   ButtonBar,
 } from './styles'
 
@@ -22,9 +19,9 @@ import { getDate, tranformNum2Day } from './service/DateUtils'
 import { updateWeekStorage, getItem, setItem } from './service/Storage'
 
 import Modals from './components/Modal'
-import Menu from './components/Menu'
 import Warn from './components/Warn'
 import Requesting from './components/Requesting'
+import ButtonMenu from './components/ButtonMenu'
 import DataNull from './components/DataNull'
 import Favorite from './components/Favorite'
 import Suggestion from './components/Suggestion'
@@ -40,8 +37,7 @@ export default function App() {
   const [foods, setFoods] = useState(Array)
   const [favorites, setFavorites] = useState(Array)
   const [warns, setWarns] = useState(Array)
-  const [action, setAction] = useState('')
-  const [viewedWarn, setViewedWarn] = useState(true)
+  const [thereIsWarn, setThereIsWarn] = useState(false)
   const [contentModal, setContentModal] = useState(null)
   const [modalVisible, setModalVisible] = useState(false)
 
@@ -49,7 +45,7 @@ export default function App() {
   const Page = useRef(Container)// -> Referência para a PageView
   /*   FIM DECLARAÇÃO DE VARIÁVEIS    */
 
-  function arrIncludesFavorites(item) { // -> Verifica quais itens favoritos estão no cardápio
+  function itemIsInclude(item) { // -> Verifica quais itens favoritos estão no cardápio
     let a = favorites.filter(fav =>
       JSON.stringify(item).includes(fav.toUpperCase())
     )
@@ -65,7 +61,7 @@ export default function App() {
       // -> Método responsável por iniciar os dados do cardápio
       const jsonStorage = JSON.parse(await getItem('@week'))
       if (jsonStorage === null || isoWeekOfTomorrow !== jsonStorage.number_week) {
-        setAction(<Requesting />)
+        setContentModal(<Requesting />)
         await controllerWeek.verifyConnectionAndGetWeek()
       } else {
         setFoods(jsonStorage.foods)
@@ -88,7 +84,8 @@ export default function App() {
           setContentModal(null)
         }
       } else {
-        setAction('networkError')
+        setContentModal(null)
+        constants.showAlert('Falha na conexão', 'Por favor verifique a conexão com a internet')
       }
     }
   }
@@ -105,19 +102,35 @@ export default function App() {
         if (warnStorage === null || warnResolveDataString !== warnStorageDataString) {
           await setItem('@warns', { data: warnsResolve.data })
           await setWarns(warnsResolve.data)
-          if (warnResolveDataString.length > warnStorageDataString.length) setViewedWarn(false)
+        }
+        if (warnResolveDataString.length > warnStorageDataString.length) {
+          setThereIsWarn(true)
+          setItem('@thereIsWarn',{value: true})
         }
       }
     },
-    getWarnsAndStartInterval: async () => {
+    startWarning: async () => {
       // -> Método responsável por iniciar os avisos
       const warnStorage = JSON.parse(await getItem('@warns'))
       setWarns(warnStorage ? warnStorage.data : [])
+
+      await setThereIsWarn((JSON.parse(await getItem('@thereIsWarn')).value))
+      
       controllerWarn.verifyWarn()
       setInterval(controllerWarn.verifyWarn, 10 * 1000)
-    }
+    },
   }
 
+  const actions = {
+    warning: () => {
+      setContentModal(<Warn warns={warns} />)
+      setThereIsWarn(false)
+      setItem('@thereIsWarn',{value: false})
+    },
+    favorite: () => setContentModal(<Favorite favorites={favorites} />),
+    suggestion: () => setContentModal(<Suggestion />),
+  }
+  
   async function checkFavorites() {// -> Método responsável por iniciar a lista de favoritos
     const favorites = JSON.parse(await getItem('@favorites'))
     setFavorites(favorites !== null ? favorites.data : [])
@@ -125,52 +138,19 @@ export default function App() {
 
   // Método responsável por mudar o contéudo do modal se a variárvel action mudar
   useEffect(() => {
-    switch (action) {
-      case 'networkError':
-        setAction('')
-        constants.showAlert('Falha na conexão', 'Por favor verifique a conexão com a internet')
-        break
-      case 'showWarnings':
-        setContentModal(
-          <View style={{
-            backgroundColor: '#fff',
-            padding: 10,
-            margin: 20,
-            borderRadius: 7,
-          }}>
-            <ScrollView
-              contentContainerStyle={{
-                justifyContent: 'center',
-                flexDirection: 'column-reverse'
-              }}
-              showsVerticalScrollIndicator={false}
-            >
-              {warns.length !== 0 ? warns.map((warn, inx) => (
-                <Warn key={inx} title={warn.title} content={warn.content} />
-              ))
-                : <Text style={{ color: '#000', fontSize: 18 }}
-                >
-                  Nenhum aviso!
-                </Text>}
-            </ScrollView>
-          </View>
-        )
-        setViewedWarn(true)
-        break
-    }
     if (contentModal !== null) {
       setModalVisible(true)
     } else {
       checkFavorites()
       setModalVisible(false)
     }
-  }, [contentModal, action])
+  }, [contentModal])
 
   useEffect(() => { // -> Método responsável por iniciar o app
     // console.info(`Hermes is ${isHermes()}`)
     OneSignal.init('85b3451d-6f7d-481f-b66e-1f93fe069135')
     controllerWeek.checkWeek()
-    controllerWarn.getWarnsAndStartInterval()
+    controllerWarn.startWarning()
     checkFavorites()
     return clearInterval()
   }, [])
@@ -191,28 +171,18 @@ export default function App() {
                 justifyContent: 'center',
               }}
             >
-              <Button
-                style={
-                  arrIncludesFavorites(item.almoco) ? { borderColor: '#f9b233' } : {}
-                }
-                onPress={() => {
-                  setContentModal(<Menu type='launch' item={item.almoco} />)
-                }}
-              >
-                <TextButton>ALMOÇO</TextButton>
-                <ButtonDetails>10:30h - 14:00h</ButtonDetails>
-              </Button>
-              <Button
-                style={
-                  arrIncludesFavorites(item.jantar) ? { borderColor: '#f9b233' } : {}
-                }
-                onPress={() => {
-                  setContentModal(<Menu type='dinner' item={item.jantar} />)
-                }}
-              >
-                <TextButton>JANTAR</TextButton>
-                <ButtonDetails>16:30h - 19:00h</ButtonDetails>
-              </Button>
+              <ButtonMenu
+                onPress={setContentModal}
+                type='launch'
+                item={item.almoco}
+                isIncluded={itemIsInclude}
+              />
+              <ButtonMenu
+                onPress={setContentModal}
+                type='dinner'
+                item={item.jantar}
+                isIncluded={itemIsInclude}
+              />
             </View>
           </View>
         ))}
@@ -226,14 +196,16 @@ export default function App() {
         <Icon
           style={{
             borderBottomColor: '#f00',
-            borderBottomWidth: viewedWarn ? 0 : 1
+            borderBottomWidth: thereIsWarn ? 1 : 0
           }}
-          onPress={() => setAction('showWarnings')}
+          onPress={actions.warning}
           name='message-alert'
           text='Avisos'
         />
-        <Icon onPress={() => setContentModal(<Favorite favorites={favorites} />)} name='account-star' text='Favoritos' />
-        <Icon onPress={() => setContentModal(<Suggestion />)} name='voice' text='Sugerir' />
+        <Icon onPress={actions.favorite}
+          name='account-star' text='Favoritos'
+        />
+        <Icon onPress={actions.suggestion} name='voice' text='Sugerir' />
         <Icon onPress={controllerWeek.requestAndSetWeek} name='reload' text='Renovar' />
       </ButtonBar>
     </Container>

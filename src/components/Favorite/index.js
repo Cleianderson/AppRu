@@ -41,7 +41,7 @@ export default function Favorite(props) {
 
   return (
     <Container>
-      <ScrollView showsVerticalScrollIndicator={false} style={{ maxHeight: 300 }} >
+      <ScrollView showsVerticalScrollIndicator={false} style={{ maxHeight: 190 }} >
         {
           listFavorites.map((item, inx) => (
             <FavoriteUnit

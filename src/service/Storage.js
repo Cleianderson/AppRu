@@ -15,6 +15,12 @@ export async function setItem(str, json) {
     JSON.stringify(json)
   )
 }
+export async function setPrimitive(str, item) {
+  await Storage.setItem(
+    str,
+    String(item)
+  )
+}
 
 export async function getItem(str) {
   return await Storage.getItem(str)
