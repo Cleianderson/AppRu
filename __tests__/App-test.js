@@ -13,9 +13,36 @@ import renderer from 'react-test-renderer'
 import DataNull from '../src/components/DataNull'
 import Requesting from '../src/components/Requesting'
 import Modal from '../src/components/Modal'
-import Details from '../src/components/Details'
+import ButtonMenu from '../src/components/ButtonMenu'
 
 jest.mock('@react-native-community/async-storage', () => mockAsyncStorage)
+
+const item = {
+  almoco: {
+    suc: 'ACEROLA/ CAJU',
+    p1: 'CARNE ASSADA AO MOLHO FERRUGEM',
+    p2: 'PEIXE À GOMES DE SÁ',
+    gua: 'QUIBEBE- ARROZ COM ERVILHAS- FEIJÃO PRETO',
+    sob: 'MAÇA',
+    veg: 'RISOTO DE GRÃO DE BICO',
+    gre: 'ISCA DE FRANGO COM PIMENTÕES',
+    fag: 'PARMEGIANA DE FRANGO',
+    sco: 'BETERRABA COM CEBOLINHO E GERGELIM BRANCO',
+    sal: 'MIX DE FOLHAS COM  CENOURA E HORTELÃ'
+  },
+  jantar: {
+    suc: 'ACEROLA / CAJU',
+    p1: 'PEITO ACEBOLADO',
+    p2: 'ESCONDIDINHO DE ABÓBORA COM CHARQUE',
+    gua: 'ARROZ COM CHEIRO VERDE',
+    sob: 'MAÇA',
+    sopa: 'SOPA MINESTRONE',
+    veg: 'QUIBE COM MOLHO DE ERVAS',
+    gre: 'FRANGO AO FORNO COM AVEIA',
+    fag: '*******',
+    sal: 'TOMATE COM ACELGA E ERVILHAS'
+  }
+}
 
 describe('Rendering Components', () => {
 
@@ -32,15 +59,42 @@ describe('Rendering Components', () => {
   })
 
   it('Modal', () => {
-    renderer.create(<Modal />)
+    renderer.create(<Modal component={<Requesting />} />)
   })
 
-  it('Details', () => {
+  it('ButtonMenu', () => {
     renderer.create(
-      <Details
-        names={['p1', 'p2']}
-        item={{ p1: 'C t1', p2: 'C t2' }}
-      />)
+      <ButtonMenu
+        onPress={() => { }}
+        type='launch'
+        item={item.almoco}
+        isIncluded={() => true}
+      />
+    )
+    renderer.create(
+      <ButtonMenu
+        onPress={() => { }}
+        type='launch'
+        item={item.almoco}
+        isIncluded={() => false}
+      />
+    )
+    renderer.create(
+      <ButtonMenu
+        onPress={() => { }}
+        type='dinner'
+        item={item.jantar}
+        isIncluded={() => true}
+      />
+    )
+    renderer.create(
+      <ButtonMenu
+        onPress={() => { }}
+        type='dinner'
+        item={item.jantar}
+        isIncluded={() => false}
+      />
+    )
   })
 
 })
