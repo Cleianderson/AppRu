@@ -55,7 +55,7 @@ export default function App() {
   const controllerWeek = {
     requestAndSetWeek: async () => {
       setContentModal(<Requesting />)
-      await controllerWeek.verifyConnectionAndGetWeek(moment().isoWeek())
+      await controllerWeek.verifyConnectionAndGetWeek()
     },
     checkWeek: async () => {
       // -> Método responsável por iniciar os dados do cardápio
@@ -71,11 +71,10 @@ export default function App() {
       Page.current.setPage(moment().weekday() > 5 ? 0 : moment().weekday() - 1)
 
     },
-    verifyConnectionAndGetWeek: async (number_week) => {
+    verifyConnectionAndGetWeek: async () => {
       if ((await NetInfo.fetch()).isConnected) {
-        const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
+        const { data, number_week } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
 
-        number_week = number_week || data.number_week
         if (data === null) {
           setContentModal(<DataNull />)
         } else {
@@ -105,7 +104,7 @@ export default function App() {
         }
         if (warnResolveDataString.length > warnStorageDataString.length) {
           setThereIsWarn(true)
-          setItem('@thereIsWarn',{value: true})
+          setItem('@thereIsWarn', { value: true })
         }
       }
     },
@@ -114,8 +113,8 @@ export default function App() {
       const warnStorage = JSON.parse(await getItem('@warns'))
       setWarns(warnStorage ? warnStorage.data : [])
 
-      await setThereIsWarn((JSON.parse(await getItem('@thereIsWarn')).value))
-      
+      await setThereIsWarn((JSON.parse(await getItem('@thereIsWarn')) || { value: false }).value)
+
       controllerWarn.verifyWarn()
       setInterval(controllerWarn.verifyWarn, 10 * 1000)
     },
@@ -125,12 +124,12 @@ export default function App() {
     warning: () => {
       setContentModal(<Warn warns={warns} />)
       setThereIsWarn(false)
-      setItem('@thereIsWarn',{value: false})
+      setItem('@thereIsWarn', { value: false })
     },
     favorite: () => setContentModal(<Favorite favorites={favorites} />),
     suggestion: () => setContentModal(<Suggestion />),
   }
-  
+
   async function checkFavorites() {// -> Método responsável por iniciar a lista de favoritos
     const favorites = JSON.parse(await getItem('@favorites'))
     setFavorites(favorites !== null ? favorites.data : [])
