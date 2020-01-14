@@ -73,12 +73,12 @@ export default function App() {
     },
     verifyConnectionAndGetWeek: async () => {
       if ((await NetInfo.fetch()).isConnected) {
-        const { data, number_week } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
+        const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
 
         if (data === null) {
           setContentModal(<DataNull />)
         } else {
-          updateWeekStorage(data.data, { number_week })
+          updateWeekStorage(data.data, { number_week: data.number_week })
           setFoods(data.data)
           setContentModal(null)
         }
