@@ -52,37 +52,37 @@ export default function RUral() {
             backgroundColor: constants.PRIMARY_COLOR,
             image: (<Image style={{ width: 75, height: 75 }} source={require('./assets/avisos.png')} />),
             title: 'Avisos',
-            subtitle: 'Aqui serão mostrados todos os avisos que a CGARU tem pra você. Se houver um novo aviso o botão ficará vermelhinho e você também receberá uma notificação',
+            subtitle: 'Aqui serão mostrados todos os avisos que a CGARU tem para você. Se houver um novo aviso o botão ficará vermelhinho e você também receberá uma notificação',
           },
           {
             backgroundColor: constants.PRIMARY_COLOR,
             image: (<Image style={{ width: 75, height: 75 }} source={require('./assets/favoritos.png')} />),
             title: 'Favoritos',
-            subtitle: 'Nesse você pode inserir comidas e se houver alguma delas no cardápio o botão do almoço e/ou jantar ficará amarelinho',
+            subtitle: 'Nesse você pode favoritar as preparações que mais gosta e quando alguma delas estiver no cardápio o botão do almoço e/ou jantar ficará amarelinho',
           },
           {
             backgroundColor: constants.PRIMARY_COLOR,
             image: (<Image style={{ width: 75, height: 75 }} source={require('./assets/sugerir.png')} />),
             title: 'Sugerir',
-            subtitle: 'Aqui você pode nos dar sua sugestão sobre o RU, sobre o app ou sobre o que você quiser, simples, porém importantíssimo',
+            subtitle: 'Aqui você pode nos dar sua sugestão sobre o RU, sobre o app ou sobre o que quiser. Simples, porém importantíssimo',
           },
           {
             backgroundColor: constants.PRIMARY_COLOR,
             image: (<Image style={{ width: 75, height: 75 }} source={require('./assets/renovar.png')} />),
             title: 'Renovar',
-            subtitle: 'Esse é simples, ele apenas contata o servidor pra checar se a semana no seu celular é a mesma do servidor',
+            subtitle: 'Esse é simples, ele apenas contata o servidor para checar se a semana no seu celular é a mesma do servidor',
           },
           {
             backgroundColor: constants.PRIMARY_COLOR,
             image: (<Image style={{ width: 350, height: 200 }} source={require('./assets/botoes.png')} />),
             title: 'A cereja do bolo',
-            subtitle: 'Cada dia útil da semana tem um par de botões que mostram o cardápio do almoço e do jantar. Repare no botão amarelinho, isso significa que naquele horário tem algum dos itens favoritos',
+            subtitle: 'Cada dia útil da semana tem um par de botões que mostra o cardápio do almoço e do jantar. Repare no botão amarelinho, isso significa que naquele horário tem algum dos seus itens favoritos',
           },
           {
             backgroundColor: constants.PRIMARY_COLOR,
             image: (<Image style={{ width: 200, height: 200 }} source={require('./assets/icon.png')} />),
             title: 'É isso...',
-            subtitle: 'Não esqueça de nos dar sua opinião/sugestão, pois é o modo mais fácil de sabermos aonde e no que devemos melhorar',
+            subtitle: 'Não esqueça de nos dar sua opinião/sugestão, pois esse é o modo mais fácil de sabermos onde e no que devemos melhorar',
           },
         ]}
         nextLabel='Próximo'
