@@ -10,6 +10,7 @@ export default {
 
   PRIMARY_COLOR: '#1b2d4f',
   SECOND_COLOR: '#f9b233',
+  THIRTY_COLOR: '#1b2d4f',
 
   PRIMARY_BG_COLOR: '#fff',
   SECOND_BG_COLOR: '#ddd',
