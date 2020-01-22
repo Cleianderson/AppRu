@@ -21,7 +21,7 @@ export default function Warn(props) {
         {props.warns.length !== 0 ? props.warns.map((warn, inx) => (
           <WarnUnit key={inx} title={warn.title} content={warn.content} />
         ))
-          : <Text style={{ color: '#000', fontSize: 18 }}
+          : <Text style={{ color: '#000', fontSize: 18, textAlign:'center' }}
           >
             Nenhum aviso!
           </Text>}
