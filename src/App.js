@@ -35,6 +35,7 @@ const isoWeekOfTomorrow = moment().add(1, 'days').isoWeek()
 export default function App() {
   /*   DECLARAÇÃO DE VARIÁVEIS    */
   const [foods, setFoods] = useState(Array)
+  const [pagePos, setPagePos] = useState(0)
   const [favorites, setFavorites] = useState(Array)
   const [warns, setWarns] = useState(Array)
   const [thereIsWarn, setThereIsWarn] = useState(false)
@@ -157,7 +158,10 @@ export default function App() {
   return (
     <Container>
       <StatusBar animated barStyle='light-content' />
-      <Content ref={Page}>
+      <Content 
+        ref={Page}
+        onPageSelected={ev => setPagePos(ev.nativeEvent.position)}
+      >
         {foods.map((item, inx) => (
           <View key={inx}>
             <InfoDate>
@@ -191,6 +195,7 @@ export default function App() {
           component={contentModal}
         />
       </Content>
+      <WeekIndicator day={pagePos} />
       <ButtonBar>
         <Icon
           style={{
