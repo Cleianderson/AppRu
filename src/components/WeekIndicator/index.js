@@ -1,20 +1,41 @@
-import react from 'react'
-import { View, Text } from 'react-native'
+import React from 'react'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import constants from '../../service/constants'
+import { getDate } from '../../service/DateUtils'
 
-export default function WeekIndicator(props){
-    
-    return(
-        <View
-            style={{
-                flexDirection: 'row'
-            }}
+export default function WeekIndicator(props) {
+
+  return (
+    <View style={style.view}>
+      {constants.STRING_DAYS.map((day, index) => (
+        <TouchableOpacity 
+          key={index}
+          onPress={() => props.press(index)} 
         >
-            <Text style={{color: props.day == 0 ? '#ccc':'#fff'}} >Seg</Text>
-            <Text style={{color: props.day == 1 ? '#ccc':'#fff'}} >Ter</Text>
-            <Text style={{color: props.day == 2 ? '#ccc':'#fff'}} >Qua</Text>
-            <Text style={{color: props.day == 3 ? '#ccc':'#fff'}} >Qui</Text>
-            <Text style={{color: props.day == 4 ? '#ccc':'#fff'}} >Sex</Text>
-        </View>
-    )
+          <Text style={[style.text, { color: props.day == index ? constants.SECOND_COLOR : '#aaa' }]} >
+            {day}
+          </Text>
+          <Text style={[style.date, { color: props.day == index ? constants.SECOND_COLOR : '#aaa' }]}>
+            {getDate(index)}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+  )
 }
+
+const style = StyleSheet.create({
+  view: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  text: {
+    fontSize: 17,
+    textAlign: 'center'
+  },
+  date: {
+    fontSize: 14,
+    textAlign: 'center'
+  }
+})
 
