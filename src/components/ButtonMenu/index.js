@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Menu from './menuUnit'
+import Menu from './Menu'
 
 import {Button, TextButton, ButtonDetails} from './styles'
 
