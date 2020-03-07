@@ -6,16 +6,12 @@ import OneSignal from 'react-native-onesignal'
 import NetInfo from '@react-native-community/netinfo'
 
 import {
-  Text,
   Container,
   Content,
-  Data,
-  InfoDate,
   ButtonBar,
 } from './styles'
 
 import api from './service/Api'
-import { getDate, tranformNum2Day } from './service/DateUtils'
 import { updateWeekStorage, getItem, setItem } from './service/Storage'
 
 import Modals from './components/Modal'
@@ -28,6 +24,7 @@ import Suggestion from './components/Suggestion'
 import Icon from './components/Icon'
 
 import constants from './service/constants'
+import WeekIndicator from './components/WeekIndicator'
 
 const isoWeekOfTomorrow = moment().add(1, 'days').isoWeek()
 // const isHermes = () => global.HermesInternal != null
@@ -117,7 +114,7 @@ export default function App() {
       await setThereIsWarn((JSON.parse(await getItem('@thereIsWarn')) || { value: false }).value)
 
       controllerWarn.verifyWarn()
-      setInterval(controllerWarn.verifyWarn, 10 * 1000)
+      // setInterval(controllerWarn.verifyWarn, 10 * 1000)
     },
   }
 
@@ -149,6 +146,12 @@ export default function App() {
   useEffect(() => { // -> Método responsável por iniciar o app
     // console.info(`Hermes is ${isHermes()}`)
     OneSignal.init('85b3451d-6f7d-481f-b66e-1f93fe069135')
+    OneSignal.addEventListener('received', async (not)=>{
+      await setItem('@warns', { data: not.payload.additionalData.warns })
+      setWarns(not.payload.additionalData.warns)
+      setThereIsWarn(true)
+      setItem('@thereIsWarn', { value: true })
+    })
     controllerWeek.checkWeek()
     controllerWarn.startWarning()
     checkFavorites()
@@ -158,16 +161,13 @@ export default function App() {
   return (
     <Container>
       <StatusBar animated barStyle='light-content' />
+      <WeekIndicator day={pagePos} press={Page.current.setPage} />
       <Content 
         ref={Page}
         onPageSelected={ev => setPagePos(ev.nativeEvent.position)}
       >
         {foods.map((item, inx) => (
           <View key={inx}>
-            <InfoDate>
-              <Text>{tranformNum2Day(inx)}</Text>
-              <Data>{getDate(inx)}</Data>
-            </InfoDate>
             <View
               style={{
                 flex: 1,
@@ -189,13 +189,12 @@ export default function App() {
             </View>
           </View>
         ))}
+      </Content>
         <Modals
           visible={modalVisible}
           close={() => setContentModal(null)}
           component={contentModal}
         />
-      </Content>
-      <WeekIndicator day={pagePos} />
       <ButtonBar>
         <Icon
           style={{

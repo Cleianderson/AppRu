@@ -6,10 +6,10 @@ export function getDate(inx) {
 
   if(moment().add(1, 'days').isoWeek() !== moment().isoWeek()){
     const date = moment().add(1, 'days').isoWeekday(inx + 1)
-    dateToReturn = date.format('DD/MM/YY')
+    dateToReturn = date.format('DD/MM')
   }else{
     const date = moment().isoWeekday(inx + 1)
-    dateToReturn = date.format('DD/MM/YY')
+    dateToReturn = date.format('DD/MM')
   }
   
   return dateToReturn

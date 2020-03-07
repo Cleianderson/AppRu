@@ -73,5 +73,5 @@ export const ButtonBar = styled.View`
 	flex-direction: row;
 	justify-content: space-around;
 	padding-top:5px;
-	background: ${constants.THIRTY_COLOR};
+	background: ${constants.PRIMARY_COLOR};
 `
