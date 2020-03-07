@@ -1,6 +1,8 @@
 import { Alert } from 'react-native'
 
 export default {
+  STRING_DAYS: ['S','T','Q','Q','S'],
+  
   LARGE: 50,
   MEDIUM: 30,
   NORMAL: 12,
@@ -10,7 +12,7 @@ export default {
 
   PRIMARY_COLOR: '#1b2d4f',
   SECOND_COLOR: '#f9b233',
-  THIRTY_COLOR: '#1b2d4f',
+  THIRTY_COLOR: '#b61823',
 
   PRIMARY_BG_COLOR: '#fff',
   SECOND_BG_COLOR: '#ddd',
