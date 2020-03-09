@@ -40,10 +40,15 @@ export default function App() {
   const [modalVisible, setModalVisible] = useState(false)
 
 
-  const Page = useRef(Container)// -> Referência para a PageView
+  const Page = useRef(null)// -> Referência para a PageView
   /*   FIM DECLARAÇÃO DE VARIÁVEIS    */
 
-  function itemIsInclude(item) { // -> Verifica quais itens favoritos estão no cardápio
+  /**
+   * Function that verify if an item is included in favorites
+   * 
+   * @param {JSON} item an object that contain all foods
+   */
+  function itemIsInclude(item) {
       const arr = favorites.filter(fav => {
         let dinner = constants.ARRAY_DINNER.map(unit => item[unit])
         let launch = constants.ARRAY_LAUNCH.map(unit => item[unit])
@@ -72,7 +77,12 @@ export default function App() {
       }
 
       // Muda a página para o dia da semana atual
-      Page.current.setPage(moment().isoWeekday() > 4 ? 0 : moment().isoWeekday())
+      const weekDay = moment().isoWeekday()
+      Page.current.setPage(
+          weekDay >= 1 && weekDay <= 5 ? 
+            0 :
+            weekDay
+        )
 
     },
     verifyConnectionAndGetWeek: async () => {
