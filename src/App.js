@@ -44,10 +44,16 @@ export default function App() {
   /*   FIM DECLARAÇÃO DE VARIÁVEIS    */
 
   function itemIsInclude(item) { // -> Verifica quais itens favoritos estão no cardápio
-    let a = favorites.filter(fav =>
-      JSON.stringify(item).includes(fav.toUpperCase())
-    )
-    return a.length > 0
+      const arr = favorites.filter(fav => {
+        let dinner = constants.ARRAY_DINNER.map(unit => item[unit])
+        let launch = constants.ARRAY_LAUNCH.map(unit => item[unit])
+        
+        dinner = dinner.filter(unit => unit!== undefined)
+        launch = launch.filter(unit => unit!== undefined)
+        
+        return (dinner.includes(fav.toUpperCase()) || launch.includes(fav.toUpperCase()))
+      })
+      return arr.length > 0
   }
 
   const controllerWeek = {
@@ -66,7 +72,7 @@ export default function App() {
       }
 
       // Muda a página para o dia da semana atual
-      Page.current.setPage(moment().weekday() > 5 ? 0 : moment().weekday() - 1)
+      Page.current.setPage(moment().isoWeekday() > 4 ? 0 : moment().isoWeekday())
 
     },
     verifyConnectionAndGetWeek: async () => {
@@ -155,7 +161,6 @@ export default function App() {
     controllerWeek.checkWeek()
     controllerWarn.startWarning()
     checkFavorites()
-    return clearInterval()
   }, [])
 
   return (
@@ -167,8 +172,8 @@ export default function App() {
         onPageSelected={ev => setPagePos(ev.nativeEvent.position)}
       >
         {foods.map((item, inx) => (
-          <View key={inx}>
             <View
+            key={inx}
               style={{
                 flex: 1,
                 justifyContent: 'center',
@@ -187,7 +192,6 @@ export default function App() {
                 isIncluded={itemIsInclude}
               />
             </View>
-          </View>
         ))}
       </Content>
         <Modals

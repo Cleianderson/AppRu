@@ -3,9 +3,10 @@ import constants from '../../service/constants'
 
 export const Container = styled.View`
   background: #fff;
-  padding: 10px;
+  padding: 7px 10px;
   margin: 20px;
   border-radius: ${constants.RADIUS};
+  max-height: 90%;
 `
 export const ContainerInput = styled.View`
   flex-direction: row;
@@ -15,8 +16,7 @@ export const ContainerInput = styled.View`
 `
 
 export const Button = styled.TouchableOpacity`
-  border-width: 2;
-  border-radius: 100px;
+  justify-content: center;
+  align-items: center;
   padding: 5px;
-  border-color: ${constants.SECOND_COLOR};
 `

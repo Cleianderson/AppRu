@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { ScrollView, View, TouchableOpacity } from 'react-native'
+import { ScrollView, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import { Info, FoodDescription, FoodText, FoodContainer, MenuContainer } from './styles'
@@ -28,7 +28,7 @@ export default function Menu(props) {
 
   function checkItem(str) {
     let result = favorites.filter(fav =>
-      str.toUpperCase().includes(fav.toUpperCase())
+      str.toUpperCase() === fav.toUpperCase()
     )
     return result.length > 0
   }
@@ -55,15 +55,24 @@ export default function Menu(props) {
   return (
     <Info>
       <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+        showsVerticalScrollIndicator={true}
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: 'center',
+          paddingVertical: 10,
+          paddingHorizontal: 7,
+        }}
       >
         {dynamicArray.map((strFood, inx) => (
           <FoodContainer key={inx}>
             <MenuContainer>
               <FoodText>{extensive[strFood]}</FoodText>
               <TouchableOpacity onPress={() => toggleFavorite(props.item[strFood])} >
-                <Icon name='star' color={checkItem(props.item[strFood]) ? constants.SECOND_COLOR : '#ccc'} size={25} />
+                <Icon
+                  name='star'
+                  color={checkItem(props.item[strFood]) ? constants.SECOND_COLOR : '#ccc'}
+                  size={25}
+                />
               </TouchableOpacity>
             </MenuContainer>
             <FoodDescription>{props.item[strFood].toUpperCase()}</FoodDescription>

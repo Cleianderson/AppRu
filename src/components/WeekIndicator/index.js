@@ -6,20 +6,23 @@ import { getDate } from '../../service/DateUtils'
 export default function WeekIndicator(props) {
 
   return (
-    <View style={style.view}>
-      {constants.STRING_DAYS.map((day, index) => (
-        <TouchableOpacity 
-          key={index}
-          onPress={() => props.press(index)} 
-        >
-          <Text style={[style.text, { color: props.day == index ? constants.SECOND_COLOR : '#aaa' }]} >
-            {day}
-          </Text>
-          <Text style={[style.date, { color: props.day == index ? constants.SECOND_COLOR : '#aaa' }]}>
-            {getDate(index)}
-          </Text>
-        </TouchableOpacity>
-      ))}
+    <View style={style.container}>
+      <View style={style.view}>
+        {constants.STRING_DAYS.map((day, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => props.press(index)}
+          >
+            <Text style={[
+              style.text,
+              { color: props.day == index ? constants.SECOND_COLOR : '#aaa' }
+            ]} >
+              {day}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <Text style={style.date} >{getDate(props.day)}</Text>
     </View>
   )
 }
@@ -30,12 +33,15 @@ const style = StyleSheet.create({
     justifyContent: 'space-around',
   },
   text: {
-    fontSize: 17,
     textAlign: 'center'
   },
   date: {
-    fontSize: 14,
-    textAlign: 'center'
+    color: '#aaa',
+    textAlign: 'center',
+    marginTop: 3,
+  },
+  container:{
+    flexDirection: 'column'
   }
 })
 

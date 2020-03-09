@@ -12,7 +12,7 @@ export default function FavoriteUnit(props) {
         accessibilityLabel='Remover item dos favoritos'
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       >
-        <Icon name='close-circle-outline' color='#c00' size={30} />
+        <Icon name='close' color={constants.THIRTY_COLOR} size={20} />
       </TouchableOpacity>
     </View>
   )
@@ -25,11 +25,11 @@ const style = StyleSheet.create({
     padding: 10,
     margin: 5,
     borderWidth: 1,
-    borderColor: '#666',
+    borderColor: '#ccc',
     borderRadius: constants.RADIUS_NUM
   },
   text: {
     flex: 1,
-    fontSize: 18
+    color: '#333'
   }
 })

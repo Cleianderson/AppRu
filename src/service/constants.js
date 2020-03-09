@@ -1,7 +1,7 @@
 import { Alert } from 'react-native'
 
 export default {
-  STRING_DAYS: ['S','T','Q','Q','S'],
+  STRING_DAYS: ['Seg','Ter','Qua','Qui','Sex'],
   
   LARGE: 50,
   MEDIUM: 30,
