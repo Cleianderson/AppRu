@@ -20,6 +20,9 @@ export default function Suggestion() {
       showAlert('Tipo de sugestão inválida', 'Informe sobre o que se trata a sua sugestão')
       return null
     }
+    Alert.alert('Processando...', 'Estamos recebendo sua sugestão. Você será avisado se tudo ocorrer bem', [
+      { text: '', style: 'default', onPress: () => { } }
+    ])
     const resolve = await api.post('/suggestion', {
       text: txtSuggestion,
       type: typeSuggestion,
@@ -28,6 +31,10 @@ export default function Suggestion() {
     if (resolve.status === 200) {
       Alert.alert('Sugestão enviada', 'Obrigado <3', [
         { text: 'De nada', style: 'default', onPress: () => setTxtSuggestion('') }
+      ])
+    } else {
+      Alert.alert('Erro', 'Houve um erro inesperado, tente mais tarde', [
+        { text: 'Ok', style: 'default', onPress: () => { } }
       ])
     }
   }

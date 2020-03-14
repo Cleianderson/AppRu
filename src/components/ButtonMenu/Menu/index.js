@@ -67,7 +67,10 @@ export default function Menu(props) {
           <FoodContainer key={inx}>
             <MenuContainer>
               <FoodText>{extensive[strFood]}</FoodText>
-              <TouchableOpacity onPress={() => toggleFavorite(props.item[strFood])} >
+              <TouchableOpacity
+                onPress={() => toggleFavorite(props.item[strFood])}
+                hitSlop={{ top: 5, bottom: 5, left: 5, right: 5 }}
+              >
                 <Icon
                   name='star'
                   color={checkItem(props.item[strFood]) ? constants.SECOND_COLOR : '#ccc'}

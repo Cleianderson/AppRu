@@ -13,16 +13,18 @@ export default function WeekIndicator(props) {
             key={index}
             onPress={() => props.press(index)}
           >
-            <Text style={[
-              style.text,
-              { color: props.day == index ? constants.SECOND_COLOR : '#aaa' }
-            ]} >
-              {day}
+            <Text style={props.day == index ? style.selected : style.text} >{day}</Text>
+            <Text style={
+              props.day === index
+                ? style.dateSelected
+                : style.date
+            }
+            >
+              {getDate(props.day)}
             </Text>
           </TouchableOpacity>
         ))}
       </View>
-      <Text style={style.date} >{getDate(props.day)}</Text>
     </View>
   )
 }
@@ -33,14 +35,22 @@ const style = StyleSheet.create({
     justifyContent: 'space-around',
   },
   text: {
+    textAlign: 'center',
+    color: '#aaa'
+  },
+  selected: {
+    color: constants.SECOND_COLOR,
     textAlign: 'center'
   },
   date: {
-    color: '#aaa',
+    opacity: 0
+  },
+  dateSelected: {
+    color: constants.SECOND_COLOR,
     textAlign: 'center',
     marginTop: 3,
   },
-  container:{
+  container: {
     flexDirection: 'column'
   }
 })

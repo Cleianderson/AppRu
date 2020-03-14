@@ -32,7 +32,7 @@ const isoWeekOfTomorrow = moment().add(1, 'days').isoWeek()
 export default function App() {
   /*   DECLARAÇÃO DE VARIÁVEIS    */
   const [foods, setFoods] = useState(Array)
-  const [pagePos, setPagePos] = useState(0)
+  const [pagePos, setPagePos] = useState(-1)
   const [favorites, setFavorites] = useState(Array)
   const [warns, setWarns] = useState(Array)
   const [thereIsWarn, setThereIsWarn] = useState(false)
@@ -40,7 +40,7 @@ export default function App() {
   const [modalVisible, setModalVisible] = useState(false)
 
 
-  const Page = useRef(null)// -> Referência para a PageView
+  const Page = useRef(Content)// -> Referência para a PageView
   /*   FIM DECLARAÇÃO DE VARIÁVEIS    */
 
   /**
@@ -64,14 +64,14 @@ export default function App() {
   const controllerWeek = {
     requestAndSetWeek: async () => {
       setContentModal(<Requesting />)
-      await controllerWeek.verifyConnectionAndGetWeek()
+      await controllerWeek.verifyConnectionAndRefresh()
     },
     checkWeek: async () => {
       // -> Método responsável por iniciar os dados do cardápio
       const jsonStorage = JSON.parse(await getItem('@week'))
       if (jsonStorage === null || isoWeekOfTomorrow !== jsonStorage.number_week) {
         setContentModal(<Requesting />)
-        await controllerWeek.verifyConnectionAndGetWeek()
+        await controllerWeek.verifyConnectionAndRefresh()
       } else {
         setFoods(jsonStorage.foods)
       }
@@ -80,14 +80,15 @@ export default function App() {
       const weekDay = moment().isoWeekday()
       Page.current.setPage(
           weekDay >= 1 && weekDay <= 5 ? 
-            0 :
-            weekDay
+          weekDay - 1:
+          0
         )
 
     },
-    verifyConnectionAndGetWeek: async () => {
+    verifyConnectionAndRefresh: async () => {
       if ((await NetInfo.fetch()).isConnected) {
         const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
+        await controllerWarn.verifyWarn()
 
         if (data === null) {
           setContentModal(<DataNull />)
@@ -176,7 +177,7 @@ export default function App() {
   return (
     <Container>
       <StatusBar animated barStyle='light-content' />
-      <WeekIndicator day={pagePos} press={Page.current.setPage} />
+      {(foods.length > 0) && <WeekIndicator day={pagePos} press={Page.current.setPage} />}	 
       <Content 
         ref={Page}
         onPageSelected={ev => setPagePos(ev.nativeEvent.position)}
