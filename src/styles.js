@@ -1,9 +1,9 @@
 import styled from 'styled-components/native'
-import ViewPager from '@react-native-community/viewpager'
+import Page from '@react-native-community/viewpager'
 
 import constants from './service/constants'
 
-export const Content = styled(ViewPager)`
+export const Content = styled(Page)`
 	flex: 1;
 	/* background-color: ${constants.PRIMARY_COLOR}; */
 	align-content: center;
@@ -73,5 +73,5 @@ export const ButtonBar = styled.View`
 	flex-direction: row;
 	justify-content: space-around;
 	padding-top:5px;
-	background: ${constants.THIRTY_COLOR};
+	background: ${constants.PRIMARY_COLOR};
 `

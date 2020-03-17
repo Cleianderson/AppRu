@@ -41,7 +41,13 @@ export default function Favorite(props) {
 
   return (
     <Container>
-      <ScrollView showsVerticalScrollIndicator={false} style={{ maxHeight: 190 }} >
+      <ScrollView 
+        showsVerticalScrollIndicator={true} 
+        contentContainerStyle={{
+          flexGrow:1,
+          justifyContent: 'center'
+        }}
+      >
         {
           listFavorites.map((item, inx) => (
             <FavoriteUnit
@@ -56,7 +62,7 @@ export default function Favorite(props) {
         <TextInput
           style={{
             flex: 1,
-            fontSize: 16,
+            // fontSize: 16,
             padding: 7
           }}
           placeholderTextColor='#888'

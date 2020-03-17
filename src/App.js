@@ -6,16 +6,12 @@ import OneSignal from 'react-native-onesignal'
 import NetInfo from '@react-native-community/netinfo'
 
 import {
-  Text,
   Container,
   Content,
-  Data,
-  InfoDate,
   ButtonBar,
 } from './styles'
 
 import api from './service/Api'
-import { getDate, tranformNum2Day } from './service/DateUtils'
 import { updateWeekStorage, getItem, setItem } from './service/Storage'
 
 import Modals from './components/Modal'
@@ -28,6 +24,7 @@ import Suggestion from './components/Suggestion'
 import Icon from './components/Icon'
 
 import constants from './service/constants'
+import WeekIndicator from './components/WeekIndicator'
 
 const isoWeekOfTomorrow = moment().add(1, 'days').isoWeek()
 // const isHermes = () => global.HermesInternal != null
@@ -35,6 +32,7 @@ const isoWeekOfTomorrow = moment().add(1, 'days').isoWeek()
 export default function App() {
   /*   DECLARAÇÃO DE VARIÁVEIS    */
   const [foods, setFoods] = useState(Array)
+  const [pagePos, setPagePos] = useState(-1)
   const [favorites, setFavorites] = useState(Array)
   const [warns, setWarns] = useState(Array)
   const [thereIsWarn, setThereIsWarn] = useState(false)
@@ -42,38 +40,55 @@ export default function App() {
   const [modalVisible, setModalVisible] = useState(false)
 
 
-  const Page = useRef(Container)// -> Referência para a PageView
+  const Page = useRef(Content)// -> Referência para a PageView
   /*   FIM DECLARAÇÃO DE VARIÁVEIS    */
 
-  function itemIsInclude(item) { // -> Verifica quais itens favoritos estão no cardápio
-    let a = favorites.filter(fav =>
-      JSON.stringify(item).includes(fav.toUpperCase())
-    )
-    return a.length > 0
+  /**
+   * Function that verify if an item is included in favorites
+   * 
+   * @param {JSON} item an object that contain all foods
+   */
+  function itemIsInclude(item) {
+      const arr = favorites.filter(fav => {
+        let dinner = constants.ARRAY_DINNER.map(unit => item[unit])
+        let launch = constants.ARRAY_LAUNCH.map(unit => item[unit])
+        
+        dinner = dinner.filter(unit => unit!== undefined)
+        launch = launch.filter(unit => unit!== undefined)
+        
+        return (dinner.includes(fav.toUpperCase()) || launch.includes(fav.toUpperCase()))
+      })
+      return arr.length > 0
   }
 
   const controllerWeek = {
     requestAndSetWeek: async () => {
       setContentModal(<Requesting />)
-      await controllerWeek.verifyConnectionAndGetWeek()
+      await controllerWeek.verifyConnectionAndRefresh()
     },
     checkWeek: async () => {
       // -> Método responsável por iniciar os dados do cardápio
       const jsonStorage = JSON.parse(await getItem('@week'))
       if (jsonStorage === null || isoWeekOfTomorrow !== jsonStorage.number_week) {
         setContentModal(<Requesting />)
-        await controllerWeek.verifyConnectionAndGetWeek()
+        await controllerWeek.verifyConnectionAndRefresh()
       } else {
         setFoods(jsonStorage.foods)
       }
 
       // Muda a página para o dia da semana atual
-      Page.current.setPage(moment().weekday() > 5 ? 0 : moment().weekday() - 1)
+      const weekDay = moment().isoWeekday()
+      Page.current.setPage(
+          weekDay >= 1 && weekDay <= 5 ? 
+          weekDay - 1:
+          0
+        )
 
     },
-    verifyConnectionAndGetWeek: async () => {
+    verifyConnectionAndRefresh: async () => {
       if ((await NetInfo.fetch()).isConnected) {
         const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
+        await controllerWarn.verifyWarn()
 
         if (data === null) {
           setContentModal(<DataNull />)
@@ -116,7 +131,7 @@ export default function App() {
       await setThereIsWarn((JSON.parse(await getItem('@thereIsWarn')) || { value: false }).value)
 
       controllerWarn.verifyWarn()
-      setInterval(controllerWarn.verifyWarn, 10 * 1000)
+      // setInterval(controllerWarn.verifyWarn, 10 * 1000)
     },
   }
 
@@ -148,23 +163,28 @@ export default function App() {
   useEffect(() => { // -> Método responsável por iniciar o app
     // console.info(`Hermes is ${isHermes()}`)
     OneSignal.init('85b3451d-6f7d-481f-b66e-1f93fe069135')
+    OneSignal.addEventListener('received', async (not)=>{
+      await setItem('@warns', { data: not.payload.additionalData.warns })
+      setWarns(not.payload.additionalData.warns)
+      setThereIsWarn(true)
+      setItem('@thereIsWarn', { value: true })
+    })
     controllerWeek.checkWeek()
     controllerWarn.startWarning()
     checkFavorites()
-    return clearInterval()
   }, [])
 
   return (
     <Container>
       <StatusBar animated barStyle='light-content' />
-      <Content ref={Page}>
+      {(foods.length > 0) && <WeekIndicator day={pagePos} press={Page.current.setPage} />}	 
+      <Content 
+        ref={Page}
+        onPageSelected={ev => setPagePos(ev.nativeEvent.position)}
+      >
         {foods.map((item, inx) => (
-          <View key={inx}>
-            <InfoDate>
-              <Text>{tranformNum2Day(inx)}</Text>
-              <Data>{getDate(inx)}</Data>
-            </InfoDate>
             <View
+            key={inx}
               style={{
                 flex: 1,
                 justifyContent: 'center',
@@ -183,14 +203,13 @@ export default function App() {
                 isIncluded={itemIsInclude}
               />
             </View>
-          </View>
         ))}
+      </Content>
         <Modals
           visible={modalVisible}
           close={() => setContentModal(null)}
           component={contentModal}
         />
-      </Content>
       <ButtonBar>
         <Icon
           style={{

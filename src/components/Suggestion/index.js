@@ -8,6 +8,7 @@ import constants from '../../service/constants'
 
 export default function Suggestion() {
   const [txtSuggestion, setTxtSuggestion] = useState('')
+  const [txtIdentification, setTxtIdentification] = useState('')
   const [typeSuggestion, setTypeSuggestion] = useState('others')
 
   async function postSuggestion() {
@@ -19,10 +20,21 @@ export default function Suggestion() {
       showAlert('Tipo de sugestão inválida', 'Informe sobre o que se trata a sua sugestão')
       return null
     }
-    const resolve = await api.post('/suggestion', { text: txtSuggestion, type: typeSuggestion })
+    Alert.alert('Processando...', 'Estamos recebendo sua sugestão. Você será avisado se tudo ocorrer bem', [
+      { text: '', style: 'default', onPress: () => { } }
+    ])
+    const resolve = await api.post('/suggestion', {
+      text: txtSuggestion,
+      type: typeSuggestion,
+      author: txtIdentification
+    })
     if (resolve.status === 200) {
       Alert.alert('Sugestão enviada', 'Obrigado <3', [
         { text: 'De nada', style: 'default', onPress: () => setTxtSuggestion('') }
+      ])
+    } else {
+      Alert.alert('Erro', 'Houve um erro inesperado, tente mais tarde', [
+        { text: 'Ok', style: 'default', onPress: () => { } }
       ])
     }
   }
@@ -39,7 +51,6 @@ export default function Suggestion() {
   return (
     <Container>
       <ChooseBox
-        mode='dropdown'
         onValueChange={itemValue => setTypeSuggestion(itemValue)}
         prompt='Do que se trata a sugestão?'
         selectedValue={typeSuggestion}
@@ -49,6 +60,11 @@ export default function Suggestion() {
         <ChooseBox.Item label='Aplicativo' value='app' />
         <ChooseBox.Item label='Outros' value='others' />
       </ChooseBox>
+      <TextInput
+        placeholder='Identificação [NÃO OBRIGATÓRIO]'
+        onChangeText={setTxtIdentification}
+        value={txtIdentification}
+      />
       <ContainerInput>
         <TextInput
           style={{ flex: 1 }}

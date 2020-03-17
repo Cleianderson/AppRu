@@ -3,7 +3,7 @@ import constants from '../../service/constants'
 
 export const Container = styled.View`
   background: #fff;
-  padding: 10px;
+  padding: 7px 10px;
   margin: 20px;
   border-radius: ${constants.RADIUS};
 `
@@ -12,9 +12,6 @@ export const ContainerInput = styled.View`
   align-items: center;
 `
 export const Button = styled.TouchableOpacity`
-  border-width: 2;
-  border-radius: 100px;
   padding: 5px;
-  border-color: ${constants.SECOND_COLOR};
 `
 export const ChooseBox = styled.Picker``
