@@ -43,7 +43,9 @@ const style = StyleSheet.create({
     textAlign: 'center'
   },
   date: {
-    opacity: 0
+    opacity: 0,
+    textAlign: 'center',
+    marginTop: 3,
   },
   dateSelected: {
     color: constants.SECOND_COLOR,

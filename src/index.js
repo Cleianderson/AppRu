@@ -58,7 +58,7 @@ export default function RUral() {
             backgroundColor: constants.PRIMARY_COLOR,
             image: (<Image style={{ width: 75, height: 75 }} source={require('./assets/favoritos.png')} />),
             title: 'Favoritos',
-            subtitle: 'Nesse você pode favoritar as preparações que mais gosta e quando alguma delas estiver no cardápio o botão do almoço e/ou jantar ficará amarelinho',
+            subtitle: 'Nesse você pode favoritar as preparações que mais gosta e quando alguma delas estiver no cardápio o botão do almoço e/ou jantar ficará amarelinho. Também é possível favoritar preparações diretamente do menu',
           },
           {
             backgroundColor: constants.PRIMARY_COLOR,
@@ -70,7 +70,7 @@ export default function RUral() {
             backgroundColor: constants.PRIMARY_COLOR,
             image: (<Image style={{ width: 75, height: 75 }} source={require('./assets/renovar.png')} />),
             title: 'Renovar',
-            subtitle: 'Esse é simples, ele apenas contata o servidor para checar se a semana no seu celular é a mesma do servidor',
+            subtitle: 'Esse é simples, ele apenas contata o servidor para checar se os dados no seu celular são os mesmos do servidor',
           },
           {
             backgroundColor: constants.PRIMARY_COLOR,
