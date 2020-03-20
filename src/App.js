@@ -212,10 +212,7 @@ export default function App() {
         />
       <ButtonBar>
         <Icon
-          style={{
-            borderBottomColor: '#f00',
-            borderBottomWidth: thereIsWarn ? 1 : 0
-          }}
+          notify={thereIsWarn}
           onPress={actions.warning}
           name='message-alert'
           text='Avisos'

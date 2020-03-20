@@ -6,8 +6,12 @@ import constants from '../../service/constants'
 export const Container = styled.TouchableOpacity`
   align-items: center;
   align-content: center;
+  
+  border: 0px ${({notify}) => notify ? constants.THIRTY_COLOR : constants.PRIMARY_COLOR} solid;
+  border-bottom-width: 2;
 `
 
+// props.notify ? constants.THIRTY_COLOR : constants.PRIMARY_COLOR
 export const IconStyled = styled(Icon).
   attrs({ color: constants.TEXT_COLOR, size: 30 })`
 `
