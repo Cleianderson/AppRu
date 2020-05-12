@@ -18,7 +18,7 @@ export default {
   SECOND_BG_COLOR: '#ddd',
   DATANULL_BG_COLOR: '#a00',
 
-  RADIUS: '7px',
+  RADIUS: '10px',
   RADIUS_NUM: 7,
 
   showAlert: (errDesc, errContent) => {

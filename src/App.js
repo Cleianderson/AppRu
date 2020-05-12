@@ -1,65 +1,36 @@
+import 'react-native-gesture-handler'
+
 /* eslint-disable indent */
-import React, { useState, useEffect, useRef } from 'react'
-import { View, StatusBar } from 'react-native'
+import React, {useState, useEffect, useRef} from 'react'
 import moment from 'moment'
 import OneSignal from 'react-native-onesignal'
 import NetInfo from '@react-native-community/netinfo'
 
-import {
-  Container,
-  Content,
-  ButtonBar,
-} from './styles'
+import {Container, Content, ButtonBar} from './styles'
 
 import api from './service/Api'
-import { updateWeekStorage, getItem, setItem } from './service/Storage'
+import {updateWeekStorage, getItem, setItem} from './service/Storage'
 
 import Modals from './components/Modal'
-import Warn from './components/Warn'
-import Requesting from './components/Requesting'
-import ButtonMenu from './components/ButtonMenu'
 import DataNull from './components/DataNull'
-import Favorite from './components/Favorite'
-import Suggestion from './components/Suggestion'
-import Icon from './components/Icon'
-
+import Requesting from './components/Requesting'
 import constants from './service/constants'
-import WeekIndicator from './components/WeekIndicator'
+
+import Home from './routes/Home'
+
+import DataContext from './contexts/DataContext'
 
 const isoWeekOfTomorrow = moment().add(1, 'days').isoWeek()
-// const isHermes = () => global.HermesInternal != null
+const weekDay = moment().isoWeekday()
 
 export default function App() {
-  /*   DECLARAÇÃO DE VARIÁVEIS    */
-  const [foods, setFoods] = useState(Array)
-  const [pagePos, setPagePos] = useState(-1)
-  const [favorites, setFavorites] = useState(Array)
-  const [warns, setWarns] = useState(Array)
+  const [foods, setFoods] = useState([]);
+  const [day, setDay] = useState(weekDay >= 1 && weekDay <= 5 ? weekDay - 1 : 0)
+  const [favorites, setFavorites] = useState([''])
+  const [warns, setWarns] = useState([])
   const [thereIsWarn, setThereIsWarn] = useState(false)
   const [contentModal, setContentModal] = useState(null)
   const [modalVisible, setModalVisible] = useState(false)
-
-
-  const Page = useRef(Content)// -> Referência para a PageView
-  /*   FIM DECLARAÇÃO DE VARIÁVEIS    */
-
-  /**
-   * Function that verify if an item is included in favorites
-   * 
-   * @param {JSON} item an object that contain all foods
-   */
-  function itemIsInclude(item) {
-      const arr = favorites.filter(fav => {
-        let dinner = constants.ARRAY_DINNER.map(unit => item[unit])
-        let launch = constants.ARRAY_LAUNCH.map(unit => item[unit])
-        
-        dinner = dinner.filter(unit => unit!== undefined)
-        launch = launch.filter(unit => unit!== undefined)
-        
-        return (dinner.includes(fav.toUpperCase()) || launch.includes(fav.toUpperCase()))
-      })
-      return arr.length > 0
-  }
 
   const controllerWeek = {
     requestAndSetWeek: async () => {
@@ -77,23 +48,18 @@ export default function App() {
       }
 
       // Muda a página para o dia da semana atual
-      const weekDay = moment().isoWeekday()
-      Page.current.setPage(
-          weekDay >= 1 && weekDay <= 5 ? 
-          weekDay - 1:
-          0
-        )
-
+      // Page.current.setPage(weekDay >= 1 && weekDay <= 5 ? weekDay - 1 : 0);
     },
     verifyConnectionAndRefresh: async () => {
       if ((await NetInfo.fetch()).isConnected) {
-        const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
+        setContentModal(<Requesting />)
+        const {data} = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
         await controllerWarn.verifyWarn()
 
         if (data === null) {
           setContentModal(<DataNull />)
         } else {
-          updateWeekStorage(data.data, { number_week: data.number_week })
+          updateWeekStorage(data.data, {number_week: data.number_week})
           setFoods(data.data)
           setContentModal(null)
         }
@@ -101,7 +67,7 @@ export default function App() {
         setContentModal(null)
         constants.showAlert('Falha na conexão', 'Por favor verifique a conexão com a internet')
       }
-    }
+    },
   }
 
   const controllerWarn = {
@@ -109,45 +75,57 @@ export default function App() {
       // -> Verifica se as notificações locais e do servidor são iguais
       if ((await NetInfo.fetch()).isConnected) {
         const warnsResolve = await api.get('/warn')
-        const warnStorage = JSON.parse(await getItem('@warns'))
-        const warnResolveDataString = JSON.stringify(warnsResolve.data)
-        const warnStorageDataString = warnStorage ? JSON.stringify(warnStorage.data) : '{data:[]}'
+        let warnsStorage = JSON.parse(await getItem('@warns'))
 
-        if (warnStorage === null || warnResolveDataString !== warnStorageDataString) {
-          await setItem('@warns', { data: warnsResolve.data })
-          await setWarns(warnsResolve.data)
+        if (warnsStorage === null) {
+          await setItem('@warns', {data: warnsResolve.data})
+          warnsStorage = {data: warnsResolve.data}
         }
-        if (warnResolveDataString.length > warnStorageDataString.length) {
+
+        const resolveIds = warnsResolve.data.map((w) => w._id)
+        const storageIds = warnsStorage.data.map((w) => w._id)
+
+        const thereIsNewWarn = !resolveIds.every((resolveId) => storageIds.includes(resolveId))
+
+        await setItem('@warns', {data: warnsResolve.data})
+        setWarns(warnsResolve.data)
+
+        if (thereIsNewWarn) {
           setThereIsWarn(true)
-          setItem('@thereIsWarn', { value: true })
+          setItem('@thereIsWarn', {value: true})
         }
       }
     },
     startWarning: async () => {
       // -> Método responsável por iniciar os avisos
-      const warnStorage = JSON.parse(await getItem('@warns'))
-      setWarns(warnStorage ? warnStorage.data : [])
+      const warnsStorage = JSON.parse(await getItem('@warns'))
+      setWarns(warnsStorage ? warnsStorage.data : [])
 
-      await setThereIsWarn((JSON.parse(await getItem('@thereIsWarn')) || { value: false }).value)
+      setThereIsWarn((JSON.parse(await getItem('@thereIsWarn')) || {value: false}).value)
 
       controllerWarn.verifyWarn()
-      // setInterval(controllerWarn.verifyWarn, 10 * 1000)
     },
   }
 
-  const actions = {
-    warning: () => {
-      setContentModal(<Warn warns={warns} />)
-      setThereIsWarn(false)
-      setItem('@thereIsWarn', { value: false })
-    },
-    favorite: () => setContentModal(<Favorite favorites={favorites} />),
-    suggestion: () => setContentModal(<Suggestion />),
-  }
-
-  async function checkFavorites() {// -> Método responsável por iniciar a lista de favoritos
+  async function loadFavorites() {
+    // -> Método responsável por iniciar a lista de favoritos
     const favorites = JSON.parse(await getItem('@favorites'))
     setFavorites(favorites !== null ? favorites.data : [])
+  }
+
+  const updateThereIsWarn = async (value) => {
+    setThereIsWarn(value)
+    await setItem('@thereIsWarn', {value})
+  }
+
+  const addFavorites = async (str = '') => {
+    await setItem('@favorites', {data: [...favorites, str]})
+    setFavorites([...favorites, str])
+  }
+  const removeFavorites = (str = '') => {
+    const favoritesFiltered = favorites.filter((value) => value.toLowerCase() !== str.toLowerCase())
+    setFavorites(favoritesFiltered)
+    setItem('@favorites', {data: favoritesFiltered})
   }
 
   // Método responsável por mudar o contéudo do modal se a variárvel action mudar
@@ -155,74 +133,48 @@ export default function App() {
     if (contentModal !== null) {
       setModalVisible(true)
     } else {
-      checkFavorites()
+      loadFavorites()
       setModalVisible(false)
     }
   }, [contentModal])
 
-  useEffect(() => { // -> Método responsável por iniciar o app
-    // console.info(`Hermes is ${isHermes()}`)
+  useEffect(() => {
     OneSignal.init('85b3451d-6f7d-481f-b66e-1f93fe069135')
-    OneSignal.addEventListener('received', async (not)=>{
-      await setItem('@warns', { data: not.payload.additionalData.warns })
-      setWarns(not.payload.additionalData.warns)
+    OneSignal.addEventListener('received', async (pushNot) => {
+      console.log(pushNot)
+      await setItem('@warns', {data: pushNot.payload.additionalData.warns})
+      setWarns(pushNot.payload.additionalData.warns)
       setThereIsWarn(true)
-      setItem('@thereIsWarn', { value: true })
+      setItem('@thereIsWarn', {value: true})
     })
     controllerWeek.checkWeek()
     controllerWarn.startWarning()
-    checkFavorites()
+    loadFavorites()
   }, [])
 
   return (
-    <Container>
-      <StatusBar animated barStyle='light-content' />
-      {(foods.length > 0) && <WeekIndicator day={pagePos} press={Page.current.setPage} />}	 
-      <Content 
-        ref={Page}
-        onPageSelected={ev => setPagePos(ev.nativeEvent.position)}
-      >
-        {foods.map((item, inx) => (
-            <View
-            key={inx}
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-              }}
-            >
-              <ButtonMenu
-                onPress={setContentModal}
-                type='launch'
-                item={item.almoco}
-                isIncluded={itemIsInclude}
-              />
-              <ButtonMenu
-                onPress={setContentModal}
-                type='dinner'
-                item={item.jantar}
-                isIncluded={itemIsInclude}
-              />
-            </View>
-        ))}
-      </Content>
+    <DataContext.Provider
+      value={{
+        favorites,
+        addFavorites,
+        removeFavorites,
+        setFavorites,
+        warns,
+        thereIsWarn,
+        updateThereIsWarn,
+        foods,
+        day,
+        setDay,
+        reload: controllerWeek.verifyConnectionAndRefresh,
+      }}>
+      <Container>
+        <Home />
         <Modals
           visible={modalVisible}
           close={() => setContentModal(null)}
           component={contentModal}
         />
-      <ButtonBar>
-        <Icon
-          notify={thereIsWarn}
-          onPress={actions.warning}
-          name='message-alert'
-          text='Avisos'
-        />
-        <Icon onPress={actions.favorite}
-          name='account-star' text='Favoritos'
-        />
-        <Icon onPress={actions.suggestion} name='voice' text='Sugerir' />
-        <Icon onPress={controllerWeek.requestAndSetWeek} name='reload' text='Renovar' />
-      </ButtonBar>
-    </Container>
+      </Container>
+    </DataContext.Provider>
   )
 }
