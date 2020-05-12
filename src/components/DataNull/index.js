@@ -23,6 +23,7 @@ const style = StyleSheet.create({
   },
   view: {
     backgroundColor: constants.DATANULL_BG_COLOR,
+    elevation: 5,
     padding: 10,
     justifyContent: 'center',
     margin: 20,

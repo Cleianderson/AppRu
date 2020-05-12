@@ -18,6 +18,7 @@ export default function Requesting() {
 
 const style = StyleSheet.create({
   container: {
+    elevation: 5,
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems:'center',
