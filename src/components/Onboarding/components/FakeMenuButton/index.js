@@ -1,0 +1,32 @@
+import React from 'react'
+import {Alert} from 'react-native'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+
+import {
+  MenuButton,
+  MenuText,
+  MenuContent,
+  MenuContentText,
+} from '../../../../pages/Home/components/MenuButton/styles'
+
+const FakeMenuButton = ({title, horary, star}) => {
+  return (
+    <MenuButton
+      onPress={() =>
+        Alert.alert('mensagem_do_desenvolvedor.txt', 'Eu amo a RUralinda!', [
+          {text: 'Eu também!!!!', onPress: () => {}},
+        ])
+      }>
+      <MenuText>{title}</MenuText>
+      <MenuContent>
+        <Icon name="clock" color="#1b2d4f" size={15} />
+        <MenuContentText>{horary}</MenuContentText>
+      </MenuContent>
+      {star && (
+        <Icon style={{position: 'absolute', right: 20}} name="star" size={20} color="#f9b233" />
+      )}
+    </MenuButton>
+  )
+}
+
+export default FakeMenuButton
