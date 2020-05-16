@@ -24,7 +24,7 @@ const isoWeekOfTomorrow = moment().add(1, 'days').isoWeek()
 const weekDay = moment().isoWeekday()
 
 export default function App() {
-  const [foods, setFoods] = useState([]);
+  const [foods, setFoods] = useState([])
   const [day, setDay] = useState(weekDay >= 1 && weekDay <= 5 ? weekDay - 1 : 0)
   const [favorites, setFavorites] = useState([''])
   const [warns, setWarns] = useState([])
@@ -139,14 +139,25 @@ export default function App() {
   }, [contentModal])
 
   useEffect(() => {
-    OneSignal.init('85b3451d-6f7d-481f-b66e-1f93fe069135')
-    OneSignal.addEventListener('received', async (pushNot) => {
-      console.log(pushNot)
-      await setItem('@warns', {data: pushNot.payload.additionalData.warns})
-      setWarns(pushNot.payload.additionalData.warns)
-      setThereIsWarn(true)
-      setItem('@thereIsWarn', {value: true})
-    })
+    const initalizeOneSignal = async () => {
+      OneSignal.setRequiresUserPrivacyConsent(true)
+
+      const {value} = JSON.parse(await getItem('@RUral:oneSignal'))
+
+      OneSignal.provideUserConsent(value)
+
+      OneSignal.init('85b3451d-6f7d-481f-b66e-1f93fe069135')
+      OneSignal.addEventListener('received', async (pushNot) => {
+        await setItem('@warns', {data: pushNot.payload.additionalData.warns})
+        setWarns(pushNot.payload.additionalData.warns)
+        setThereIsWarn(true)
+        setItem('@thereIsWarn', {value: true})
+      })
+      process.env.NODE_ENV !== 'production' &&
+        console.log('UserConsent: ', await OneSignal.userProvidedPrivacyConsent())
+    }
+
+    initalizeOneSignal()
     controllerWeek.checkWeek()
     controllerWarn.startWarning()
     loadFavorites()
