@@ -14,9 +14,7 @@ import DataContext from '../../contexts/DataContext'
 const Home = () => {
   const PageFoods = useRef(ViewPage)
 
-  const {foods, day, setDay, reload, thereIsWarn, updateThereIsWarn} = useContext(
-    DataContext,
-  )
+  const {foods, day, setDay, reload, thereIsWarn, updateThereIsWarn} = useContext(DataContext)
 
   const navigation = useNavigation()
 
@@ -27,11 +25,11 @@ const Home = () => {
           <Icon name="reload" color="#1b2d4f" size={30} />
         </TouchableOpacity>
       ),
-      headerLeft: ()=>(
-        <TouchableOpacity style={{margin: 20}} onPress={()=>navigation.navigate('Info')}>
-        <Icon name="information-outline" color="#1b2d4f" size={30} />
-      </TouchableOpacity>
-      )
+      headerLeft: () => (
+        <TouchableOpacity style={{margin: 20}} onPress={() => navigation.navigate('Info')}>
+          <Icon name="information-outline" color="#1b2d4f" size={30} />
+        </TouchableOpacity>
+      ),
     })
     PageFoods.current.setPage(day)
   }, [])
@@ -57,6 +55,7 @@ const Home = () => {
           ) : (
             <EmptyContainer>
               <EmptyText>;(</EmptyText>
+              <EmptyText style={{fontSize: 16}}>desculpa, não encontrei a semana</EmptyText>
             </EmptyContainer>
           )}
         </ViewPage>
