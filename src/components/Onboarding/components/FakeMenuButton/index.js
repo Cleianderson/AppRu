@@ -12,6 +12,7 @@ import {
 const FakeMenuButton = ({title, horary, star}) => {
   return (
     <MenuButton
+      style={{margin: 0, marginRight: 0, marginLeft: 0, marginBottom: 0}}
       onPress={() =>
         Alert.alert('mensagem_do_desenvolvedor.txt', 'Eu amo a RUralinda!', [
           {text: 'Eu também!!!!', onPress: () => {}},
