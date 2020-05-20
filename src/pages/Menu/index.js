@@ -63,7 +63,7 @@ const Menu = ({route}) => {
 
   return (
     <Container>
-      <Content contentContainerStyle={{paddingBottom: 20}}>
+      <Content contentContainerStyle={{paddingBottom: 20, paddingHorizontal: 15}}>
         {dynamicArray.map((strFood, inx) => (
           <FoodContainer key={inx}>
             <MenuContainer>
@@ -82,15 +82,15 @@ const Menu = ({route}) => {
           </FoodContainer>
         ))}
       </Content>
+      <NavButton onPress={() => (day > 0 ? pageView.setPage(day - 1) : {})} style={{left: 0}}>
+        <Icon name="chevron-left" color="#1b2d4f" size={25} />
+      </NavButton>
       <NavBar>
-        <NavButton onPress={() => (day > 0 ? pageView.setPage(day - 1) : {})}>
-          <Icon name="chevron-left" color="#1b2d4f" size={25} />
-        </NavButton>
         <Text>{constants.STRING_DAYS[day]}</Text>
-        <NavButton onPress={() => (day < 4 ? pageView.setPage(day + 1) : {})}>
-          <Icon name="chevron-right" color="#1b2d4f" size={25} />
-        </NavButton>
       </NavBar>
+      <NavButton onPress={() => (day < 4 ? pageView.setPage(day + 1) : {})} style={{right: 0}}>
+        <Icon name="chevron-right" color="#1b2d4f" size={25} />
+      </NavButton>
     </Container>
   )
 }

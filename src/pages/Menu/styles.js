@@ -54,7 +54,8 @@ export const NavButton = styled.TouchableOpacity`
   align-items: center;
   background: #eee;
   border-radius: 10px;
-  elevation: 1;
+  position: absolute;
+  top: 250px;
 `
 
 export const NavText = styled.Text`

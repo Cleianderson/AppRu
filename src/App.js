@@ -53,7 +53,7 @@ export default function App() {
     verifyConnectionAndRefresh: async () => {
       if ((await NetInfo.fetch()).isConnected) {
         setContentModal(<Requesting />)
-        const {data} = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
+        const {data} = await api.get(`/thisweek?week=11`)
         await controllerWarn.verifyWarn()
 
         if (data === null) {

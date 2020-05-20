@@ -11,6 +11,9 @@ export const Content = styled.View`
 export const Buttons = styled.View`
   flex-direction: row;
   justify-content: space-around;
+  border: 0px solid #ddd;
+  border-top-width: 1px;
+  padding-top: 5px;
 `
 
 export const EmptyText = styled.Text`

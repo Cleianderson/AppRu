@@ -47,12 +47,5 @@ export default function RUral() {
     )
   }, [onBoarded])
 
-  return (
-    <>
-      {process.env.NODE_ENV !== 'production' && (
-        <Button title="clear storage" onPress={async () => await AsyncStorage.clear()} />
-      )}
-      {render()}
-    </>
-  )
+  return render()
 }

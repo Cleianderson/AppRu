@@ -1,5 +1,5 @@
 import React, {useContext, useRef, useEffect} from 'react'
-import {View, TouchableOpacity} from 'react-native'
+import {View, TouchableOpacity, Image} from 'react-native'
 import {useNavigation} from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import ViewPage from '@react-native-community/viewpager'
@@ -21,14 +21,25 @@ const Home = () => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity style={{margin: 20}} onPress={reload}>
-          <Icon name="reload" color="#1b2d4f" size={30} />
-        </TouchableOpacity>
+        <View
+          style={{
+            flexDirection: 'row',
+            width: 150,
+            justifyContent: 'space-around',
+          }}>
+          <TouchableOpacity onPress={reload}>
+            <Icon name="reload" color="#1b2d4f" size={25} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Info')}>
+            <Icon name="information-outline" color="#1b2d4f" size={25} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Config')}>
+            <Icon name="settings" color="#1b2d4f" size={25} />
+          </TouchableOpacity>
+        </View>
       ),
       headerLeft: () => (
-        <TouchableOpacity style={{margin: 20}} onPress={() => navigation.navigate('Info')}>
-          <Icon name="information-outline" color="#1b2d4f" size={30} />
-        </TouchableOpacity>
+        <Image style={{width: 50, height: 50}} source={require('../../assets/iconSquare.png')} />
       ),
     })
     PageFoods.current.setPage(day)
@@ -36,10 +47,12 @@ const Home = () => {
 
   return (
     <Container>
+      <WeekIndicator day={day} press={(index) => PageFoods.current.setPage(index)} />
       <Content>
         <ViewPage
           ref={PageFoods}
           style={{flex: 1}}
+          onPageScroll={() => {}}
           onPageSelected={(props) => setDay(props.nativeEvent.position)}>
           {foods.length ? (
             foods.map((item, index) => (
@@ -59,7 +72,6 @@ const Home = () => {
             </EmptyContainer>
           )}
         </ViewPage>
-        <WeekIndicator day={day} press={(index) => PageFoods.current.setPage(index)} />
       </Content>
       <Buttons>
         <Button
