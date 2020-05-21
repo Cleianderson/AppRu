@@ -5,6 +5,7 @@ import React, {useState, useEffect, useRef} from 'react'
 import moment from 'moment'
 import OneSignal from 'react-native-onesignal'
 import NetInfo from '@react-native-community/netinfo'
+import ViewPager from '@react-native-community/viewpager'
 
 import {Container, Content, ButtonBar} from './styles'
 
@@ -16,7 +17,7 @@ import DataNull from './components/DataNull'
 import Requesting from './components/Requesting'
 import constants from './service/constants'
 
-import Home from './routes/Home'
+import Main from './routes/Main'
 
 import DataContext from './contexts/DataContext'
 
@@ -31,6 +32,7 @@ export default function App() {
   const [thereIsWarn, setThereIsWarn] = useState(false)
   const [contentModal, setContentModal] = useState(null)
   const [modalVisible, setModalVisible] = useState(false)
+  const [homeViewPage, setHomeViewPage] = useState(null)
 
   const controllerWeek = {
     requestAndSetWeek: async () => {
@@ -128,6 +130,11 @@ export default function App() {
     setItem('@favorites', {data: favoritesFiltered})
   }
 
+  const reload = () => {
+    controllerWeek.verifyConnectionAndRefresh()
+    controllerWarn.verifyWarn()
+  }
+  
   // Método responsável por mudar o contéudo do modal se a variárvel action mudar
   useEffect(() => {
     if (contentModal !== null) {
@@ -176,10 +183,12 @@ export default function App() {
         foods,
         day,
         setDay,
-        reload: controllerWeek.verifyConnectionAndRefresh,
+        homeViewPage,
+        setHomeViewPage,
+        reload,
       }}>
       <Container>
-        <Home />
+        <Main />
         <Modals
           visible={modalVisible}
           close={() => setContentModal(null)}
