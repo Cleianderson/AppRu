@@ -2,6 +2,7 @@ import { Alert } from 'react-native'
 
 export default {
   STRING_DAYS: ['Seg','Ter','Qua','Qui','Sex'],
+  STRING_DAYS_EXTENDED: ['Segunda','Terça','Quarta','Quinta','Sexta'],
   
   LARGE: 50,
   MEDIUM: 30,
