@@ -7,7 +7,7 @@ import DataContext from '../../../../contexts/DataContext'
 
 import {MenuButton, MenuText, MenuContent, MenuContentText} from './styles'
 
-const MButton = ({item, launch = false, pageView}) => {
+const MButton = ({item, launch = false}) => {
   const navigation = useNavigation()
 
   const {favorites} = useContext(DataContext)
@@ -30,13 +30,12 @@ const MButton = ({item, launch = false, pageView}) => {
       onPress={() =>
         navigation.navigate('Cardápio', {
           type: launch ? 'almoco' : 'jantar',
-          pageView,
         })
       }>
       <MenuText>{launch ? 'Almoço' : 'Jantar'}</MenuText>
       <MenuContent>
         <Icon name="clock" color="#1b2d4f" size={15} />
-        <MenuContentText>{launch ? '9h - 14h' : '16h30m - 19h'}</MenuContentText>
+        <MenuContentText>{launch ? '10:30 - 14h' : '16:30 - 19h'}</MenuContentText>
       </MenuContent>
       {itemIsInclude(launch ? item.almoco : item.jantar) && (
         <Icon style={{position: 'absolute', right: 20}} name="star" size={20} color="#f9b233" />

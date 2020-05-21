@@ -1,9 +1,23 @@
-import React from 'react'
-import {StyleSheet} from 'react-native'
+import React, {useState, useContext, useEffect, useRef} from 'react'
+import {Dimensions, View, Animated} from 'react-native'
+
 import constants from '../../../../service/constants'
 import {Container, Content, Button, BText} from './styles'
 
+import DataContext from '../../../../contexts/DataContext'
+
 export default function WeekIndicator(props) {
+  const animatedMargin = useRef(new Animated.Value(0)).current
+
+  const {day} = useContext(DataContext)
+
+  useEffect(() => {
+    Animated.spring(animatedMargin, {
+      toValue: (Dimensions.get('screen').width / 5) * day,
+      useNativeDriver: false,
+    }).start()
+  }, [day])
+
   return (
     <Container>
       <Content>
@@ -16,52 +30,15 @@ export default function WeekIndicator(props) {
           </Button>
         ))}
       </Content>
+      <Animated.View
+        style={{
+          height: 3,
+          backgroundColor: '#f9b233',
+          width: Dimensions.get('screen').width / 5,
+          borderRadius: 50,
+          marginLeft: animatedMargin,
+        }}
+      />
     </Container>
   )
 }
-
-const style = StyleSheet.create({
-  view: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 20,
-    position: 'absolute',
-    bottom: 0,
-    right: 10,
-    left: 10,
-  },
-  button: {
-    elevation: 1,
-    backgroundColor: '#eee',
-    paddingHorizontal: 15,
-    paddingVertical: 2,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    textAlign: 'center',
-    fontWeight: 'bold',
-    color: '#aaa',
-  },
-  selected: {
-    color: constants.SECOND_COLOR,
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  date: {
-    opacity: 0,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    marginTop: 3,
-  },
-  dateSelected: {
-    fontWeight: 'bold',
-    color: constants.SECOND_COLOR,
-    textAlign: 'center',
-    marginTop: 3,
-  },
-  container: {
-    flexDirection: 'column',
-  },
-})
