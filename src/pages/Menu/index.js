@@ -10,9 +10,9 @@ import {
   FoodText,
   FoodContainer,
   MenuContainer,
-  NavBar,
   NavButton,
-  NavText,
+  DayText,
+  Header,
 } from './styles'
 import constants from '../../service/constants'
 import {setItem} from '../../service/Storage'
@@ -33,10 +33,10 @@ const extensive = {
 }
 
 const Menu = ({route}) => {
-  const {type, pageView} = route.params
+  const {type} = route.params
   const navigation = useNavigation()
 
-  const {favorites, setFavorites, day, setDay, foods} = useContext(DataContext)
+  const {favorites, setFavorites, day, setDay, foods, homeViewPage} = useContext(DataContext)
   const dynamicArray = type === 'almoco' ? constants.ARRAY_LAUNCH : constants.ARRAY_DINNER
 
   function checkItem(str) {
@@ -63,34 +63,38 @@ const Menu = ({route}) => {
 
   return (
     <Container>
-      <Content contentContainerStyle={{paddingBottom: 20, paddingHorizontal: 15}}>
+      <Header>
+        <NavButton
+          onPress={() => (day > 0 ? homeViewPage.setPage(day - 1) : {})}
+          style={day > 0 ? {} : {backgroundColor: '#1b2d4f'}}>
+          <Icon name="chevron-left" color="#1b2d4f" size={25} />
+        </NavButton>
+        <DayText>{constants.STRING_DAYS_EXTENDED[day]}</DayText>
+        <NavButton
+          onPress={() => (day < 4 ? homeViewPage.setPage(day + 1) : {})}
+          style={day < 4 ? {} : {backgroundColor: '#1b2d4f'}}>
+          <Icon name="chevron-right" color="#1b2d4f" size={25} />
+        </NavButton>
+      </Header>
+      <Content showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom: 10}}>
         {dynamicArray.map((strFood, inx) => (
           <FoodContainer key={inx}>
             <MenuContainer>
               <FoodText>{extensive[strFood]}</FoodText>
-              <TouchableOpacity
-                onPress={() => toggleFavorite(foods[day][type][strFood])}
-                hitSlop={{top: 5, bottom: 5, left: 5, right: 5}}>
-                <Icon
-                  name="star"
-                  color={checkItem(foods[day][type][strFood]) ? constants.SECOND_COLOR : '#ccc'}
-                  size={25}
-                />
-              </TouchableOpacity>
+              <FoodDescription>{foods[day][type][strFood].toUpperCase()}</FoodDescription>
             </MenuContainer>
-            <FoodDescription>{foods[day][type][strFood].toUpperCase()}</FoodDescription>
+            <TouchableOpacity
+              onPress={() => toggleFavorite(foods[day][type][strFood])}
+              hitSlop={{top: 5, bottom: 5, left: 5, right: 5}}>
+              <Icon
+                name="star"
+                color={checkItem(foods[day][type][strFood]) ? constants.SECOND_COLOR : '#ccc'}
+                size={25}
+              />
+            </TouchableOpacity>
           </FoodContainer>
         ))}
       </Content>
-      <NavButton onPress={() => (day > 0 ? pageView.setPage(day - 1) : {})} style={{left: 0}}>
-        <Icon name="chevron-left" color="#1b2d4f" size={25} />
-      </NavButton>
-      <NavBar>
-        <Text>{constants.STRING_DAYS[day]}</Text>
-      </NavBar>
-      <NavButton onPress={() => (day < 4 ? pageView.setPage(day + 1) : {})} style={{right: 0}}>
-        <Icon name="chevron-right" color="#1b2d4f" size={25} />
-      </NavButton>
     </Container>
   )
 }
