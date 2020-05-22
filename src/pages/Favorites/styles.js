@@ -50,3 +50,12 @@ export const FavButton = styled.TouchableOpacity`
   padding: 5px;
 `;
 
+export const EmptyContainer = styled.View`
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+`
+
+export const EmptyText = styled.Text`
+  color: #666;
+`

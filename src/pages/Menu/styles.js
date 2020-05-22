@@ -42,6 +42,8 @@ export const FoodText = styled.Text`
 `
 export const FoodDescription = styled.Text`
   text-transform: capitalize;
+  color: #666;
+  
   border-bottom-left-radius: ${constants.RADIUS};
   border-bottom-right-radius: ${constants.RADIUS};
 `
@@ -57,7 +59,6 @@ export const FoodContainer = styled.View`
 export const MenuContainer = styled.View`
   flex:1;
   padding: 2px 4px;
-  /* background: ${constants.PRIMARY_COLOR}; */
 
   border-top-left-radius: ${constants.RADIUS};
   border-top-right-radius: ${constants.RADIUS};

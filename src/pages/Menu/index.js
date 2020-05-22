@@ -57,10 +57,6 @@ const Menu = ({route}) => {
     }
   }
 
-  useEffect(() => {
-    navigation.setOptions({title: `Cardápio - ${type === 'almoco' ? 'Almoço' : 'Jantar'}`})
-  }, [])
-
   return (
     <Container>
       <Header>
@@ -69,7 +65,9 @@ const Menu = ({route}) => {
           style={day > 0 ? {} : {backgroundColor: '#1b2d4f'}}>
           <Icon name="chevron-left" color="#1b2d4f" size={25} />
         </NavButton>
-        <DayText>{constants.STRING_DAYS_EXTENDED[day]}</DayText>
+        <DayText>
+          {type === 'almoco' ? 'Almoço' : 'Jantar'} - {constants.STRING_DAYS_EXTENDED[day]}
+        </DayText>
         <NavButton
           onPress={() => (day < 4 ? homeViewPage.setPage(day + 1) : {})}
           style={day < 4 ? {} : {backgroundColor: '#1b2d4f'}}>
@@ -95,6 +93,11 @@ const Menu = ({route}) => {
           </FoodContainer>
         ))}
       </Content>
+      <TouchableOpacity onPress={navigation.goBack} style={{justifyContent: 'center', alignItems: 'center', padding: 5}}>
+        <Text style={{color: '#1b2d4f', fontWeight: 'bold', textDecorationLine: 'underline'}}>
+          voltar
+        </Text>
+      </TouchableOpacity>
     </Container>
   )
 }
