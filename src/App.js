@@ -49,13 +49,11 @@ export default function App() {
         setFoods(jsonStorage.foods)
       }
 
-      // Muda a página para o dia da semana atual
-      // Page.current.setPage(weekDay >= 1 && weekDay <= 5 ? weekDay - 1 : 0);
     },
     verifyConnectionAndRefresh: async () => {
       if ((await NetInfo.fetch()).isConnected) {
         setContentModal(<Requesting />)
-        const {data} = await api.get(`/thisweek?week=11`)
+        const {data} = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
         await controllerWarn.verifyWarn()
 
         if (data === null) {
