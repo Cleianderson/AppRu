@@ -1,16 +1,13 @@
 {
     "env": {
-        "es6": true,
-        "node": true
+        "es2020": true
     },
     "extends": [
+        "eslint:recommended",
         "plugin:react/recommended",
         "standard"
     ],
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
-    },
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true
@@ -19,8 +16,12 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "react-native",
+        "@typescript-eslint"
     ],
     "rules": {
+        "max-len": ["error", {"code":120, "tabWidth": 2}],
+        "react/prop-types": [0]
     }
 }

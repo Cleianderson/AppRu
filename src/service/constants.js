@@ -1,9 +1,9 @@
 import { Alert } from 'react-native'
 
 export default {
-  STRING_DAYS: ['Seg','Ter','Qua','Qui','Sex'],
-  STRING_DAYS_EXTENDED: ['Segunda','Terça','Quarta','Quinta','Sexta'],
-  
+  STRING_DAYS: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'],
+  STRING_DAYS_EXTENDED: ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'],
+
   LARGE: 50,
   MEDIUM: 30,
   NORMAL: 12,
@@ -40,7 +40,7 @@ export default {
     'sal',
     'sco',
     'sob',
-    'suc',
+    'suc'
   ],
   ARRAY_DINNER: [
     'p1',
@@ -52,6 +52,6 @@ export default {
     'sal',
     'sopa',
     'sob',
-    'suc',
+    'suc'
   ]
 }
