@@ -10,8 +10,6 @@ import { Container } from './styles'
 import api from './service/Api'
 import { updateWeekStorage, getItem, setItem } from './service/Storage'
 
-import Modals from './components/Modal'
-import DataNull from './components/DataNull'
 import Requesting from './components/Requesting'
 import constants from './service/constants'
 
@@ -28,14 +26,15 @@ export default function App () {
   const [favorites, setFavorites] = useState<string[]>([])
   const [warns, setWarns] = useState<WarningType[]>()
   const [thereIsWarn, setThereIsWarn] = useState(false)
-  const [modalVisible, setModalVisible] = useState(false)
-  const [contentModal, setContentModal] = useState<JSX.Element | null>()
   const [homeViewPage, setHomeViewPage] = useState<JSX.Element>()
+  // eslint-disable-next-line no-extra-parens
+  const [action, setAction] = useState<() => Promise<any >>(async () => false)
+  const [failedText, setFailedText] = useState('')
 
   const controllerWeek = {
     requestAndSetWeek: async () => {
-      setContentModal(<Requesting />)
-      await controllerWeek.verifyConnectionAndRefresh()
+      setAction(controllerWeek.verifyConnectionAndRefresh)
+      // await controllerWeek.verifyConnectionAndRefresh()
     },
     checkWeek: async () => {
       // -> Método responsável por iniciar os dados do cardápio
@@ -43,27 +42,27 @@ export default function App () {
       const jsonStorage = weekFromStorage.data
 
       if (jsonStorage === null || isoWeekOfTomorrow !== jsonStorage.number_week) {
-        setContentModal(<Requesting />)
-        await controllerWeek.verifyConnectionAndRefresh()
+        setAction(controllerWeek.verifyConnectionAndRefresh)
       } else {
         setFoods(jsonStorage.data || [])
       }
     },
     verifyConnectionAndRefresh: async () => {
       if ((await NetInfo.fetch()).isConnected) {
-        setContentModal(<Requesting />)
-        const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
-        await controllerWarn().verifyWarn()
-
-        if (data === null) {
-          setContentModal(<DataNull />)
-        } else {
-          updateWeekStorage(data.data, { number_week: data.number_week })
-          setFoods(data.data)
-          setContentModal(null)
-        }
+        setFailedText('O cardápio ainda não está disponível')
+        setAction(async () => {
+          const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
+          await controllerWarn().verifyWarn()
+          if (data) {
+            updateWeekStorage(data.data, { number_week: data.number_week })
+            setFoods(data.data)
+            // setAction(null)
+            return true
+          }
+          return false
+        })
       } else {
-        setContentModal(null)
+        // setAction(async () => false)
         constants.showAlert('Falha na conexão', 'Por favor verifique a conexão com a internet')
       }
     }
@@ -120,36 +119,27 @@ export default function App () {
   }
 
   const updateThereIsWarn = async (value: boolean) => {
-    setThereIsWarn(value)
     await setItem('@thereIsWarn', { data: value })
+    setThereIsWarn(value)
   }
 
   const addFavorites = async (str: string) => {
     await setItem('@favorites', { data: [...favorites, str] })
     setFavorites([...favorites, str])
-
-    console.log(favorites)
   }
-  const removeFavorites = (str: string) => {
+
+  const removeFavorites = async (str: string) => {
     const favoritesFiltered = favorites.filter((value) => value.toLowerCase() !== str.toLowerCase())
     setFavorites(favoritesFiltered)
-    setItem('@favorites', { data: favoritesFiltered })
+    await setItem('@favorites', { data: favoritesFiltered })
   }
 
   const reload = () => {
-    controllerWeek.verifyConnectionAndRefresh()
-    controllerWarn().verifyWarn()
+    setAction(async () => {
+      await controllerWeek.verifyConnectionAndRefresh()
+      await controllerWarn().verifyWarn()
+    })
   }
-
-  // Método responsável por mudar o contéudo do modal se a variárvel action mudar
-  useEffect(() => {
-    if (contentModal !== null) {
-      setModalVisible(true)
-    } else {
-      loadFavorites()
-      setModalVisible(false)
-    }
-  }, [contentModal])
 
   useEffect(() => {
     const initalizeOneSignal = async () => {
@@ -164,10 +154,8 @@ export default function App () {
         await setItem('@warns', { data: pushNot.payload.additionalData.warns })
         setWarns(pushNot.payload.additionalData.warns)
         setThereIsWarn(true)
-        setItem('@thereIsWarn', { data: true })
+        await setItem('@thereIsWarn', { data: true })
       })
-      process.env.NODE_ENV !== 'production' &&
-        console.log('UserConsent: ', await OneSignal.userProvidedPrivacyConsent())
     }
 
     initalizeOneSignal()
@@ -195,11 +183,7 @@ export default function App () {
       }}>
       <Container>
         <Main />
-        <Modals
-          visible={modalVisible}
-          close={() => setContentModal(null)}
-          component={contentModal}
-        />
+        <Requesting action={action} onFailedText={failedText} />
       </Container>
     </DataContext.Provider>
   )

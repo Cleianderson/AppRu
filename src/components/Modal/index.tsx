@@ -7,7 +7,8 @@ export default function Modals (props) {
       visible={props.visible}
       transparent={true}
       animationType="fade"
-      onRequestClose={props.close}>
+      onRequestClose={props.close}
+    >
       <TouchableWithoutFeedback onPress={props.close}>
         <View
           style={{
