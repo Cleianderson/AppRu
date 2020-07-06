@@ -12,8 +12,9 @@ export default function WeekIndicator (props) {
   const { day } = useContext(DataContext)
 
   useEffect(() => {
-    Animated.spring(animatedMargin, {
+    Animated.timing(animatedMargin, {
       toValue: (Dimensions.get('screen').width / 5) * day,
+      duration: 150,
       useNativeDriver: false
     }).start()
   }, [day])

@@ -11,15 +11,12 @@ import { View, TouchableOpacity, Image, Text } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import DataContext from '../../contexts/DataContext'
-import Button from './components/Button'
+import TabBar from '~/components/TabBar'
 
-// import { Container } from './styles';
 const TabBottom = createBottomTabNavigator()
 
-const icons = { Início: 'home', Avisos: 'alert-box', Sugerir: 'voice', Favoritos: 'star' } as {[key: string]: string}
-
 const RouteHome = () => {
-  const { reload, thereIsWarn } = useContext(DataContext)
+  const { reload } = useContext(DataContext)
 
   const navigation = useNavigation()
 
@@ -49,22 +46,7 @@ const RouteHome = () => {
     })
   }, [])
   return (
-    <TabBottom.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused }) => (
-          <Button
-            icon={icons[route.name]}
-            notify={route.name === 'Avisos' ? thereIsWarn : false}
-            focused={focused}
-            color={focused ? '#1b2d4f' : '#aaa'}
-          />
-        ),
-        tabBarLabel: ({ focused }) => (
-          <Text style={{ fontSize: 12, color: focused ? '#1b2d4f' : '#aaa', paddingBottom: 3 }}>
-            {route.name}
-          </Text>
-        )
-      })}>
+    <TabBottom.Navigator tabBar={props => <TabBar {...props} />} >
       <TabBottom.Screen name="Início" component={Home} />
       <TabBottom.Screen name="Avisos" options={{ unmountOnBlur: true }} component={Warn} />
       <TabBottom.Screen name="Sugerir" component={Suggestion} />

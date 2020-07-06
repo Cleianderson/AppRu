@@ -1,5 +1,9 @@
 import styled from 'styled-components/native'
 
+type BTextProps = {
+  selected: boolean
+}
+
 export const Container = styled.View`
   /* border: 1px solid; */
   padding: 10px 0px;
@@ -21,7 +25,7 @@ export const Button = styled.TouchableOpacity`
 
 `
 
-export const BText = styled.Text`
+export const BText = styled.Text<BTextProps>`
   text-align: center;
   font-weight: bold;
   color: ${({ selected }) => (selected ? '#f9b233' : '#999')};
