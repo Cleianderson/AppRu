@@ -56,13 +56,11 @@ export default function App () {
           if (data) {
             updateWeekStorage(data.data, { number_week: data.number_week })
             setFoods(data.data)
-            // setAction(null)
             return true
           }
           return false
         })
       } else {
-        // setAction(async () => false)
         constants.showAlert('Falha na conexão', 'Por favor verifique a conexão com a internet')
       }
     }

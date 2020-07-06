@@ -55,6 +55,7 @@ const RouteHome = () => {
           <Button
             icon={icons[route.name]}
             notify={route.name === 'Avisos' ? thereIsWarn : false}
+            focused={focused}
             color={focused ? '#1b2d4f' : '#aaa'}
           />
         ),
