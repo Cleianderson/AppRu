@@ -57,7 +57,7 @@ const Favorites = () => {
         <TextInput placeholder="Comida" value={textFavorite} onChangeText={setTextFavorite} />
         <Button
           onPress={submitFood}>
-          <Icon name="plus" color="white" size={25} />
+          <Icon name="plus" color="#1b2d4f" size={31} />
         </Button>
       </Inputs>
     </Container>

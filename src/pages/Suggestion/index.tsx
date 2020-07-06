@@ -58,7 +58,7 @@ export default function Suggestion () {
     }
   }
 
-  function showAlert (errDesc, errContent) {
+  function showAlert (errDesc: string, errContent: string) {
     Alert.alert(errDesc, errContent, [{ text: 'Certo', style: 'default' }])
   }
 
@@ -105,7 +105,7 @@ export default function Suggestion () {
             style={{
               marginTop: 0,
               marginBottom: 0,
-              color: 'white',
+              color: '#1b2d4f',
               fontWeight: 'bold'
             }}
           >

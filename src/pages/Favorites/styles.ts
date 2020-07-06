@@ -15,7 +15,7 @@ export const Inputs = styled.View`
   margin: 10px;
   border: 1px solid #ccc;
   border-radius: 10px;
-  background: rgba(27, 45, 79, .05);
+  /* background: rgba(27, 45, 79, .05); */
 `
 
 export const TextInput = styled.TextInput`
@@ -24,7 +24,7 @@ export const TextInput = styled.TextInput`
 `
 
 export const Button = styled.TouchableOpacity`
-  background: #1b2d4f;
+  /* background: #1b2d4f; */
   justify-content: center;
   align-items: center;
   margin: 5px;
