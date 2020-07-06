@@ -22,7 +22,7 @@ export const ListItem = styled.Text`
 `
 
 export const Button = styled.TouchableOpacity`
-  background: ${({activated, color}) =>
+  background: ${({ activated, color }) =>
     activated ? color || '#1b2d4f' : '#ccc'};
   padding: 5px 10px;
   justify-content: center;

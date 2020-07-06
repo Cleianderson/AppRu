@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useContext } from 'react'
 import { TouchableOpacity, Text } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useNavigation } from '@react-navigation/native'
@@ -36,7 +36,7 @@ const Menu = ({ route }) => {
   const { type } = route.params
   const navigation = useNavigation()
 
-  const { favorites, setFavorites, day, setDay, foods, homeViewPage } = useContext(DataContext)
+  const { favorites, setFavorites, day, foods, homeViewPage } = useContext(DataContext)
   const dynamicArray = type === 'almoco' ? constants.ARRAY_LAUNCH : constants.ARRAY_DINNER
 
   function checkItem (str) {
@@ -93,7 +93,10 @@ const Menu = ({ route }) => {
           </FoodContainer>
         ))}
       </Content>
-      <TouchableOpacity onPress={navigation.goBack} style={{ justifyContent: 'center', alignItems: 'center', padding: 5 }}>
+      <TouchableOpacity
+        onPress={navigation.goBack}
+        style={{ justifyContent: 'center', alignItems: 'center', padding: 5 }}
+      >
         <Text style={{ color: '#1b2d4f', fontWeight: 'bold', textDecorationLine: 'underline' }}>
           voltar
         </Text>

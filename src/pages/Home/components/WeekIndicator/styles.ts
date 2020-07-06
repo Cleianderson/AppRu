@@ -24,5 +24,5 @@ export const Button = styled.TouchableOpacity`
 export const BText = styled.Text`
   text-align: center;
   font-weight: bold;
-  color: ${({selected}) => (selected ? '#f9b233' : '#999')};
+  color: ${({ selected }) => (selected ? '#f9b233' : '#999')};
 `

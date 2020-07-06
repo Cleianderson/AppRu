@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
-import { Container, Content, Text, Switch } from './styles';
+import { Container, Content, Text, Switch } from './styles'
 
 type Props = { label: string, isActived: boolean, nested?: boolean }
 
@@ -17,7 +17,7 @@ const SwitchLabeled: React.FC<Props> = ({ isActived, label, children, nested }) 
       </Content>
       {children}
     </Container>
-  );
+  )
 }
 
-export default SwitchLabeled;  
+export default SwitchLabeled

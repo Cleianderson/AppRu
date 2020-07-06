@@ -1,4 +1,4 @@
-import styled from 'styled-components/native';
+import styled from 'styled-components/native'
 
 export const Container = styled.TouchableOpacity<{nested?: boolean}>`
     display: flex;
@@ -7,8 +7,8 @@ export const Container = styled.TouchableOpacity<{nested?: boolean}>`
     height: 40px;
     border: 0px solid #ccc;
     /* border-bottom-width: 1px; */
-    padding-left: ${props => props.nested ? '10px' : '0px' };
-`;
+    padding-left: ${props => props.nested ? '10px' : '0px'};
+`
 
 export const Content = styled.View`
     padding: 5px 15px;

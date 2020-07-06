@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect, useRef } from 'react'
-import { Dimensions, View, Animated } from 'react-native'
+import React, { useContext, useEffect, useRef } from 'react'
+import { Dimensions, Animated } from 'react-native'
 
 import constants from '../../../../service/constants'
 import { Container, Content, Button, BText } from './styles'
