@@ -2,19 +2,15 @@
 import { createContext, Dispatch, SetStateAction } from 'react'
 
 type StateContext = {
-  warns: WarningType[] | undefined,
-  foods: Table[] | undefined,
-  favorites: string[] | undefined,
-  day: number,
-  setHomeViewPage: Dispatch<SetStateAction<JSX.Element | undefined>>,
-  setFavorites: Dispatch<SetStateAction<string[]>>,
-  setDay: (d: number) => void,
+  warns: WarningType[] | undefined, setWarns: Dispatch<SetStateAction<WarningType[] | undefined>>
+  foods: Table[] | undefined, setFoods: Dispatch<SetStateAction<Table[] | undefined>>
+  favorites: string[] | undefined, setFavorites: Dispatch<SetStateAction<string[]>>,
+  day: number, setDay: (d: number) => void,
+  homeViewPage: JSX.Element | undefined, setHomeViewPage: Dispatch<SetStateAction<JSX.Element | undefined>>,
   addFavorites: (str: string) => Promise<void>,
   removeFavorites: (str: string) => void,
-  thereIsWarn: boolean,
+  thereIsWarn: boolean, setThereIsWarn: Dispatch<SetStateAction<boolean>>,
   updateThereIsWarn: (bool: boolean) => {},
-  homeViewPage: JSX.Element | undefined,
-  reload: () => void
 }
 
 const DataContext = createContext<StateContext>({} as StateContext)
