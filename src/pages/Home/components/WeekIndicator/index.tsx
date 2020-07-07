@@ -1,14 +1,17 @@
 import React, { useContext, useEffect, useRef } from 'react'
 import { Dimensions, Animated } from 'react-native'
 
-import constants from '../../../../service/constants'
-import { Container, Content, Button, BText } from './styles'
+import constants from '~/service/constants'
+import { Container, Content, Button, BText, TxtDate } from './styles'
 
-import DataContext from '../../../../contexts/DataContext'
+import Config from '~/contexts/Config'
+import DataContext from '~/contexts/DataContext'
+import { getDate } from '~/service/DateUtils'
 
 export default function WeekIndicator (props) {
   const animatedMargin = useRef(new Animated.Value(0)).current
 
+  const { showDateOnIndicator } = useContext(Config)
   const { day } = useContext(DataContext)
 
   useEffect(() => {
@@ -28,6 +31,7 @@ export default function WeekIndicator (props) {
             onPress={() => props.press(index)}
             hitSlop={{ top: 5, bottom: 10, left: 5, right: 5 }}>
             <BText selected={props.day === index}>{day}</BText>
+            {showDateOnIndicator && <TxtDate selected={props.day === index} >{getDate(index)}</TxtDate>}
           </Button>
         ))}
       </Content>

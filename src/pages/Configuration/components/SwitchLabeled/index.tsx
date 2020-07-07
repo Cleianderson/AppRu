@@ -1,19 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { Container, Content, Text, Switch } from './styles'
 
-type Props = { label: string, isActived: boolean, nested?: boolean }
+type Props = { label: string, isActived: boolean, nested?: boolean, onPress: () => void, disabled?: boolean }
 
-const SwitchLabeled: React.FC<Props> = ({ isActived, label, children, nested }) => {
-  const [isActive, setIsActive] = useState(isActived)
-
-  const toggleActive = () => setIsActive(!isActive)
-
+const SwitchLabeled: React.FC<Props> = ({ isActived, label, children, nested, onPress, disabled }) => {
   return (
-    <Container nested={nested} onPress={toggleActive} >
+    <Container disabled={disabled} nested={nested} onPress={onPress} >
       <Content>
         <Text>{label}</Text>
-        <Switch value={isActive} onValueChange={setIsActive} />
+        <Switch disabled={disabled} value={isActived} onValueChange={onPress} />
       </Content>
       {children}
     </Container>

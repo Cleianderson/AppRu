@@ -6,11 +6,13 @@ import { Container, Content, EmptyText, EmptyContainer } from './styles'
 import WeekIndicator from './components/WeekIndicator'
 import MButton from './components/MenuButton'
 
+import Config from '~/contexts/Config'
 import DataContext from '~/contexts/DataContext'
 
 const Home = () => {
   const PageFoods = useRef<ViewPage>()
 
+  const { showIndicator } = useContext(Config)
   const { foods, day, setDay, setHomeViewPage } = useContext(DataContext)
 
   useEffect(() => {
@@ -22,7 +24,7 @@ const Home = () => {
 
   return (
     <Container>
-      {foods && <WeekIndicator day={day} press={(index) => PageFoods.current!.setPage(index)} />}
+      {foods && showIndicator && <WeekIndicator day={day} press={(index) => PageFoods.current!.setPage(index)} />}
       <Content>
         <ViewPage
           ref={PageFoods}

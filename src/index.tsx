@@ -9,6 +9,10 @@ import { getItem } from './service/Storage'
 
 import OnboardingComponent from './components/Onboarding'
 
+import State from '~/providers/State'
+import Config from '~/providers/Config'
+import Request from '~/providers/Request'
+
 export default function RUral () {
   const [onBoarded, setOnBoarded] = useState<boolean | undefined>(undefined)
 
@@ -29,7 +33,13 @@ export default function RUral () {
     if (onBoarded) {
       return (
         <NavigationContainer>
-          <App />
+          <Config>
+            <State>
+              <Request>
+                <App />
+              </Request>
+            </State>
+          </Config>
         </NavigationContainer>
       )
     } else if (onBoarded !== undefined) {
