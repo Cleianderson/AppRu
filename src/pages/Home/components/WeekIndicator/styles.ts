@@ -1,6 +1,6 @@
 import styled from 'styled-components/native'
 
-type BTextProps = {
+type CommonProps = {
   selected: boolean
 }
 
@@ -22,11 +22,14 @@ export const Button = styled.TouchableOpacity`
   padding: 2px 15px;
   /* border-radius: 10px; */
   border: 0px solid #ccc;
-
+  padding-bottom: 5px;
 `
 
-export const BText = styled.Text<BTextProps>`
+export const BText = styled.Text<CommonProps>`
   text-align: center;
   font-weight: bold;
+  color: ${({ selected }) => (selected ? '#f9b233' : '#999')};
+`
+export const TxtDate = styled.Text<CommonProps>`
   color: ${({ selected }) => (selected ? '#f9b233' : '#999')};
 `

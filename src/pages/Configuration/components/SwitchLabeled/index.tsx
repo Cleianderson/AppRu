@@ -8,7 +8,7 @@ const SwitchLabeled: React.FC<Props> = ({ isActived, label, children, nested, on
   return (
     <Container disabled={disabled} nested={nested} onPress={onPress} >
       <Content>
-        <Text>{label}</Text>
+        <Text disabled={disabled} >{label}</Text>
         <Switch disabled={disabled} value={isActived} onValueChange={onPress} />
       </Content>
       {children}

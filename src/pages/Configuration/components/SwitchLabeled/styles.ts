@@ -16,10 +16,11 @@ export const Content = styled.View`
     flex-direction: row;
 `
 
-export const Text = styled.Text`
+export const Text = styled.Text<{disabled: boolean | undefined}>`
     display: flex;
     flex: 1;
     font-size: 16px;
+    color: ${props => props.disabled ? '#ccc' : '#000'};
 `
 
 export const Switch = styled.Switch``
