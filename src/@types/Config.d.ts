@@ -4,7 +4,7 @@ type Configs = {
 }
 
 type ConfigAction = {
-    type: 'UPDATE_CONFIG' | 'log'
+    type: 'UPDATE_CONFIG'
     data: any
 }
 
