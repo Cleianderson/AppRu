@@ -1,28 +1,27 @@
 {
-  "env": {
-    "browser": true,
-    "es6": true
-  },
-  "extends": ["eslint:recommended", "plugin:react/recommended"],
-  "globals": {
-    "Atomics": "readonly",
-    "SharedArrayBuffer": "readonly"
-  },
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
+    "env": {
+        "es2020": true
     },
-    "ecmaVersion": 2018,
-    "sourceType": "module"
-  },
-  "plugins": ["react"],
-  "rules": {
-    "indent": ["error", 2],
-    "max-len": ["error", {"code":100}],
-    "linebreak-style": ["error", "unix"],
-    "quotes": ["error", "single"],
-    "semi": ["error", "never"],
-    "react/prop-types": [0],
-    "no-undef": [0]
-  }
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "standard"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 11,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "react-native",
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "max-len": ["error", {"code":120, "tabWidth": 2}],
+        "react/prop-types": [0]
+    }
 }
