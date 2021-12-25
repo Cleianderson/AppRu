@@ -1,84 +1,100 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
-import { ActivityIndicator, Animated, Modal, View, TouchableWithoutFeedback } from 'react-native'
+import React, { useEffect, useCallback } from 'react'
+import { ActivityIndicator, Modal, View, TouchableWithoutFeedback } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 
 import constants from '~/service/constants'
 import { Container, Content, Text, ContainerText } from './styles'
 
-type Props = {
-  action: () => Promise<boolean | void>,
-  onSucessText?: string
-  onFailedText?: string
-}
+const Requesting: React.FC = () => {
+  // const [success, setSuccess] = useState<boolean | undefined>(undefined)
+  // const [textSuccess, setTextSuccess] = useState<string | undefined>(undefined)
+  // const [textFailed, setTextFailed] = useState<string | undefined>(undefined)
+  // const [isVisible, setIsVisible] = useState<boolean | undefined>()
 
-const Requesting: React.FC<Props> = ({ action, onSucessText = 'Pronto!', onFailedText }) => {
-  const [actionSucceded, setActionSucceded] = useState<boolean | undefined>(undefined)
-  const [isVisible, setIsVisible] = useState<boolean | undefined>()
+  const dispatch = useDispatch()
 
-  const opacityValue = useRef(new Animated.Value(0)).current
+  const textSuccess = useSelector<RootState, string>(state => state.requestState.textSuccess)
+  const textFailed = useSelector<RootState, string>(state => state.requestState.textFailed)
+  const action = useSelector<RootState, Function>(state => state.requestState.action)
+  const isRequesting = useSelector<RootState, boolean | undefined>(state => state.requestState.isRequesting)
+  // const isVisible = useSelector<RootState, boolean>(state => state.requestState.isVisible)
+  const success = useSelector<RootState, boolean | undefined>(state => state.requestState.success)
 
-  const closeModal = () => setIsVisible(false)
+  // const opacityValue = useRef(new Animated.Value(0)).current
+  const setIsRequesting = (isRequesting: boolean | undefined) => (
+    dispatch({ type: 'SET_IS_REQUESTING', payload: { isRequesting } })
+  )
 
-  onFailedText = onFailedText !== null && onFailedText !== '' ? onFailedText : 'Algo deu errado'
+  const closeModal = () => setIsRequesting(false)
+  // const setTextSuccess = (str: string) => (
+  //   dispatch({ type: 'SET_TEXT_SUCCESS', payload: { textSuccess: str } })
+  // )
+  // const setTextFailed = (str: string) => (
+  //   dispatch({ type: 'SET_TEXT_FAILED', payload: { textFailed: str } })
+  // )
+  // const setIsVisible = (isVisible: boolean | undefined) => dispatch({ type: 'SET_IS_VISIBLE', payload: { isVisible } })
+  // const setTextFailed = (str: string) => dispatch({ type: 'SET_TEXT_FAILED', payload: { textFailed: str } })
+  const setSuccess = (value: boolean | undefined) => dispatch({ type: 'SET_SUCCESS', payload: { success: value } })
+
+  // onFailedText = onFailedText !== null && onFailedText !== '' ? onFailedText : 'Algo deu errado'
 
   useEffect(() => {
-    setIsVisible(true)
-    opacityValue.setValue(0)
-    setActionSucceded(undefined)
+    setIsRequesting(true)
+    // opacityValue.setValue(0)
+    setSuccess(undefined)
 
     const executeAction = async () => {
       try {
-        const responseAction = await Promise.resolve(action) as any as boolean | undefined
-        setActionSucceded(responseAction)
-        if (responseAction || responseAction === false) {
-          Animated.timing(opacityValue, { toValue: 1, useNativeDriver: false, duration: 250 }).start()
+        const responseAction = await action()
+        if (typeof responseAction === 'boolean') {
+          setSuccess(responseAction)
         }
       } catch (error) {
-        setActionSucceded(false)
+        setIsRequesting(false)
       }
     }
     executeAction()
   }, [action])
 
   useEffect(() => {
-    if (actionSucceded) {
-      setTimeout(() => setIsVisible(false), 2000)
+    if (success) {
+      setTimeout(closeModal, 2000)
+    } else if (textFailed === undefined) {
+      // setTextFailed('Algo deu errado')
     }
-  }, [actionSucceded])
+  }, [success])
 
   const renderContent = useCallback(() => {
-    if (actionSucceded !== false) {
+    if (success) {
+      return (
+        <ContainerText>
+          <Text>{textSuccess}</Text>
+        </ContainerText>
+      )
+    } else if (success === undefined) {
       return (
         <>
+          <ActivityIndicator color={constants.SECOND_COLOR} size={72} />
           <ContainerText>
-            <Text style={{ opacity: Animated.subtract(1, opacityValue) }}>Fazendo requisição ao servidor</Text>
-            <Text style={{
-              opacity: opacityValue.interpolate({ inputRange: [0.5, 1], outputRange: [0, 1] })
-            }}
-            >
-              {onSucessText}
-            </Text>
+            <Text>Fazendo requisição ao servidor</Text>
           </ContainerText>
         </>
       )
     } else {
       return (
-        <>
-          <ContainerText>
-            <Text style={{
-              opacity: opacityValue.interpolate({ inputRange: [0.5, 1], outputRange: [0, 1] })
-            }}
-            >
-              {onFailedText}
-            </Text>
-          </ContainerText>
-        </>
+        <ContainerText>
+          <Text>{textFailed}</Text>
+          {/* <Text>{isRequesting?.toString()}</Text> */}
+          {/* <Text>{textFailed}</Text> */}
+          {/* <Text>{textSuccess}</Text> */}
+        </ContainerText>
       )
     }
-  }, [opacityValue, actionSucceded])
+  }, [isRequesting, textSuccess, textFailed, success])
 
   return (
     <Modal
-      visible={isVisible}
+      visible={isRequesting}
       transparent={true}
       animationType='fade'
       onRequestClose={closeModal}
@@ -87,16 +103,6 @@ const Requesting: React.FC<Props> = ({ action, onSucessText = 'Pronto!', onFaile
         <Container>
           <View onStartShouldSetResponder={() => true}>
             <Content>
-              <Animated.View
-                style={{
-                  height: opacityValue.interpolate({ inputRange: [0.5, 1], outputRange: [30, 0] }),
-                  transform: [
-                    { scale: opacityValue.interpolate({ inputRange: [0.5, 1], outputRange: [0.5, 0] }) }
-                  ]
-                }}
-              >
-                <ActivityIndicator color={constants.SECOND_COLOR} size={72} />
-              </Animated.View>
               {renderContent()}
             </Content>
           </View>

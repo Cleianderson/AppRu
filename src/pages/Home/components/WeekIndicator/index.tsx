@@ -1,18 +1,18 @@
 import React, { useContext, useEffect, useRef } from 'react'
 import { Dimensions, Animated } from 'react-native'
+import { useSelector } from 'react-redux'
 
 import constants from '~/service/constants'
 import { Container, Content, Button, BText, TxtDate } from './styles'
 
 import Config from '~/contexts/ConfigContext'
-import DataContext from '~/contexts/DataContext'
 import { getDate } from '~/service/DateUtils'
 
-export default function WeekIndicator (props) {
+export default function WeekIndicator(props) {
   const animatedMargin = useRef(new Animated.Value(0)).current
 
   const { configs } = useContext(Config)
-  const { day } = useContext(DataContext)
+  const day = useSelector<RootState, number>(state => state.mainState.day)
 
   useEffect(() => {
     Animated.timing(animatedMargin, {

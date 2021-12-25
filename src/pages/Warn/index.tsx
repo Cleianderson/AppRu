@@ -1,12 +1,14 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Text, FlatList, View } from 'react-native'
-
-import DataContext from '../../contexts/DataContext'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Container, Title, Message, Content } from './style'
 
 export default function Warn () {
-  const { warns, updateThereIsWarn } = useContext(DataContext)
+  const dispatch = useDispatch()
+  const warns = useSelector<RootState, WarningType[] | undefined>(state => state.mainState.warns)
+
+  const updateThereIsWarn = (value: boolean) => dispatch({ type: 'SET_THERE_IS_WARN', payload: { thereIsWarn: value } })
 
   useEffect(() => {
     updateThereIsWarn(false)

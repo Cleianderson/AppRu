@@ -6,6 +6,7 @@ type CommonProps = {
 }
 
 export const Container = styled.View`
+    background-color: #FFFFFF;
     height: 55px;
     border: 0 solid #ccc;
     border-top-width: 1px;

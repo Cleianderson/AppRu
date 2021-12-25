@@ -11,7 +11,7 @@ const Stack = createStackNavigator()
 
 const RouteHome = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ cardStyle: { backgroundColor: '#0009' } }} >
       <Stack.Screen name="Home" component={Home} options={{ title: '' }} />
       <Stack.Screen name="Info" component={Info} options={{ title: 'Informações' }} />
       <Stack.Screen name="Cardápio" component={Menu} options={{ header: () => null }} />

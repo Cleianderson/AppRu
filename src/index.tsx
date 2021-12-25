@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect, useCallback } from 'react'
 import { View, ActivityIndicator } from 'react-native'
+import { Provider } from 'react-redux'
 import { NavigationContainer } from '@react-navigation/native'
 
 import App from './App'
@@ -9,15 +10,15 @@ import { getItem } from './service/Storage'
 
 import OnboardingComponent from './components/Onboarding'
 
-import State from '~/providers/State'
 import Config from '~/providers/Config'
-import Request from '~/providers/Request'
+import { Store } from './store'
+import Requesting from './components/Requesting'
 
-export default function RUral () {
+export default function RUral() {
   const [onBoarded, setOnBoarded] = useState<boolean | undefined>(undefined)
 
   useEffect(() => {
-    async function getOnBoarded () {
+    async function getOnBoarded() {
       const checkOnBoarded = (await getItem('@RUral:onBoarded')).data
       if (checkOnBoarded === null) {
         setOnBoarded(false)
@@ -34,11 +35,10 @@ export default function RUral () {
       return (
         <NavigationContainer>
           <Config>
-            <State>
-              <Request>
-                <App />
-              </Request>
-            </State>
+            <Provider store={Store} >
+              <App />
+              <Requesting />
+            </Provider>
           </Config>
         </NavigationContainer>
       )

@@ -1,5 +1,4 @@
 import styled from 'styled-components/native'
-import { Animated } from 'react-native'
 
 export const Container = styled.View`
     flex: 1;
@@ -7,7 +6,7 @@ export const Container = styled.View`
     align-content: center;
     background: rgba(255, 255, 255, 0.7);
 `
-export const Content = styled(Animated.View)`
+export const Content = styled.View`
     background: #fff;
     padding: 10px;
     margin: 20px;
@@ -17,13 +16,13 @@ export const Content = styled(Animated.View)`
     elevation: 5;
 `
 
-export const Text = styled(Animated.Text)`
+export const Text = styled.Text`
     color: #000;
     font-size: 16px;
     position: absolute;
 `
 
-export const ContainerText = styled(Animated.View)`
+export const ContainerText = styled.View`
     position: relative;
     height: 30px;
     justify-content: center;

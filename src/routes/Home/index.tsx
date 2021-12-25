@@ -10,14 +10,11 @@ import Home from '~/pages/Home'
 import { View, TouchableOpacity, Image, Text } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
-import DataContext from '../../contexts/DataContext'
 import TabBar from '~/components/TabBar'
 
 const TabBottom = createBottomTabNavigator()
 
 const RouteHome = () => {
-  const { reload } = useContext(DataContext)
-
   const navigation = useNavigation()
 
   useEffect(() => {
@@ -29,7 +26,7 @@ const RouteHome = () => {
             width: 150,
             justifyContent: 'space-around'
           }}>
-          <TouchableOpacity onPress={reload}>
+          <TouchableOpacity onPress={() => { }}>
             <Icon name="reload" color="#1b2d4f" size={25} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Info')}>

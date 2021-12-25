@@ -7,18 +7,22 @@ import WeekIndicator from './components/WeekIndicator'
 import MButton from './components/MenuButton'
 
 import Config from '~/contexts/ConfigContext'
-import DataContext from '~/contexts/DataContext'
+import { useDispatch, useSelector } from 'react-redux'
 
 const Home = () => {
   const PageFoods = useRef<ViewPage>()
 
   const { configs } = useContext(Config)
-  const { foods, day, setDay, setHomeViewPage } = useContext(DataContext)
+  const foods = useSelector<RootState, Table[] | undefined>(state => state.mainState.foods)
+  const day = useSelector<RootState, number>(state => state.mainState.day)
+  const dispatch = useDispatch()
+
+  const setDay = (num: number) => dispatch({ type: 'SET_DAY', payload: { day: num } })
 
   useEffect(() => {
     if (PageFoods.current !== undefined) {
       PageFoods.current.setPage(day)
-      setHomeViewPage(PageFoods.current)
+      dispatch({ type: 'SET_HOME_VIEW', payload: { homeView: PageFoods.current } })
     }
   }, [foods])
 
@@ -40,8 +44,8 @@ const Home = () => {
                   justifyContent: 'center'
                 }}
                 key={index}>
-                <MButton item={item} launch pageView={PageFoods.current} />
-                <MButton item={item} pageView={PageFoods.current} />
+                <MButton item={item} launch />
+                <MButton item={item} />
               </View>
             ))
           ) : (

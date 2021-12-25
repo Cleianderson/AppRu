@@ -1,18 +1,18 @@
 import React, { useContext } from 'react'
+import { useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import constants from '~/service/constants'
-import DataContext from '~/contexts/DataContext'
 
 import { MenuButton, MenuText, MenuContent, MenuContentText } from './styles'
 
 const MButton = ({ item, launch = false }) => {
   const navigation = useNavigation()
 
-  const { favorites } = useContext(DataContext)
+  const favorites = useSelector<RootState, string[] | undefined>(state => state.mainState.favorites)
 
-  function itemIsInclude (item) {
+  function itemIsInclude(item) {
     const arr = favorites.filter((fav) => {
       let dinner = constants.ARRAY_DINNER.map((unit) => item[unit])
       let launch = constants.ARRAY_LAUNCH.map((unit) => item[unit])

@@ -1,8 +1,7 @@
-import React, { useContext, useState, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import { FlatList } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-
-import DataContext from '../../contexts/DataContext'
+import { useDispatch, useSelector } from 'react-redux'
 
 import {
   Container,
@@ -20,12 +19,15 @@ import {
 const Favorites = () => {
   const [textFavorite, setTextFavorite] = useState('')
   const ListFav = useRef<FlatList>(null)
+  const favorites = useSelector<RootState, string[] | undefined>(state => state.mainState.favorites)
+  const dispatch = useDispatch()
 
-  const { favorites, addFavorites, removeFavorites } = useContext(DataContext)
+  const addFavorites = (favItem: string) => dispatch({ type: 'ADD_FAVORITES', payload: { favItem } })
+  const removeFavorites = (favItem: string) => dispatch({ type: 'REMOVE_FAVORITES', payload: { favItem } })
 
-  const submitFood = async () => {
-    if (textFavorite.trim().length < 3) return 0
-    await addFavorites(textFavorite)
+  const submitFood = () => {
+    // if (textFavorite.trim().length < 3) return 0
+    addFavorites(textFavorite)
     setTextFavorite('')
     setTimeout(() => ListFav.current?.scrollToEnd(), 500)
   }

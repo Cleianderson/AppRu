@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler'
 
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
 import OneSignal from 'react-native-onesignal'
 import NetInfo from '@react-native-community/netinfo'
@@ -10,18 +11,30 @@ import { Container } from './styles'
 import api from './service/Api'
 import { updateWeekStorage, getItem, setItem } from './service/Storage'
 
-import constants from './service/constants'
-
 import Main from './routes/Main'
-
-import StateContext from './contexts/DataContext'
-import RequestContext from './contexts/RequestContext'
 
 const isoWeekOfTomorrow = moment().add(1, 'days').isoWeek()
 
 const App: React.FC = () => {
-  const { setFoods, setWarns, setThereIsWarn } = useContext(StateContext)
-  const { setAction } = useContext(RequestContext)
+  const dispatch = useDispatch()
+
+  const favorites = useSelector<RootState, string[] | undefined>(state => state.mainState.favorites)
+  const warns = useSelector<RootState, WarningType[] | undefined>(state => state.mainState.warns)
+
+  const setFoods = (foods: any) => dispatch({ type: 'SET_FOODS', payload: { foods } })
+  const setWarns = (warns: any) => dispatch({ type: 'SET_WARNS', payload: { warns } })
+  const setFavorites = (favorites: any) => dispatch({ type: 'SET_FAVORITES', payload: { favorites } })
+  const setThereIsWarn = (thereIsWarn: boolean) => dispatch({ type: 'SET_THERE_IS_WARNS', payload: { thereIsWarn } })
+
+  const setAction = (fn: Function) => dispatch({ type: 'SET_ACTION', payload: { action: fn } })
+  const setTextFailed = (str: string) => dispatch({ type: 'SET_TEXT_FAILED', payload: { textFailed: str } })
+  const setTextSuccess = (str: string) => dispatch({ type: 'SET_TEXT_SUCCESS', payload: { textSuccess: str } })
+
+  async function initFavorites () {
+    // -> Método responsável por iniciar a lista de favoritos
+    const favorites = (await getItem<string[]>('@favorites')).data
+    setFavorites(favorites !== null ? favorites : [])
+  }
 
   const checkWeek = async () => {
     // -> Método responsável por iniciar os dados do cardápio
@@ -36,9 +49,10 @@ const App: React.FC = () => {
   }
   const verifyConnectionAndRefresh = async () => {
     if ((await NetInfo.fetch()).isConnected) {
-      // setFailedText('O cardápio ainda não está disponível')
+      setTextFailed('O cardápio ainda não está disponível')
+      setTextSuccess('Cardápio atualizado!')
       setAction(async () => {
-        const { data } = await api.get(`/thisweek?week=${'11' || isoWeekOfTomorrow}`)
+        const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
         await verifyWarn()
         if (data) {
           updateWeekStorage(data.data, { number_week: data.number_week })
@@ -48,7 +62,8 @@ const App: React.FC = () => {
         return false
       })
     } else {
-      constants.showAlert('Falha na conexão', 'Por favor verifique a conexão com a internet')
+      setTextFailed('Falha na conexão')
+      return false
     }
   }
 
@@ -110,9 +125,22 @@ const App: React.FC = () => {
     }
 
     initalizeOneSignal()
+    initFavorites()
     checkWeek()
     startWarning()
   }, [])
+
+  useEffect(() => {
+    if (favorites !== undefined) {
+      const writeFavorites = async () => (await setItem('@favorites', { data: favorites }))
+      writeFavorites()
+    }
+  }, [favorites])
+
+  useEffect(() => {
+    const writeWarns = async () => (await setItem('@warns', { data: warns }))
+    writeWarns()
+  }, [warns])
 
   return (
     <Container>

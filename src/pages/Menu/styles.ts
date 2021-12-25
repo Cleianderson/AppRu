@@ -4,8 +4,8 @@ import constants from '../../service/constants'
 
 export const Container = styled.View`
   flex: 1;
-  margin: 5px;
-`
+  margin: 30px 10px 30px 10px;
+  `
 
 export const Header = styled.View`
   flex-direction: row;
@@ -17,6 +17,17 @@ export const Header = styled.View`
   padding: 7px 10px;
   align-items: center;
 `
+export const Footer = styled.View`
+  flex-direction: row;
+  /* margin-top: 5px; */
+  margin-bottom: 0;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background: #1b2d4f;
+  padding: 7px 10px;
+  align-items: center;
+  justify-content: space-between;
+`
 
 export const DayText = styled.Text`
   flex: 1;
@@ -24,15 +35,16 @@ export const DayText = styled.Text`
   color: white;
   font-weight: bold;
   font-size: 14px;
-`
+  `
 
 export const Content = styled.ScrollView`
   /* padding: 2px 10px; */
+  background-color: #FFFFFF;
   flex-grow: 1;
   border: 1px solid #ccc;
   border-top-width: 0px;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  /* border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px; */
   padding: 5px;
 `
 
@@ -72,7 +84,7 @@ export const NavBar = styled.View`
 `
 export const NavButton = styled.TouchableOpacity`
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   background: #eee;
   border-radius: 10px;
