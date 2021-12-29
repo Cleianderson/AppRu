@@ -15,9 +15,8 @@ const Requesting: React.FC = () => {
 
   const textSuccess = useSelector<RootState, string>(state => state.requestState.textSuccess)
   const textFailed = useSelector<RootState, string>(state => state.requestState.textFailed)
-  const action = useSelector<RootState, Function>(state => state.requestState.action)
+  const action = useSelector<RootState, Function | undefined>(state => state.requestState.action)
   const isRequesting = useSelector<RootState, boolean | undefined>(state => state.requestState.isRequesting)
-  // const isVisible = useSelector<RootState, boolean>(state => state.requestState.isVisible)
   const success = useSelector<RootState, boolean | undefined>(state => state.requestState.success)
 
   // const opacityValue = useRef(new Animated.Value(0)).current
@@ -26,34 +25,28 @@ const Requesting: React.FC = () => {
   )
 
   const closeModal = () => setIsRequesting(false)
-  // const setTextSuccess = (str: string) => (
-  //   dispatch({ type: 'SET_TEXT_SUCCESS', payload: { textSuccess: str } })
-  // )
-  // const setTextFailed = (str: string) => (
-  //   dispatch({ type: 'SET_TEXT_FAILED', payload: { textFailed: str } })
-  // )
-  // const setIsVisible = (isVisible: boolean | undefined) => dispatch({ type: 'SET_IS_VISIBLE', payload: { isVisible } })
-  // const setTextFailed = (str: string) => dispatch({ type: 'SET_TEXT_FAILED', payload: { textFailed: str } })
   const setSuccess = (value: boolean | undefined) => dispatch({ type: 'SET_SUCCESS', payload: { success: value } })
 
   // onFailedText = onFailedText !== null && onFailedText !== '' ? onFailedText : 'Algo deu errado'
 
   useEffect(() => {
-    setIsRequesting(true)
-    // opacityValue.setValue(0)
-    setSuccess(undefined)
+    if (action !== undefined) {
+      setIsRequesting(true)
+      // opacityValue.setValue(0)
+      setSuccess(undefined)
 
-    const executeAction = async () => {
-      try {
-        const responseAction = await action()
-        if (typeof responseAction === 'boolean') {
-          setSuccess(responseAction)
+      const executeAction = async () => {
+        try {
+          const responseAction = await action()
+          if (typeof responseAction === 'boolean') {
+            setSuccess(responseAction)
+          }
+        } catch (error) {
+          setIsRequesting(false)
         }
-      } catch (error) {
-        setIsRequesting(false)
       }
+      executeAction()
     }
-    executeAction()
   }, [action])
 
   useEffect(() => {

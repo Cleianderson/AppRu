@@ -10,14 +10,26 @@ export const Content = styled.View`
   padding: 10px 15px;
 `
 
-export const Title = styled.Text`
-  text-align: center;
+export const Header = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   background: #1b2d4f;
-  color: white;
-  font-weight: bold;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  padding: 4px;
+  padding: 7px;
+`
+
+export const DateText = styled.Text`
+  color: #eee;
+  margin: 4px;
+`
+
+export const Title = styled.Text`
+  flex: 1;
+  font-weight: bold;
+  margin: 4px;
+  color: white;
 `
 
 export const Message = styled.Text`

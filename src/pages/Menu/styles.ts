@@ -14,7 +14,7 @@ export const Header = styled.View`
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   background: #1b2d4f;
-  padding: 7px 10px;
+  padding: 10px 7px;
   align-items: center;
 `
 export const Footer = styled.View`
@@ -24,7 +24,7 @@ export const Footer = styled.View`
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   background: #1b2d4f;
-  padding: 7px 10px;
+  padding: 10px 7px;
   align-items: center;
   justify-content: space-between;
 `

@@ -119,9 +119,9 @@ const Menu = ({ route }) => {
           <Icon name="chevron-left" color="#1b2d4f" size={25} />
           <Text style={{ marginRight: 10 }}>Anterior</Text>
         </NavButton>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Icon name="menu-down" color="#FFF" size={30} />
-        </TouchableOpacity>
+        <NavButton onPress={navigation.goBack}>
+          <Icon name="menu-down" color="#1b2d4f" size={25} />
+        </NavButton>
         <NavButton
           onPress={nextPage}
           disabled={day >= 4}

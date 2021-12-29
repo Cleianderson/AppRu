@@ -40,7 +40,7 @@ declare type MainState = {
 }
 
 declare type RequestState = {
-    action: Function,
+    action: Function | undefined,
     textSuccess: string,
     textFailed: string,
     isVisible: boolean,

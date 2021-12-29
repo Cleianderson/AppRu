@@ -4,7 +4,7 @@ interface Action {
 }
 
 const initialState: RequestState = {
-  action: () => { },
+  action: undefined,
   textSuccess: 'Success',
   textFailed: 'Failed',
   isRequesting: false,

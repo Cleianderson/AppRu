@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Text, FlatList, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Container, Title, Message, Content } from './style'
+import { Container, Title, Message, Content, DateText, Header } from './style'
 
 export default function Warn () {
   const dispatch = useDispatch()
@@ -10,13 +10,31 @@ export default function Warn () {
 
   const updateThereIsWarn = (value: boolean) => dispatch({ type: 'SET_THERE_IS_WARN', payload: { thereIsWarn: value } })
 
+  const formatDate = (date: string) => {
+    let month = `${new Date(date).getMonth()}`
+    let day = `${new Date(date).getDay()}`
+
+    if (month.length === 1) {
+      month = '0' + month
+    }
+
+    if (day.length === 1) {
+      day = '0' + day
+    }
+
+    return `${day}/${month}`
+  }
+
   useEffect(() => {
     updateThereIsWarn(false)
   }, [])
 
   const renderItem = ({ item }) => (
     <Container>
-      <Title>{item.title}</Title>
+      <Header>
+        <Title>{item.title}</Title>
+        <DateText>{formatDate(item.createdAt)}</DateText>
+      </Header>
       <Content>
         <Message>{item.content}</Message>
       </Content>

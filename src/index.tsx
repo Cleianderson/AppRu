@@ -14,11 +14,11 @@ import Config from '~/providers/Config'
 import { Store } from './store'
 import Requesting from './components/Requesting'
 
-export default function RUral() {
+export default function RUral () {
   const [onBoarded, setOnBoarded] = useState<boolean | undefined>(undefined)
 
   useEffect(() => {
-    async function getOnBoarded() {
+    async function getOnBoarded () {
       const checkOnBoarded = (await getItem('@RUral:onBoarded')).data
       if (checkOnBoarded === null) {
         setOnBoarded(false)
