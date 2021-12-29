@@ -27,6 +27,7 @@ const App: React.FC = () => {
   const setThereIsWarn = (thereIsWarn: boolean) => dispatch({ type: 'SET_THERE_IS_WARNS', payload: { thereIsWarn } })
 
   const setAction = (fn: Function) => dispatch({ type: 'SET_ACTION', payload: { action: fn } })
+  const setDay = (day: number) => dispatch({ type: 'SET_DAY', payload: { day } })
   const setTextFailed = (str: string) => dispatch({ type: 'SET_TEXT_FAILED', payload: { textFailed: str } })
   const setTextSuccess = (str: string) => dispatch({ type: 'SET_TEXT_SUCCESS', payload: { textSuccess: str } })
 
@@ -53,7 +54,6 @@ const App: React.FC = () => {
       setTextSuccess('Cardápio atualizado!')
       setAction(async () => {
         const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
-        await verifyWarn()
         if (data) {
           updateWeekStorage(data.data, { number_week: data.number_week })
           setFoods(data.data)
@@ -123,6 +123,8 @@ const App: React.FC = () => {
         await setItem('@thereIsWarn', { data: true })
       })
     }
+
+    setDay(new Date(Date.now()).getDay() - 1)
 
     initalizeOneSignal()
     initFavorites()

@@ -21,6 +21,7 @@ const Home = () => {
 
   useEffect(() => {
     if (PageFoods.current !== undefined) {
+      console.log(day)
       PageFoods.current.setPage(day)
       dispatch({ type: 'SET_HOME_VIEW', payload: { homeView: PageFoods.current } })
     }
