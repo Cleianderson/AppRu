@@ -1,8 +1,9 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect, useCallback } from 'react'
-import { View, ActivityIndicator } from 'react-native'
+import { View, ActivityIndicator, Text } from 'react-native'
 import { Provider } from 'react-redux'
 import { NavigationContainer } from '@react-navigation/native'
+import VersionNumber from 'react-native-version-number'
 
 import App from './App'
 import OnboardingContext from './contexts/OnboardingContext'
@@ -50,8 +51,13 @@ export default function RUral () {
       )
     }
     return (
-      <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 100 }}>
-        <ActivityIndicator color="#1b2d4f" size="large" />
+      <View style={{ flex: 1, flexDirection: 'column' }}>
+        <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 100 }}>
+          <ActivityIndicator color="#1b2d4f" size="large" />
+        </View>
+        <Text style={{ width: '100%', textAlign: 'center', marginBottom: 10, color: '#666' }} >
+          Versão {VersionNumber.appVersion}
+        </Text>
       </View>
     )
   }, [onBoarded])
