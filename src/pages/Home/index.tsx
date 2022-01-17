@@ -30,7 +30,7 @@ const Home = () => {
   return (
     <Container>
       {foods && configs.showIndicator &&
-        <WeekIndicator day={day} press={(index) => PageFoods.current!.setPage(index)} />
+        <WeekIndicator press={(index) => PageFoods.current!.setPage(index)} />
       }
       <Content>
         <ViewPage
