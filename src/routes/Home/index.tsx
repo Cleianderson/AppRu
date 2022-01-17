@@ -11,11 +11,14 @@ import { View, TouchableOpacity, Image, Text } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import TabBar from '~/components/TabBar'
+import { Badge } from 'react-native-paper'
+import { useSelector, useStore } from 'react-redux'
 
 const TabBottom = createBottomTabNavigator()
 
 const RouteHome = () => {
   const navigation = useNavigation()
+  const thereIsWarn = useSelector<RootState, boolean>(state => state.mainState.thereIsWarn)
 
   useEffect(() => {
     navigation.setOptions({
@@ -23,14 +26,12 @@ const RouteHome = () => {
         <View
           style={{
             flexDirection: 'row',
-            width: 150,
+            width: 120,
             justifyContent: 'space-around'
           }}>
-          <TouchableOpacity onPress={() => { }}>
-            <Icon name="reload" color="#1b2d4f" size={25} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Info')}>
-            <Icon name="information-outline" color="#1b2d4f" size={25} />
+          <TouchableOpacity onPress={() => navigation.navigate('Avisos')}>
+            <Badge visible={thereIsWarn} style={{position: 'absolute', top: -1}} size={12}/>
+            <Icon name="bell-outline" color="#1b2d4f" size={25} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Config')}>
             <Icon name="settings" color="#1b2d4f" size={25} />
@@ -41,13 +42,13 @@ const RouteHome = () => {
         <Image style={{ width: 50, height: 50 }} source={require('../../assets/iconSquare.png')} />
       )
     })
-  }, [])
+  }, [thereIsWarn])
   return (
     <TabBottom.Navigator tabBar={props => <TabBar {...props} />} >
       <TabBottom.Screen name="Início" component={Home} />
-      <TabBottom.Screen name="Avisos" options={{ unmountOnBlur: true }} component={Warn} />
-      <TabBottom.Screen name="Sugerir" component={Suggestion} />
+      {/* <TabBottom.Screen name="Avisos" options={{ unmountOnBlur: true }} component={Warn} /> */}
       <TabBottom.Screen name="Favoritos" component={Favorites} />
+      <TabBottom.Screen name="Sugerir" component={Suggestion} />
     </TabBottom.Navigator>
   )
 }

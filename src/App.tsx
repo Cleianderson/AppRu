@@ -24,7 +24,7 @@ const App: React.FC = () => {
   const setFoods = (foods: any) => dispatch({ type: 'SET_FOODS', payload: { foods } })
   const setWarns = (warns: any) => dispatch({ type: 'SET_WARNS', payload: { warns } })
   const setFavorites = (favorites: any) => dispatch({ type: 'SET_FAVORITES', payload: { favorites } })
-  const setThereIsWarn = (thereIsWarn: boolean) => dispatch({ type: 'SET_THERE_IS_WARNS', payload: { thereIsWarn } })
+  const setThereIsWarn = (thereIsWarn: boolean) => dispatch({ type: 'SET_THERE_IS_WARN', payload: { thereIsWarn } })
 
   const setAction = (fn: Function) => dispatch({ type: 'SET_ACTION', payload: { action: fn } })
   const setDay = (day: number) => dispatch({ type: 'SET_DAY', payload: { day } })
@@ -90,7 +90,7 @@ const App: React.FC = () => {
 
       if (thereIsNewWarn) {
         setThereIsWarn(true)
-        setItem('@thereIsWarn', { value: true })
+        setItem('@thereIsWarn', { data: true })
       }
     }
   }

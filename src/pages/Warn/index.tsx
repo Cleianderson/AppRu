@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { Text, FlatList, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+import { setItem } from '~/service/Storage'
 
 import { Container, Title, Message, Content, DateText, Header } from './style'
 
@@ -8,7 +9,10 @@ export default function Warn () {
   const dispatch = useDispatch()
   const warns = useSelector<RootState, WarningType[] | undefined>(state => state.mainState.warns)
 
-  const updateThereIsWarn = (value: boolean) => dispatch({ type: 'SET_THERE_IS_WARN', payload: { thereIsWarn: value } })
+  const updateThereIsWarn = async (value: boolean) => {
+    dispatch({ type: 'SET_THERE_IS_WARN', payload: { thereIsWarn: value } })
+    await setItem('@thereIsWarn', { data: value })
+  }
 
   const formatDate = (date: string) => {
     let month = `${new Date(date).getMonth()}`
@@ -45,7 +49,7 @@ export default function Warn () {
     <FlatList
       data={warns}
       keyExtractor={(item, index) => String(item.title + index)}
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: '#fff' }}
       contentContainerStyle={{
         justifyContent: 'flex-end',
         flexDirection: 'column-reverse',

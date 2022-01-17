@@ -22,7 +22,7 @@ export default function Suggestion () {
     if (txtSuggestion.trim().length < 10) {
       showAlert(
         'Caracteres insuficientes',
-        'O número mínimo de caracteres é 10'
+        'A sua sugestão precisa ter, no mínimo, 10 caractéres'
       )
       return null
     }
@@ -43,10 +43,10 @@ export default function Suggestion () {
       type: typeSuggestion,
       author: txtIdentification
     })
-    if (resolve.status === 200) {
-      Alert.alert('Sugestão enviada', 'Obrigado <3', [
+    if (resolve.status >= 200 && resolve.status < 300) {
+      Alert.alert('Sua sugestão foi recebida', 'Obrigado <3', [
         {
-          text: 'De nada',
+          text: 'OK',
           style: 'default',
           onPress: () => setTxtSuggestion('')
         }
