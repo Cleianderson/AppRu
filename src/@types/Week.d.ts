@@ -30,7 +30,7 @@ declare type MainState = {
     warns: WarningType[] | undefined, // setWarns: Dispatch<SetStateAction<WarningType[] | undefined>>
     foods: Table[] | undefined, // setFoods: Dispatch<SetStateAction<Table[] | undefined>>
     favorites: string[] | undefined, //  setFavorites: Dispatch<SetStateAction<string[]>>,
-    day: number, // setDay: (d: number) => void,
+    day: number | undefined, // setDay: (d: number) => void,
     // homeViewPage: JSX.Element | undefined, //  setHomeViewPage: Dispatch<SetStateAction<JSX.Element | undefined>>,
     homeView: JSX.Element | undefined, //  setHomeViewPage: Dispatch<SetStateAction<JSX.Element | undefined>>,
     // addFavorites: (str: string) => Promise<void>,

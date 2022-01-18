@@ -7,7 +7,7 @@ const initialState: MainState = {
   warns: [],
   foods: undefined,
   favorites: undefined,
-  day: 0,
+  day: undefined,
   homeView: undefined,
   thereIsWarn: false
 }
