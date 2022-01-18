@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect, useCallback } from 'react'
 import { View, ActivityIndicator, Text } from 'react-native'
+import {DefaultTheme, Provider as ThemeProvider} from 'react-native-paper'
 import { Provider } from 'react-redux'
 import { NavigationContainer } from '@react-navigation/native'
 import VersionNumber from 'react-native-version-number'
@@ -14,6 +15,14 @@ import OnboardingComponent from './components/Onboarding'
 import Config from '~/providers/Config'
 import { Store } from './store'
 import Requesting from './components/Requesting'
+
+const customTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    notification: '#F6AF30',
+  },
+}
 
 export default function RUral() {
   const [onBoarded, setOnBoarded] = useState<boolean | undefined>(undefined)
@@ -34,14 +43,16 @@ export default function RUral() {
   const render = useCallback(() => {
     if (onBoarded) {
       return (
-        <NavigationContainer>
-          <Config>
-            <Provider store={Store} >
-              <App />
-              <Requesting />
-            </Provider>
-          </Config>
-        </NavigationContainer>
+        <ThemeProvider theme={customTheme} >
+          <NavigationContainer>
+            <Config>
+              <Provider store={Store} >
+                <App />
+                <Requesting />
+              </Provider>
+            </Config>
+          </NavigationContainer>
+        </ThemeProvider>
       )
     } else if (onBoarded !== undefined) {
       return (
