@@ -31,7 +31,7 @@ const App: React.FC = () => {
   const setTextFailed = (str: string) => dispatch({ type: 'SET_TEXT_FAILED', payload: { textFailed: str } })
   const setTextSuccess = (str: string) => dispatch({ type: 'SET_TEXT_SUCCESS', payload: { textSuccess: str } })
 
-  async function initFavorites () {
+  async function initFavorites() {
     // -> Método responsável por iniciar a lista de favoritos
     const favorites = (await getItem<string[]>('@favorites')).data
     setFavorites(favorites !== null ? favorites : [])
@@ -70,27 +70,31 @@ const App: React.FC = () => {
   const verifyWarn = async () => {
     // -> Verifica se as notificações locais e do servidor são iguais
     if ((await NetInfo.fetch()).isConnected) {
-      const warnsResolve = await api.get<WarningType[]>('/warn')
-      const warnsFromStorage = await getItem<WarningType[]>('@warns')
+      try {
+        const warnsResolve = await api.get<WarningType[]>('/warn')
+        const warnsFromStorage = await getItem<WarningType[]>('@warns')
 
-      let warnsStorage = warnsFromStorage.data
+        let warnsStorage = warnsFromStorage.data
 
-      if (warnsStorage === null) {
+        if (warnsStorage === null) {
+          await setItem('@warns', { data: warnsResolve.data })
+          warnsStorage = warnsResolve.data
+        }
+
+        const resolveIds = warnsResolve.data.map((w) => w._id)
+        const storageIds = warnsStorage.map((w) => w._id)
+
+        const thereIsNewWarn = !resolveIds.every((resolveId) => storageIds.includes(resolveId))
+
         await setItem('@warns', { data: warnsResolve.data })
-        warnsStorage = warnsResolve.data
-      }
+        setWarns(warnsResolve.data)
 
-      const resolveIds = warnsResolve.data.map((w) => w._id)
-      const storageIds = warnsStorage.map((w) => w._id)
-
-      const thereIsNewWarn = !resolveIds.every((resolveId) => storageIds.includes(resolveId))
-
-      await setItem('@warns', { data: warnsResolve.data })
-      setWarns(warnsResolve.data)
-
-      if (thereIsNewWarn) {
-        setThereIsWarn(true)
-        setItem('@thereIsWarn', { data: true })
+        if (thereIsNewWarn) {
+          setThereIsWarn(true)
+          setItem('@thereIsWarn', { data: true })
+        }
+      } catch {
+        // pass
       }
     }
   }

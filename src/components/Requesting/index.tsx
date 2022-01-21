@@ -42,10 +42,14 @@ const Requesting: React.FC = () => {
             setSuccess(responseAction)
           }
         } catch (error) {
-          setIsRequesting(false)
+          setSuccess(false)
         }
       }
-      executeAction()
+      try {
+        executeAction()
+      } catch {
+        setSuccess(false)
+      }
     }
   }, [action])
 
