@@ -26,16 +26,29 @@ const RouteHome = () => {
         <View
           style={{
             flexDirection: 'row',
-            width: 120,
-            justifyContent: 'space-around'
+            width: 60,
           }}>
           <TouchableOpacity onPress={() => navigation.navigate('Avisos')}>
-            <Badge visible={thereIsWarn} style={{position: 'absolute', top: -1}} size={12}/>
+            {thereIsWarn && <View
+              style={{
+                position: 'absolute',
+                right: 0,
+                top: -1,
+                borderColor: '#fff',
+                borderWidth: 2,
+                borderRadius: 50,
+                backgroundColor: '#ff7700',
+                width: 15,
+                height: 15,
+                zIndex: 1
+              }}
+            />}
+            {/*<Badge visible={thereIsWarn} style={{position: 'absolute', top: -1}} size={12}/>*/}
             <Icon name="bell-outline" color="#1b2d4f" size={25} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Config')}>
+          {__DEV__ && <TouchableOpacity onPress={() => navigation.navigate('Config')}>
             <Icon name="settings" color="#1b2d4f" size={25} />
-          </TouchableOpacity>
+          </TouchableOpacity>}
         </View>
       ),
       headerLeft: () => (
