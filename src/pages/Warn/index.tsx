@@ -16,18 +16,13 @@ export default function Warn() {
   }
 
   const formatDate = (date: string) => {
-    let month = `${new Date(date).getMonth()}`
-    let day = `${new Date(date).getDay()}`
+    let month = `0${new Date(date).getMonth()+1}`
+    let day = `0${new Date(date).getDate()}`
 
-    if (month.length === 1) {
-      month = '0' + month
-    }
+    const lD = day.length
+    const lM = month.length
 
-    if (day.length === 1) {
-      day = '0' + day
-    }
-
-    return `${day}/${month}`
+    return `${day[lD-2]}${day[lD-1]}/${month[lM-2]}${month[lM-1]}`
   }
 
   useEffect(() => {
