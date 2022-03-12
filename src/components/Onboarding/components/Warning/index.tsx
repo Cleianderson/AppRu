@@ -7,8 +7,8 @@ import ButtonBar from '~/routes/Home/components/Button/index'
 const Warning: React.FC = () => {
   return (
     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: 150 }} >
-      <Icon name="alert-box" color="#1b2d4f" size={50} />
-      <ButtonBar icon="alert-box" color="#1b2d4f" size={50} notify/>
+      <Icon name="bell-outline" color="#1b2d4f" size={50} />
+      <ButtonBar icon="bell-outline" color="#1b2d4f" size={50} notify/>
     </View>
   )
 }

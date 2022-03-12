@@ -27,7 +27,7 @@ const OnboardingComponent = () => {
   const pages = [
     {
       backgroundColor: '#fff',
-      image: <Image style={{ width: 400, height: 200 }} source={require('../../assets/icon.png')} />,
+      image: <Image style={{ width: 300, height: 100 }} source={require('../../assets/icon.png')} />,
       title: 'Olá!',
       subtitle: 'Bem-vindx ao app do melhor RU do Brasil, o app RUral, vamos conhecê-lo?'
     },
@@ -40,11 +40,11 @@ const OnboardingComponent = () => {
             flexDirection: 'row',
             justifyContent: 'space-around'
           }}>
-          <Icon name="alert-box" color="#1b2d4f" size={50} />
+          <Icon name="bell-outline" color="#1b2d4f" size={50} />
           <Icon name="star" color="#1b2d4f" size={50} />
           <Icon name="voice" color="#1b2d4f" size={50} />
-          <Icon name="reload" color="#1b2d4f" size={50} />
-          <Icon name="information-outline" color="#1b2d4f" size={50} />
+          <Icon name="settings" color="#1b2d4f" size={50} />
+          {/*<Icon name="information-outline" color="#1b2d4f" size={50} />*/}
         </View>
       ),
       title: 'Funcionalidades',
@@ -69,20 +69,20 @@ const OnboardingComponent = () => {
         'Aqui você pode nos dar sua sugestão sobre o RU, sobre o app ou sobre o que quiser. ' +
         'Simples, porém importantíssimo'
     },
-    {
-      backgroundColor: '#fff',
-      image: <Icon name="reload" color="#1b2d4f" size={50} />,
-      title: 'Atualizar',
-      subtitle:
-        'Esse é simples, ele apenas contata o servidor para checar se os dados no seu celular estão atualizados'
-    },
-    {
-      backgroundColor: '#fff',
-      image: <Icon name="information-outline" color="#1b2d4f" size={50} />,
-      title: 'Informações',
-      subtitle:
-        'Esse também é simples, ele contém algumas perguntas comuns dos usuários. Sugerirmos que você dê uma olhada'
-    },
+    // {
+    //   backgroundColor: '#fff',
+    //   image: <Icon name="reload" color="#1b2d4f" size={50} />,
+    //   title: 'Atualizar',
+    //   subtitle:
+    //     'Esse é simples, ele apenas contata o servidor para checar se os dados no seu celular estão atualizados'
+    // },
+    // {
+    //   backgroundColor: '#fff',
+    //   image: <Icon name="information-outline" color="#1b2d4f" size={50} />,
+    //   title: 'Informações',
+    //   subtitle:
+    //     'Esse também é simples, ele contém algumas perguntas comuns dos usuários. Sugerirmos que você dê uma olhada'
+    // },
     {
       backgroundColor: '#fff',
       image: (
