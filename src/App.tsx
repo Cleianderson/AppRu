@@ -119,7 +119,9 @@ const App: React.FC = () => {
 
       OneSignal.provideUserConsent(value)
 
-      OneSignal.init('85b3451d-6f7d-481f-b66e-1f93fe069135')
+      const appId = __DEV__ ? '9cf90441-8151-4e1a-91a5-ce90b102410c' : '85b3451d-6f7d-481f-b66e-1f93fe069135'
+
+      OneSignal.init(appId)
       OneSignal.addEventListener('received', async (pushNot: any) => {
         await setItem('@warns', { data: pushNot.payload.additionalData.warns })
         setWarns(pushNot.payload.additionalData.warns)
@@ -127,8 +129,9 @@ const App: React.FC = () => {
         await setItem('@thereIsWarn', { data: true })
       })
     }
-
-    setDay(new Date(Date.now()).getDay() - 1)
+    let _day = new Date(Date.now()).getDay() - 1
+    _day = _day > 4 || _day < 0 ? 0 : _day
+    setDay(_day)
 
     initalizeOneSignal()
     initFavorites()
