@@ -27,6 +27,7 @@ const RouteHome = () => {
           style={{
             flexDirection: 'row',
             width: 60,
+            justifyContent: 'space-around',
           }}>
           <TouchableOpacity onPress={() => navigation.navigate('Avisos')}>
             {thereIsWarn && <View
