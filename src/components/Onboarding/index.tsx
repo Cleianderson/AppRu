@@ -165,7 +165,7 @@ const OnboardingComponent = () => {
       pages={pages}
       nextLabel="Próximo"
       skipLabel="Pular"
-      skipToPage={9}
+      skipToPage={pages.length - 1}
       onDone={finalizeOnboaring}
       controlStatusBar={false}
       showDone={accepted !== undefined}
