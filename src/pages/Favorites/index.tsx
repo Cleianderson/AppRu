@@ -28,7 +28,7 @@ const Favorites = () => {
 
   const submitFood = () => {
     // if (textFavorite.trim().length < 3) return 0
-    addFavorites(textFavorite)
+    addFavorites(textFavorite.trim())
     setTextFavorite('')
     setTimeout(() => ListFav.current?.scrollToEnd(), 500)
   }
