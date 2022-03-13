@@ -20,7 +20,11 @@ const MButton = ({ item, launch = false }) => {
       dinner = dinner.filter((unit) => unit !== undefined)
       launch = launch.filter((unit) => unit !== undefined)
 
-      return dinner.includes(fav.toUpperCase()) || launch.includes(fav.toUpperCase())
+
+      return (
+        dinner.some(v => v.toUpperCase().includes(fav.toUpperCase())) ||
+        launch.some(v => v.toUpperCase().includes(fav.toUpperCase()))
+      )
     })
     return arr.length > 0
   }

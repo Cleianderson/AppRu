@@ -5,14 +5,14 @@ export const MenuButton = styled.TouchableOpacity`
   border-radius: 10px;
   justify-content: center;
   align-items: center;
-  margin: 20px;
+  margin: 10px;
   margin-left: 40px;
   margin-right: 40px;
   padding: 20px 15px;
 `
 
 export const MenuText = styled.Text`
-  font-size: 16px;
+  font-size: 14px;
 `
 
 export const MenuContent = styled.View`
@@ -22,4 +22,5 @@ export const MenuContent = styled.View`
 
 export const MenuContentText = styled.Text`
   margin-left: 5px;
+  font-size: 12px;
 `
