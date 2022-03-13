@@ -80,7 +80,7 @@ export default function Suggestion () {
             <ChooseBox.Item label="Outros" value="others" />
           </ChooseBox>
         </ContainerChooseBox>
-        <Label>Indentificação</Label>
+        <Label>Identificação</Label>
         <TextInput
           placeholder="Fulano Silva - Curso"
           onChangeText={setTxtIdentification}
