@@ -34,7 +34,7 @@ const App: React.FC = () => {
   async function initFavorites() {
     // -> Método responsável por iniciar a lista de favoritos
     const favorites = (await getItem<string[]>('@favorites')).data
-    setFavorites(favorites !== null ? favorites : [])
+    setFavorites(favorites !== null && favorites !== undefined ? favorites : [])
   }
 
   const checkWeek = async () => {

@@ -61,27 +61,38 @@ const Menu = ({ route }) => {
   }
 
   function checkItem(str) {
-    const result = favorites?.filter((fav) => str.toUpperCase() === fav.toUpperCase()) ?? []
+    const result = favorites?.filter((fav) => str.toUpperCase().includes(fav.toUpperCase())) ?? []
     return result.length > 0
   }
 
   async function toggleFavorite(str = '') {
     if (favorites !== undefined) {
-      if (favorites.includes(str.toUpperCase())) {
-        removeFavorites(str)
-      } else {
-        addFavorites(str)
+      let hasRemovedSomeFav = false
+      for (let fav of favorites) {
+        if (str.toUpperCase().includes(fav.toUpperCase())) {
+          removeFavorites(fav)
+          hasRemovedSomeFav = true
+          break
+        }
       }
-      // const _favorites = favorites.map((iFav) => iFav.toLowerCase())
-      //
-      // if (_favorites?.includes(str.toLowerCase())) {
-      //   const newFavorites = favorites.filter((fav) => fav.toLowerCase() !== str.toLowerCase())
-      //   await setItem('@favorites', { data: newFavorites })
-      //   setFavorites(newFavorites)
-      // } else {
-      //   await setItem('@favorites', { data: [...favorites, str] })
-      //   setFavorites([...favorites, str])
-      // }
+      if(hasRemovedSomeFav === false){
+        addFavorites(str.trim().toUpperCase())
+      }
+      //   if (favorites.includes(str.toUpperCase())) {
+      //     removeFavorites(str)
+      //   } else {
+      //     addFavorites(str)
+      //   }
+      //   // const _favorites = favorites.map((iFav) => iFav.toLowerCase())
+      //   //
+      //   // if (_favorites?.includes(str.toLowerCase())) {
+      //   //   const newFavorites = favorites.filter((fav) => fav.toLowerCase() !== str.toLowerCase())
+      //   //   await setItem('@favorites', { data: newFavorites })
+      //   //   setFavorites(newFavorites)
+      //   // } else {
+      //   //   await setItem('@favorites', { data: [...favorites, str] })
+      //   //   setFavorites([...favorites, str])
+      //   // }
     }
   }
 
