@@ -4,21 +4,9 @@ module.exports = {
     [
       'babel-plugin-root-import',
       {
-        rootPathPrefix: '~',
         rootPathSuffix: 'src'
       }
     ],
     'react-native-paper/babel'
   ],
-  env: {
-    production: {
-      plugins: [
-        'babel-plugin-root-import',
-        {
-          rootPathPrefix: '~',
-          rootPathSuffix: 'src'
-        }
-      ]
-    }
-  }
 };
