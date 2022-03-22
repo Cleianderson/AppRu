@@ -44,7 +44,7 @@ const Favorites = () => {
             <FavContainer>
               <FavText>{item}</FavText>
               <FavButton onPress={() => removeFavorites(item)}>
-                <Icon name="delete-forever" color="white" size={20} />
+                <Icon name="close" color="#b61823" size={18} />
               </FavButton>
             </FavContainer>
           )}
@@ -102,7 +102,7 @@ const Favorites = () => {
         <TextInput placeholder="Comida" value={textFavorite} onChangeText={setTextFavorite} />
         <Button
           onPress={submitFood}>
-          <Icon name="plus" color="#1b2d4f" size={31} />
+          <Icon name="send-circle" color="#1b2d4f" size={41} />
         </Button>
       </Inputs>
     </Container>

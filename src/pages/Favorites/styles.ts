@@ -38,6 +38,7 @@ export const FavContainer = styled.View`
   margin: 10px;
   border: 1px solid #ccc;
   padding: 10px 20px;
+  padding-right: 10px;
   border-radius: 10px;
   align-items: center;
 `
@@ -45,9 +46,9 @@ export const FavText = styled.Text`
   flex: 1;
 `
 export const FavButton = styled.TouchableOpacity`
-  background: #b61823;
   border-radius: 10px;
-  padding: 5px;
+  border: 1px solid #b61823;
+  padding: 3px;
 `
 
 export const EmptyContainer = styled.View`
