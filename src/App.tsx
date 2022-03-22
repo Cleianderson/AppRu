@@ -39,13 +39,12 @@ const App: React.FC = () => {
 
   const checkWeek = async () => {
     // -> Método responsável por iniciar os dados do cardápio
-    const weekFromStorage = await getItem<Week>('@week')
-    const jsonStorage = weekFromStorage.data
+    const jsonStorage = await getItem<Week>('@week')
 
     if (jsonStorage === null || isoWeekOfTomorrow !== jsonStorage.number_week) {
       setAction(verifyConnectionAndRefresh)
     } else {
-      setFoods(jsonStorage.data || [])
+      setFoods(jsonStorage.foods || [])
     }
   }
   const verifyConnectionAndRefresh = async () => {

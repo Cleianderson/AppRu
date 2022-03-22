@@ -2,7 +2,12 @@ import Storage from '@react-native-community/async-storage'
 
 // eslint-disable-next-line camelcase
 export async function setWeek (str: string, number_week: number, foods: any) {
-  await Storage.setItem(str, JSON.stringify({ data: { number_week, data: foods } }))
+  await Storage.setItem(
+    str,
+    JSON.stringify({
+      number_week,
+      foods
+  }))
 }
 
 export async function setItem (str: string, json: object) {
