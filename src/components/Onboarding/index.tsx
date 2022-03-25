@@ -29,7 +29,7 @@ const OnboardingComponent = () => {
       backgroundColor: '#fff',
       image: <Image style={{ width: 300, height: 100 }} source={require('../../assets/icon.png')} />,
       title: 'Olá!',
-      subtitle: 'Bem-vindx ao app do melhor RU do Brasil, o app RUral, vamos conhecê-lo?'
+      subtitle: 'Boas-vindas ao app do melhor RU do Brasil, o app RUral, vamos conhecê-lo?'
     },
     {
       backgroundColor: '#fff',
@@ -43,7 +43,7 @@ const OnboardingComponent = () => {
           <Icon name="bell-outline" color="#1b2d4f" size={50} />
           <Icon name="star" color="#1b2d4f" size={50} />
           <Icon name="voice" color="#1b2d4f" size={50} />
-          <Icon name="settings" color="#1b2d4f" size={50} />
+          {/* <Icon name="settings" color="#1b2d4f" size={50} /> */}
           {/*<Icon name="information-outline" color="#1b2d4f" size={50} />*/}
         </View>
       ),
