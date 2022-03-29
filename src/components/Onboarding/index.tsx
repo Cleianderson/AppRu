@@ -141,19 +141,19 @@ const OnboardingComponent = () => {
               Abaixo você pode concordar ou descordar com a coleta de dados. Ainda será possível
               usar o aplicativo mas, você não receberá as notificaçôes
             </TStyles>
+            <View
+              style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', marginVertical: 20 }}>
+              <Button
+                color="#a00"
+                activated={!accepted && accepted !== undefined}
+                onPress={() => setAccepted(false)}>
+                <ButtonText>Não aceito</ButtonText>
+              </Button>
+              <Button activated={accepted} onPress={() => setAccepted(true)}>
+                <ButtonText>Aceito</ButtonText>
+              </Button>
+            </View>
           </Content>
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-            <Button
-              color="#a00"
-              activated={!accepted && accepted !== undefined}
-              onPress={() => setAccepted(false)}>
-              <ButtonText>Não aceito</ButtonText>
-            </Button>
-            <Button activated={accepted} onPress={() => setAccepted(true)}>
-              <ButtonText>Aceito</ButtonText>
-            </Button>
-          </View>
         </Container>
       ),
       image: <View />
