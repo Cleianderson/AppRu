@@ -109,7 +109,7 @@ const OnboardingComponent = () => {
       title: 'Só mais uma coisa...',
       subtitle: (
         <Container>
-          <Content>
+          <Content  contentContainerStyle={{paddingBottom: 80}}>
             <TStyles>
               Para você ser notificado quando houver novos avisos, nós utilizamos um serviço de notificação
               chamado OneSignal que coleta algumas informações do seu celular para manter o serviço
