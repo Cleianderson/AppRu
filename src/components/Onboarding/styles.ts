@@ -1,35 +1,55 @@
 import styled from 'styled-components/native'
+import PageView from '@react-native-community/viewpager'
 
 export const Container = styled.View`
   flex: 1;
-  justify-content: center;
+  /* justify-content: center;
+  align-items: center; */
+  background: #fff;
 `
 
-export const Content = styled.ScrollView`
+export const Content = styled(PageView)`
   flex: 1;
-  margin: 15px;
+`
+export const BottomContainer = styled.View`
+  flex-direction: row;
+  background: #ccc;
+  padding: 20px 7px;
+  justify-content: space-between;
+  align-items: center;
 `
 
-export const Text = styled.Text`
-  margin-bottom: 15px;
-`
-
-export const List = styled.ScrollView``
-
-export const ListItem = styled.Text`
-  text-align: center;
-`
-
-export const Button = styled.TouchableOpacity`
-  background: ${({ activated, color }) =>
-    activated ? color || '#1b2d4f' : '#ccc'};
-  padding: 5px 10px;
+export const NavButton = styled.TouchableOpacity`
+  align-items: center;
   justify-content: center;
-  width: 120px;
-  border-radius: 10px;
+  flex-direction: row;
+  padding: 2px 7px;
+  width: 100px;
+  height: 31px;
 `
 
-export const ButtonText = styled.Text`
-  text-align: center;
-  color: white;
+export const Title = styled.Text`
+  color: #1b2d4f;
+  font-weight: 700;
+  font-size: 27px;
+  margin-bottom: 20px;
+`
+
+export const Text = styled.Text``
+
+export const PageContainer = styled.View`
+  padding: 20px;
+`
+
+export const DotsContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-around;
+`
+
+export const AcceptButton = styled.TouchableOpacity`
+  background: #1b2d4f;
+  border-radius: 5px;
+  padding: 10px 15px;
+  width: 180px;
+  align-items: center;
 `
