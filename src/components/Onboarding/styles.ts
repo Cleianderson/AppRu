@@ -37,8 +37,8 @@ export const Title = styled.Text`
 
 export const Text = styled.Text``
 
-export const PageContainer = styled.View`
-  padding: 20px;
+export const PageContainer = styled.ScrollView`
+  /* padding: 20px; */
 `
 
 export const DotsContainer = styled.View`
