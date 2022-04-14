@@ -691,7 +691,7 @@ const OnboardingComponent = () => {
         ref={refPageView}
         onPageSelected={event => setSelectedPage(event.nativeEvent.position)}>
         {pages.map(page => (
-          <Style.PageContainer key={page.title} contentContainerStyle={{ padding: 20 }} persistentScrollbar={true} >
+          <Style.PageContainer key={page.title} contentContainerStyle={{ flexGrow: 1, padding: 20, justifyContent: 'center' }} persistentScrollbar={true} >
             <Style.Title>{page.title}</Style.Title>
             {page.flatSvg && <View style={{ aspectRatio: 1, padding: 20, alignItems: 'center', justifyContent: 'center' }}>
               {page.flatSvg}
