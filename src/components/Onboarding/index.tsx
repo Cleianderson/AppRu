@@ -691,45 +691,49 @@ const OnboardingComponent = () => {
         ref={refPageView}
         onPageSelected={event => setSelectedPage(event.nativeEvent.position)}>
         {pages.map(page => (
-          <Style.PageContainer key={page.title} contentContainerStyle={{ flexGrow: 1, padding: 20, justifyContent: 'center' }} persistentScrollbar={true} >
+          <View key={page.title}>
             <Style.Title>{page.title}</Style.Title>
-            {page.flatSvg && <View style={{ aspectRatio: 1, padding: 20, alignItems: 'center', justifyContent: 'center' }}>
-              {page.flatSvg}
-            </View>}
-            {page.component && page.component}
-            {page.subtitle && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#1b2d4f22', paddingLeft: 15, borderRadius: 5 }}>
-              <View>
-                <Icon name={page.icon} size={30} color='#1b2d4f' />
-              </View>
-              <View style={{ flex: 1, padding: 20 }}>
-                <Style.Text style={{ flexWrap: 'wrap' }} >{page.subtitle}</Style.Text>
-              </View>
-            </View>}
-            {page.image && <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-              {page.image}
-            </View>}
-          </Style.PageContainer>
+            <Style.PageContainer contentContainerStyle={{ flexGrow: 1, padding: 20, justifyContent: 'center' }} persistentScrollbar={true} >
+              {page.flatSvg && <View style={{ aspectRatio: 1, padding: 20, alignItems: 'center', justifyContent: 'center' }}>
+                {page.flatSvg}
+              </View>}
+              {page.component && page.component}
+              {page.subtitle && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#1b2d4f22', paddingLeft: 15, borderRadius: 5 }}>
+                <View>
+                  <Icon name={page.icon} size={30} color='#1b2d4f' />
+                </View>
+                <View style={{ flex: 1, padding: 20 }}>
+                  <Style.Text style={{ flexWrap: 'wrap' }} >{page.subtitle}</Style.Text>
+                </View>
+              </View>}
+              {page.image && <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
+                {page.image}
+              </View>}
+            </Style.PageContainer>
+          </View>
         ))}
       </Style.Content>
-      {selectedPage !== pages.length - 1 && (
-        <Style.BottomContainer>
-          <Style.NavButton onPress={goToLastPage} >
-            <Style.Text>Pular</Style.Text>
-          </Style.NavButton>
-          <Style.DotsContainer>
-            {pages.map((_, index) => (
-              <Icon
-                key={index}
-                color="#1b2d4f"
-                name={`circle${selectedPage !== index ? '-medium' : ''}`} />
-            ))}
-          </Style.DotsContainer>
-          <Style.NavButton onPress={nextPage} >
-            <Style.Text>Próximo</Style.Text>
-            <Icon name='chevron-right' size={25} />
-          </Style.NavButton>
-        </Style.BottomContainer>)}
-    </Style.Container>
+      {
+        selectedPage !== pages.length - 1 && (
+          <Style.BottomContainer>
+            <Style.NavButton onPress={goToLastPage} >
+              <Style.Text>Pular</Style.Text>
+            </Style.NavButton>
+            <Style.DotsContainer>
+              {pages.map((_, index) => (
+                <Icon
+                  key={index}
+                  color="#1b2d4f"
+                  name={`circle${selectedPage !== index ? '-medium' : ''}`} />
+              ))}
+            </Style.DotsContainer>
+            <Style.NavButton onPress={nextPage} >
+              <Style.Text>Próximo</Style.Text>
+              <Icon name='chevron-right' size={25} />
+            </Style.NavButton>
+          </Style.BottomContainer>)
+      }
+    </Style.Container >
   )
 }
 
