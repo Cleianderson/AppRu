@@ -26,7 +26,7 @@ const App: React.FC = () => {
   const setFavorites = (favorites: any) => dispatch({ type: 'SET_FAVORITES', payload: { favorites } })
   const setThereIsWarn = (thereIsWarn: boolean) => dispatch({ type: 'SET_THERE_IS_WARN', payload: { thereIsWarn } })
 
-  const setAction = (fn: Function) => dispatch({ type: 'SET_ACTION', payload: { action: fn } })
+  const setAction = (fn: string) => dispatch({ type: 'SET_ACTION', payload: { action: fn } })
   const setDay = (day: number) => dispatch({ type: 'SET_DAY', payload: { day } })
   const setTextFailed = (str: string) => dispatch({ type: 'SET_TEXT_FAILED', payload: { textFailed: str } })
   const setTextSuccess = (str: string) => dispatch({ type: 'SET_TEXT_SUCCESS', payload: { textSuccess: str } })
@@ -42,29 +42,21 @@ const App: React.FC = () => {
     const jsonStorage = await getItem<Week>('@week')
 
     if (jsonStorage === null || isoWeekOfTomorrow !== jsonStorage.number_week) {
-      setAction(verifyConnectionAndRefresh)
+      setAction('requestWeek')
     } else {
       setFoods(jsonStorage.foods || [])
     }
   }
-  const verifyConnectionAndRefresh = async () => {
-    if ((await NetInfo.fetch()).isConnected) {
-      setTextFailed('O cardápio ainda não está disponível')
-      setTextSuccess('Cardápio atualizado!')
-      setAction(async () => {
-        const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
-        if (data) {
-          updateWeekStorage(data.data, { number_week: data.number_week })
-          setFoods(data.data)
-          return true
-        }
-        return false
-      })
-    } else {
-      setTextFailed('Falha na conexão')
-      return false
-    }
-  }
+  // const verifyConnectionAndRefresh = async () => {
+  //   if ((await NetInfo.fetch()).isConnected) {
+  //     setTextFailed('O cardápio ainda não está disponível')
+  //     setTextSuccess('Cardápio atualizado!')
+  //     setAction('requestWeek')
+  //   } else {
+  //     setTextFailed('Falha na conexão')
+  //     return false
+  //   }
+  // }
 
   const verifyWarn = async () => {
     // -> Verifica se as notificações locais e do servidor são iguais
