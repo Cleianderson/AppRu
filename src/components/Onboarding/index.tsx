@@ -18,6 +18,7 @@ const OnboardingComponent = () => {
   const [selectedPage, setSelectedPage] = useState(0)
 
   const finalizeOnboaring = async () => {
+    await setItem('@RUral:oneSignal', { data: accepted })
     await setItem('@RUral:onBoarded', { data: true })
     setOnBoarded(true)
   }
