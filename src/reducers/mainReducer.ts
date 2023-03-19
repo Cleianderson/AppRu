@@ -20,16 +20,16 @@ export const mainReducer = (state = initialState, action: Action) => {
       return { ...state, foods: action.payload.foods }
     case 'SET_WARNS':
       return { ...state, warns: action.payload.warns }
-    case 'SET_FAVORITES':
-      return { ...state, favorites: action.payload.favorites }
-    case 'ADD_FAVORITES': {
-      const favItem = action.payload.favItem.toUpperCase()
-      if (!state.favorites?.includes(favItem)) {
-        const favs = state.favorites ?? []
-        return { ...state, favorites: [...favs, favItem] }
-      }
-      return state
-    }
+    // case 'SET_FAVORITES':
+    //   return { ...state, favorites: action.payload.favorites }
+    // case 'ADD_FAVORITES': {
+    //   const favItem = action.payload.favItem.toUpperCase()
+    //   if (!state.favorites?.includes(favItem)) {
+    //     const favs = state.favorites ?? []
+    //     return { ...state, favorites: [...favs, favItem] }
+    //   }
+    //   return state
+    // }
     case 'REMOVE_FAVORITES': {
       const favs = state.favorites?.filter(fav => fav !== action.payload.favItem)
       return { ...state, favorites: favs }

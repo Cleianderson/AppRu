@@ -10,44 +10,39 @@ const weekDay = moment().isoWeekday()
 const State: React.FC = ({ children }) => {
   const [foods, setFoods] = useState<Table[]>()
   const [day, setDay] = useState(weekDay >= 1 && weekDay <= 5 ? weekDay - 1 : 0)
-  const [favorites, setFavorites] = useState<string[]>([])
+  // const [favorites, setFavorites] = useState<string[]>([])
   const [warns, setWarns] = useState<WarningType[]>()
   const [thereIsWarn, setThereIsWarn] = useState(false)
   const [homeViewPage, setHomeViewPage] = useState<JSX.Element>()
 
-  async function loadFavorites () {
-    // -> Método responsável por iniciar a lista de favoritos
-    const favorites = (await getItem<string[]>('@favorites')).data
-    setFavorites(favorites !== null ? favorites : [])
-  }
 
   const updateThereIsWarn = async (value: boolean) => {
     await setItem('@thereIsWarn', { data: value })
     setThereIsWarn(value)
   }
 
-  const addFavorites = async (str: string) => {
-    await setItem('@favorites', { data: [...favorites, str] })
-    setFavorites([...favorites, str])
-  }
+  // const addFavorites = async (str: string) => {
+  //   await setItem('@favorites', { data: [...favorites, str] })
+  //   setFavorites([...favorites, str])
+  // }
 
-  const removeFavorites = async (str: string) => {
-    const favoritesFiltered = favorites.filter((value) => value.toLowerCase() !== str.toLowerCase())
-    setFavorites(favoritesFiltered)
-    await setItem('@favorites', { data: favoritesFiltered })
+  // const removeFavorites = async (str: string) => {
+  //   const favoritesFiltered = favorites.filter((value) => value.toLowerCase() !== str.toLowerCase())
+    // setFavorites(favoritesFiltered)
+    // await setItem('@favorites', { data: favoritesFiltered })
   }
 
   useEffect(() => {
-    loadFavorites()
+    // loadFavorites()
   }, [])
 
   return (
     <DataContext.Provider
       value={{
-        favorites,
+        // favorites,
         addFavorites,
         removeFavorites,
-        setFavorites,
+        // setFavorites,
         warns,
         setWarns,
         thereIsWarn,

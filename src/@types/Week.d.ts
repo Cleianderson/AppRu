@@ -23,7 +23,8 @@ declare type Week = {
 
 declare type RootState = {
     mainState: MainState,
-    requestState: RequestState
+    requestState: RequestState,
+    storageState: Storage
 }
 
 declare type MainState = {
