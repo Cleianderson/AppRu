@@ -34,7 +34,8 @@ export const storageReducer = (state = initialState, action: StorageAction) => {
   }
 
   const SET_NEW_WARNING = (state: Storage, action: StorageAction) => {
-    return state
+    const _state = { ...state, newWarning: action.payload.value }
+    return _state
   }
 
   const SET_QUESTIONS = (state: Storage, action: StorageAction) => {
@@ -57,7 +58,7 @@ export const storageReducer = (state = initialState, action: StorageAction) => {
   }
 
   let fn_action = actions[action.type]
-  if(fn_action === undefined){
+  if (fn_action === undefined) {
     fn_action = (state, action) => state
   }
 

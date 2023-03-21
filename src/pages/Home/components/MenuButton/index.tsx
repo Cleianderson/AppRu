@@ -10,7 +10,7 @@ import { MenuButton, MenuText, MenuContent, MenuContentText } from './styles'
 const MButton = ({ item, launch = false }) => {
   const navigation = useNavigation()
 
-  const favorites = useSelector<RootState, string[] | undefined>(state => state.mainState.favorites)
+  const favorites = useSelector<RootState, string[]>(state => state.storageState.favorites)
 
   function itemIsInclude(item) {
     const arr = favorites.filter((fav) => {

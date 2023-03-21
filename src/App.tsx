@@ -12,30 +12,23 @@ import api from './service/Api'
 import { updateWeekStorage, getItem, setItem } from './service/Storage'
 
 import Main from './routes/Main'
+import { StorageActionTypes } from './utils/enums'
 
 const isoWeekOfTomorrow = moment().add(1, 'days').isoWeek()
 
 const App: React.FC = () => {
   const dispatch = useDispatch()
 
-  const favorites = useSelector<RootState, string[] | undefined>(state => state.mainState.favorites)
+  const favorites = useSelector<RootState, string[]>(state => state.storageState.favorites)
   const warns = useSelector<RootState, WarningType[] | undefined>(state => state.mainState.warns)
+  // const warnings = useSelector<RootState, WarningType[]>(state => state.storageState.warnings)
 
   const setFoods = (foods: any) => dispatch({ type: 'SET_FOODS', payload: { foods } })
-  const setWarns = (warns: any) => dispatch({ type: 'SET_WARNS', payload: { warns } })
-  const setFavorites = (favorites: any) => dispatch({ type: 'SET_FAVORITES', payload: { favorites } })
+  // const setWarns = (warns: any) => dispatch({ type: 'SET_WARNS', payload: { warns } })
   const setThereIsWarn = (thereIsWarn: boolean) => dispatch({ type: 'SET_THERE_IS_WARN', payload: { thereIsWarn } })
 
   const setAction = (fn: string) => dispatch({ type: 'SET_ACTION', payload: { action: fn } })
   const setDay = (day: number) => dispatch({ type: 'SET_DAY', payload: { day } })
-  const setTextFailed = (str: string) => dispatch({ type: 'SET_TEXT_FAILED', payload: { textFailed: str } })
-  const setTextSuccess = (str: string) => dispatch({ type: 'SET_TEXT_SUCCESS', payload: { textSuccess: str } })
-
-  async function initFavorites() {
-    // -> Método responsável por iniciar a lista de favoritos
-    const favorites = (await getItem<string[]>('@favorites')).data
-    setFavorites(favorites !== null && favorites !== undefined ? favorites : [])
-  }
 
   const checkWeek = async () => {
     // -> Método responsável por iniciar os dados do cardápio
@@ -58,49 +51,49 @@ const App: React.FC = () => {
   //   }
   // }
 
-  const verifyWarn = async () => {
-    // -> Verifica se as notificações locais e do servidor são iguais
-    if ((await NetInfo.fetch()).isConnected) {
-      try {
-        const warnsResolve = await api.get<WarningType[]>('/warn')
-        const warnsFromStorage = await getItem<WarningType[]>('@warns')
+  // const verifyWarn = async () => {
+  //   // -> Verifica se as notificações locais e do servidor são iguais
+  //   if ((await NetInfo.fetch()).isConnected) {
+  //     try {
+  //       const warnsResolve = await api.get<WarningType[]>('/warn')
+  //       const warnsFromStorage = await getItem<WarningType[]>('@warns')
 
-        let warnsStorage = warnsFromStorage.data
+  //       let warnsStorage = warnsFromStorage.data
 
-        if (warnsStorage === null) {
-          await setItem('@warns', { data: warnsResolve.data })
-          warnsStorage = warnsResolve.data
-        }
+  //       if (warnsStorage === null) {
+  //         await setItem('@warns', { data: warnsResolve.data })
+  //         warnsStorage = warnsResolve.data
+  //       }
 
-        const resolveIds = warnsResolve.data.map((w) => w._id)
-        const storageIds = warnsStorage.map((w) => w._id)
+  //       const resolveIds = warnsResolve.data.map((w) => w._id)
+  //       const storageIds = warnsStorage.map((w) => w._id)
 
-        const thereIsNewWarn = !resolveIds.every((resolveId) => storageIds.includes(resolveId))
+  //       const thereIsNewWarn = !resolveIds.every((resolveId) => storageIds.includes(resolveId))
 
-        await setItem('@warns', { data: warnsResolve.data })
-        setWarns(warnsResolve.data)
+  //       await setItem('@warns', { data: warnsResolve.data })
+  //       setWarns(warnsResolve.data)
 
-        if (thereIsNewWarn) {
-          setThereIsWarn(true)
-          setItem('@thereIsWarn', { data: true })
-        }
-      } catch {
-        // pass
-      }
-    }
-  }
+  //       if (thereIsNewWarn) {
+  //         setThereIsWarn(true)
+  //         setItem('@thereIsWarn', { data: true })
+  //       }
+  //     } catch {
+  //       // pass
+  //     }
+  //   }
+  // }
 
-  const startWarning = async () => {
-    // -> Método responsável por iniciar os avisos
-    const warnsFromStorage = await getItem<WarningType[]>('@warns')
-    const warnsStorage = warnsFromStorage.data
-    setWarns(warnsStorage || [] as WarningType[])
+  // const startWarning = async () => {
+  //   // -> Método responsável por iniciar os avisos
+  //   const warnsFromStorage = await getItem<WarningType[]>('@warns')
+  //   const warnsStorage = warnsFromStorage.data
+  //   setWarns(warnsStorage || [] as WarningType[])
 
-    const thereIsNewWarn = await getItem<boolean>('@thereIsWarn')
-    setThereIsWarn((thereIsNewWarn.data || false))
+  //   const thereIsNewWarn = await getItem<boolean>('@thereIsWarn')
+  //   setThereIsWarn((thereIsNewWarn.data || false))
 
-    verifyWarn()
-  }
+  //   verifyWarn()
+  // }
 
   useEffect(() => {
     const initalizeOneSignal = async () => {
@@ -114,10 +107,11 @@ const App: React.FC = () => {
 
       OneSignal.init(appId)
       OneSignal.addEventListener('received', async (pushNot: any) => {
-        await setItem('@warns', { data: pushNot.payload.additionalData.warns })
-        setWarns(pushNot.payload.additionalData.warns)
-        setThereIsWarn(true)
-        await setItem('@thereIsWarn', { data: true })
+        // await setItem('@warns', { data: pushNot.payload.additionalData.warns })
+        // setWarns(pushNot.payload.additionalData.warns)
+        // setThereIsWarn(true)
+        dispatch({type: StorageActionTypes.getWarnings})
+        // await setItem('@thereIsWarn', { data: true })
       })
     }
     let _day = new Date(Date.now()).getDay() - 1
@@ -125,22 +119,17 @@ const App: React.FC = () => {
     setDay(_day)
 
     initalizeOneSignal()
-    initFavorites()
+    dispatch({type: StorageActionTypes.getFavorites})
     checkWeek()
-    startWarning()
+    // startWarning()
+    // dispatch({type: StorageActionTypes.getWarnings})
   }, [])
 
   useEffect(() => {
-    if (favorites !== undefined) {
-      const writeFavorites = async () => (await setItem('@favorites', { data: favorites }))
-      writeFavorites()
-    }
-  }, [favorites])
-
-  useEffect(() => {
-    const writeWarns = async () => (await setItem('@warns', { data: warns }))
-    writeWarns()
-  }, [warns])
+    // const writeWarns = async () => (await setItem('@warns', { data: warns }))
+    // writeWarns()
+  // }, [warns])
+  }, [])
 
   return (
     <Container>

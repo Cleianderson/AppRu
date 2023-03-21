@@ -1,8 +1,8 @@
-import React from 'react'
-import { TouchableOpacity, Text } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { useNavigation } from '@react-navigation/native'
+import React from "react"
+import { TouchableOpacity, Text } from "react-native"
+import { useDispatch, useSelector } from "react-redux"
+import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import { useNavigation } from "@react-navigation/native"
 
 import {
   Container,
@@ -14,22 +14,22 @@ import {
   NavButton,
   DayText,
   Header,
-  Footer
-} from './styles'
-import constants from '../../service/constants'
+  Footer,
+} from "./styles"
+import constants from "../../service/constants"
 
 const extensive = {
-  p1: 'Prato Principal 1',
-  p2: 'Prato Principal 2',
-  gre: 'Na Grelha',
-  gua: 'Guarnição',
-  fag: 'Fast Grill',
-  veg: 'Vegetariano',
-  sal: 'Salada Crua',
-  sco: 'Salada Cozida',
-  sopa: 'Sopa',
-  sob: 'Sobremesa',
-  suc: 'Suco'
+  p1: "Prato Principal 1",
+  p2: "Prato Principal 2",
+  gre: "Na Grelha",
+  gua: "Guarnição",
+  fag: "Fast Grill",
+  veg: "Vegetariano",
+  sal: "Salada Crua",
+  sco: "Salada Cozida",
+  sopa: "Sopa",
+  sob: "Sobremesa",
+  suc: "Suco",
 }
 
 const Menu = ({ route }) => {
@@ -37,15 +37,19 @@ const Menu = ({ route }) => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
-  const day = useSelector<RootState, number>(state => state.mainState.day)
-  const foods = useSelector<RootState, Table[] | undefined>(state => state.mainState.foods)
-  const favorites = useSelector<RootState, string[] | undefined>(state => state.mainState.favorites)
-  const homeViewPage = useSelector<RootState, JSX.Element | undefined>(state => state.mainState.homeView)
+  const day = useSelector<RootState, number>((state) => state.mainState.day)
+  const foods = useSelector<RootState, Table[] | undefined>((state) => state.mainState.foods)
+  const favorites = useSelector<RootState, string[]>((state) => state.storageState.favorites)
+  const homeViewPage = useSelector<RootState, JSX.Element | undefined>(
+    (state) => state.mainState.homeView
+  )
 
-  const dynamicArray = type === 'almoco' ? constants.ARRAY_LAUNCH : constants.ARRAY_DINNER
+  const dynamicArray = type === "almoco" ? constants.ARRAY_LAUNCH : constants.ARRAY_DINNER
 
-  const addFavorites = (favItem: string) => dispatch({ type: 'ADD_FAVORITES', payload: { favItem } })
-  const removeFavorites = (favItem: string) => dispatch({ type: 'REMOVE_FAVORITES', payload: { favItem } })
+  const addFavorites = (favItem: string) =>
+    dispatch({ type: "ADD_FAVORITES", payload: { value: favItem } })
+  const removeFavorites = (favItem: string) =>
+    dispatch({ type: "DEL_FAVORITES", payload: { value: favItem } })
 
   const previousPage = () => {
     if (day > 0 && homeViewPage !== undefined) {
@@ -65,42 +69,56 @@ const Menu = ({ route }) => {
     return result.length > 0
   }
 
-  async function toggleFavorite(str = '') {
-    if (favorites !== undefined) {
-      let hasRemovedSomeFav = false
-      for (let fav of favorites) {
-        if (str.toUpperCase().includes(fav.toUpperCase())) {
-          removeFavorites(fav)
-          hasRemovedSomeFav = true
-          break
-        }
-      }
-      if(hasRemovedSomeFav === false){
-        addFavorites(str.trim().toUpperCase())
-      }
-      //   if (favorites.includes(str.toUpperCase())) {
-      //     removeFavorites(str)
-      //   } else {
-      //     addFavorites(str)
-      //   }
-      //   // const _favorites = favorites.map((iFav) => iFav.toLowerCase())
-      //   //
-      //   // if (_favorites?.includes(str.toLowerCase())) {
-      //   //   const newFavorites = favorites.filter((fav) => fav.toLowerCase() !== str.toLowerCase())
-      //   //   await setItem('@favorites', { data: newFavorites })
-      //   //   setFavorites(newFavorites)
-      //   // } else {
-      //   //   await setItem('@favorites', { data: [...favorites, str] })
-      //   //   setFavorites([...favorites, str])
-      //   // }
+  async function toggleFavorite(favoriteItem = "") {
+    const upperFavoriteItem = favoriteItem.toUpperCase().trim()
+
+    if(favorites.includes(upperFavoriteItem)){
+      removeFavorites(upperFavoriteItem)
     }
+
+    const favoritesFiltered = favorites.filter(fav => {
+      return upperFavoriteItem.includes(fav.toUpperCase().trim())
+    })
+
+    if(favoritesFiltered.length === 0){
+      addFavorites(upperFavoriteItem)
+    }
+
+    for(let favorite of favoritesFiltered){
+      removeFavorites(favorite)
+    }
+
+    // const filteredFavorites = favorites.filter((favorite) => {
+    //   const upperFavorite = favorite.toUpperCase().trim()
+    //   return upperFavoriteItem.includes(upperFavorite) || upperFavorite.includes(upperFavoriteItem)
+    // })
+
+    // console.info([upperFavoriteItem, filteredFavorites])
+    // if (filteredFavorites.includes(upperFavoriteItem)) {
+    //   removeFavorites(upperFavoriteItem)
+    //   removeFavorites(upperFavoriteItem)
+
+    //   // const _favoriteItem = favorites.map(fav => {
+    //   //   return upperFavoriteItem.toUpperCase().trim().includes(fav)
+    //   // })
+    //   // if(_favoriteItem !== undefined){
+    //   //   removeFavorites(_favoriteItem)
+    //   // }
+    // } else {
+    //   addFavorites(upperFavoriteItem)
+    // }
+    // // if (checkItem(favoriteItem)) {
+    // //   removeFavorites(upperFavoriteItem)
+    // // } else {
+    // //   addFavorites(upperFavoriteItem)
+    // // }
   }
 
   return (
     <Container>
       <Header>
         <DayText>
-          {type === 'almoco' ? 'Almoço' : 'Jantar'} - {constants.STRING_DAYS_EXTENDED[day]}
+          {type === "almoco" ? "Almoço" : "Jantar"} - {constants.STRING_DAYS_EXTENDED[day]}
         </DayText>
       </Header>
       <Content showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 10 }}>
@@ -112,10 +130,11 @@ const Menu = ({ route }) => {
             </MenuContainer>
             <TouchableOpacity
               onPress={() => toggleFavorite(foods[day][type][strFood])}
-              hitSlop={{ top: 5, bottom: 5, left: 5, right: 5 }}>
+              hitSlop={{ top: 5, bottom: 5, left: 5, right: 5 }}
+            >
               <Icon
                 name="star"
-                color={checkItem(foods[day][type][strFood]) ? constants.SECOND_COLOR : '#ccc'}
+                color={checkItem(foods[day][type][strFood]) ? constants.SECOND_COLOR : "#ccc"}
                 size={25}
               />
             </TouchableOpacity>
@@ -126,17 +145,15 @@ const Menu = ({ route }) => {
         <NavButton
           onPress={previousPage}
           disabled={day === 0}
-          style={day === 0 ? { opacity: 0.5 } : {}}>
+          style={day === 0 ? { opacity: 0.5 } : {}}
+        >
           <Icon name="chevron-left" color="#1b2d4f" size={25} />
           <Text style={{ marginRight: 10 }}>Anterior</Text>
         </NavButton>
         <NavButton onPress={navigation.goBack}>
           <Icon name="menu-down" color="#1b2d4f" size={25} />
         </NavButton>
-        <NavButton
-          onPress={nextPage}
-          disabled={day >= 4}
-          style={day >= 4 ? { opacity: 0.5 } : {}}>
+        <NavButton onPress={nextPage} disabled={day >= 4} style={day >= 4 ? { opacity: 0.5 } : {}}>
           <Text style={{ marginLeft: 10 }}>Próximo</Text>
           <Icon name="chevron-right" color="#1b2d4f" size={25} />
         </NavButton>

@@ -6,8 +6,10 @@ type Storage = {
   menu?: Table[]
   newWarning?: boolean
   questions?: object[]
-  warnings?: WarningType[]
+  warnings: WarningType[]
 }
+
+type Select<T=any> = (state: RootState, ...args: any) => T
 
 type StorageActionType =
   | "SET_ACCEPTED_NOTIFICATION"
@@ -19,15 +21,15 @@ type StorageActionType =
   | "SET_QUESTIONS"
   | "SET_WARNINGS"
 
-type StorageKeys =
-  | "@RUral:acceptedNotification"
-  | "@RUral:configuration"
-  | "@RUral:favorites"
-  | "@RUral:isOnboarded"
-  | "@RUral:menu"
-  | "@RUral:newWarning"
-  | "@RUral:questions"
-  | "@RUral:warnings"
+// type StorageKeys =
+//   | "@RUral:acceptedNotification"
+//   | "@RUral:configuration"
+//   | "@RUral:favorites"
+//   | "@RUral:isOnboarded"
+//   | "@RUral:menu"
+//   | "@RUral:newWarning"
+//   | "@RUral:questions"
+//   | "@RUral:warnings"
 // declare enum StorageKeys {
 //   ACCEPTED_NOTIFICATION = "@RUral:acceptedNotification"|
 //   CONFIGURATIONS = "@RUral:configuration",
