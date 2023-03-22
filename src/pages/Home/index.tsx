@@ -14,7 +14,8 @@ const Home = () => {
   const PageFoods = useRef<ViewPage>()
 
   const { configs } = useContext(Config)
-  const foods = useSelector<RootState, Table[] | undefined>(state => state.mainState.foods)
+  // const foods = useSelector<RootState, Table[] | undefined>(state => state.mainState.foods)
+  const week = useSelector<RootState, Week | undefined>(state => state.mainState.week)
   const day = useSelector<RootState, number | undefined>(state => state.mainState.day)
   const dispatch = useDispatch()
 
@@ -27,9 +28,9 @@ const Home = () => {
       }
       dispatch({ type: 'SET_HOME_VIEW', payload: { homeView: PageFoods.current } })
     }
-  }, [foods])
+  }, [week])
 
-  if ((foods === undefined || foods.length === 0) || day === undefined) {
+  if ((week === undefined || week.data.length === 0) || day === undefined) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
         <EmptyContainer>
@@ -175,7 +176,7 @@ const Home = () => {
 
     return (
       <Container>
-        {foods && configs.showIndicator &&
+        {week && configs.showIndicator &&
           <WeekIndicator press={(index) => PageFoods.current!.setPage(index)} />
         }
         <Content>
@@ -186,7 +187,7 @@ const Home = () => {
               setDay(props.nativeEvent.position)
             }}
           >
-            {foods?.map((item, index) => (
+            {week?.data.map((item, index) => (
               <View
                 style={{
                   justifyContent: 'center'

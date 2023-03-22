@@ -29,7 +29,7 @@ const Requesting: React.FC = () => {
   const setIsRequesting = (isRequesting: boolean | undefined) => (
     dispatch({ type: 'SET_IS_REQUESTING', payload: { isRequesting } })
   )
-  const setFoods = (foods: any) => dispatch({ type: 'SET_FOODS', payload: { foods } })
+  // const setFoods = (foods: any) => dispatch({ type: 'SET_FOODS', payload: { foods } })
   const setAction = (fn: string | undefined) => dispatch({ type: 'SET_ACTION', payload: { action: fn } })
   const setTextFailed = (str: string) => dispatch({ type: 'SET_TEXT_FAILED', payload: { textFailed: str } })
   const setTextSuccess = (str: string) => dispatch({ type: 'SET_TEXT_SUCCESS', payload: { textSuccess: str } })
@@ -45,7 +45,7 @@ const Requesting: React.FC = () => {
         const { data } = await api.get(`/thisweek?week=${isoWeekOfTomorrow}`)
         if (data) {
           updateWeekStorage(data.data, { number_week: data.number_week })
-          setFoods(data.data)
+          // setFoods(data.data)
           return true
         }
         return false

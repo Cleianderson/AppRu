@@ -18,6 +18,8 @@ export const mainReducer = (state = initialState, action: Action) => {
       return { ...state, day: action.payload.day }
     case 'SET_FOODS':
       return { ...state, foods: action.payload.foods }
+    case 'SET_WEEK':
+      return { ...state, week: action.payload.value }
     case 'SET_WARNS':
       return { ...state, warns: action.payload.warns }
     // case 'SET_FAVORITES':

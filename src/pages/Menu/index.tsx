@@ -38,7 +38,8 @@ const Menu = ({ route }) => {
   const dispatch = useDispatch()
 
   const day = useSelector<RootState, number>((state) => state.mainState.day)
-  const foods = useSelector<RootState, Table[] | undefined>((state) => state.mainState.foods)
+  // const foods = useSelector<RootState, Table[] | undefined>((state) => state.mainState.foods)
+  const week = useSelector<RootState, Week | undefined>((state) => state.mainState.week)
   const favorites = useSelector<RootState, string[]>((state) => state.storageState.favorites)
   const homeViewPage = useSelector<RootState, JSX.Element | undefined>(
     (state) => state.mainState.homeView
@@ -126,15 +127,15 @@ const Menu = ({ route }) => {
           <FoodContainer key={inx}>
             <MenuContainer>
               <FoodText>{extensive[strFood]}</FoodText>
-              <FoodDescription>{foods[day][type][strFood].toUpperCase()}</FoodDescription>
+              <FoodDescription>{week.data[day][type][strFood].toUpperCase()}</FoodDescription>
             </MenuContainer>
             <TouchableOpacity
-              onPress={() => toggleFavorite(foods[day][type][strFood])}
+              onPress={() => toggleFavorite(week.data[day][type][strFood])}
               hitSlop={{ top: 5, bottom: 5, left: 5, right: 5 }}
             >
               <Icon
                 name="star"
-                color={checkItem(foods[day][type][strFood]) ? constants.SECOND_COLOR : "#ccc"}
+                color={checkItem(week.data[day][type][strFood]) ? constants.SECOND_COLOR : "#ccc"}
                 size={25}
               />
             </TouchableOpacity>
