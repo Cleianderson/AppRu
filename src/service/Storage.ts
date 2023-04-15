@@ -1,4 +1,4 @@
-import Storage from '@react-native-community/async-storage'
+import Storage from '@react-native-async-storage/async-storage'
 
 // eslint-disable-next-line camelcase
 export async function setWeek (str: string, number_week: number, foods: any) {

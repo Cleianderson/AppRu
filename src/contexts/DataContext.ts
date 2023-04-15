@@ -3,7 +3,8 @@ import { createContext, Dispatch, SetStateAction } from 'react'
 
 type StateContext = {
   warns: WarningType[] | undefined, setWarns: Dispatch<SetStateAction<WarningType[] | undefined>>
-  foods: Table[] | undefined, setFoods: Dispatch<SetStateAction<Table[] | undefined>>
+  // foods: Table[] | undefined, setFoods: Dispatch<SetStateAction<Table[] | undefined>>
+  week?: Week,
   favorites: string[] | undefined, setFavorites: Dispatch<SetStateAction<string[]>>,
   day: number, setDay: (d: number) => void,
   homeViewPage: JSX.Element | undefined, setHomeViewPage: Dispatch<SetStateAction<JSX.Element | undefined>>,

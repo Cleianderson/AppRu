@@ -8,7 +8,6 @@ import Svg, { G, Path, Circle, Ellipse, Rect } from "react-native-svg"
 
 import OnboardingContext from '../../contexts/OnboardingContext'
 import { setItem } from '../../service/Storage'
-import Warning from './components/Warning'
 import ViewPager from '@react-native-community/viewpager'
 import FakeMenuButton from './components/FakeMenuButton'
 
@@ -19,6 +18,7 @@ const OnboardingComponent = () => {
   const [selectedPage, setSelectedPage] = useState(0)
 
   const finalizeOnboaring = async () => {
+    await setItem('@RUral:oneSignal', { data: accepted })
     await setItem('@RUral:onBoarded', { data: true })
     setOnBoarded(true)
   }
@@ -56,17 +56,87 @@ const OnboardingComponent = () => {
       subtitle:
         'Existem algumas funcionalidades no app além de mostrar o cardápio, vou te apresentar cada uma delas'
     },
-    Warning,
+    {
+      flatSvg: (
+        <Svg
+          width='100%'
+          height='100%'
+          viewBox='0 0 668 568'
+          data-name="Layer 1"
+        >
+          <Circle cx={333.961} cy={284.125} r={284.603} fill="#c3d0fc" />
+          <Path
+            fill="#f2f2f2"
+            d="M421.139 77.42c-6.31 13.07-17.92 22.8-30.08 30.72a190.204 190.204 0 0 1-41.3 20.18c-2 .7-4.02 1.37-6.04 2h-86.48c-.56-.64-1.1-1.31-1.62-2-5.43-7.18-8.34-16.27-7.25-25.18 1.43-11.68 10.3-22.42 21.81-24.91 11.51-2.48 24.63 4.39 28.12 15.63 1.93-21.67 4.15-44.25 15.67-62.71 10.43-16.71 28.51-28.67 48.09-30.81a60.56 60.56 0 0 1 33.48 6.13c.95.48 1.89.98 2.81 1.5a56.017 56.017 0 0 1 16.14 13.77c12.21 15.46 15.2 37.93 6.65 55.68z"
+          />
+          <Path
+            fill="#fff"
+            d="M398.349 7.97a1.522 1.522 0 0 1-.62 1.37 316.963 316.963 0 0 0-90.35 118.98c-.3.66-.59 1.33-.87 2h-3.98c.28-.67.56-1.34.85-2q5.686-13.26 12.57-25.98a321.831 321.831 0 0 1 34.9-51.66 317.07 317.07 0 0 1 44.27-43.95 1.923 1.923 0 0 1 .42-.26 2.038 2.038 0 0 1 2.81 1.5z"
+          />
+          <Path
+            fill="#3f3d56"
+            d="M400 128.32H19a18.89 18.89 0 0 0-9.36 2.47 18.525 18.525 0 0 0-1.97 1.29A18.964 18.964 0 0 0 0 147.32v198a19.017 19.017 0 0 0 19 19h381a19.017 19.017 0 0 0 19-19v-198a19.017 19.017 0 0 0-19-19zm17 217a17.024 17.024 0 0 1-17 17H19a17.024 17.024 0 0 1-17-17v-198a17.095 17.095 0 0 1 11.78-16.18c.14-.04.27-.09.41-.13a16.996 16.996 0 0 1 4.81-.69h381a17.024 17.024 0 0 1 17 17z"
+          />
+          <Path
+            fill="#ffb8b8"
+            d="M537.218 386.592a10.743 10.743 0 0 0 1.964-16.355l5.972-71.21-17.105 1.88-4.687 69.309a10.8 10.8 0 0 0 13.856 16.376zM476.337 556.443l-12.26-.001-5.832-47.288 18.094.001z"
+          />
+          <Path
+            fill="#2f2e41"
+            d="M455.32 552.94h23.644v14.886h-38.53a14.887 14.887 0 0 1 14.886-14.887z"
+          />
+          <Path
+            fill="#ffb8b8"
+            d="m563.337 556.443-12.26-.001-5.832-47.288 18.094.001z"
+          />
+          <Path
+            fill="#2f2e41"
+            d="M542.32 552.94h23.644v14.886h-38.53a14.887 14.887 0 0 1 14.886-14.887zM476.543 527.155c-.132 0-.266-.006-.4-.017l-17.352-1.388a5 5 0 0 1-4.538-5.783l26.308-162.72 1.763-22.95a4.972 4.972 0 0 1 3.916-4.501l26.461-5.789a4.968 4.968 0 0 1 5.196 2.061l6.452 9.43a110.4 110.4 0 0 0 8.245 10.51c4.578 5.213 12.361 16.79 13.06 35.735a126.61 126.61 0 0 0 1.933 18.553l21.304 114.761a4.998 4.998 0 0 1-4.44 5.765l-16.448 1.246a4.98 4.98 0 0 1-5.302-3.68l-29.177-108.5a1 1 0 0 0-1.932.002l-30.219 113.551a5.005 5.005 0 0 1-4.83 3.714z"
+          />
+          <Circle cx={522.687} cy={225.703} r={24.561} fill="#ffb8b8" />
+          <Path
+            fill="#1b2d4f"
+            d="m481.057 337.989-.508-35.074c-1.87-22.433 8.064-34.211 16.727-40.136a19.919 19.919 0 0 1 15.404-2.948l19.33 4.178a20.372 20.372 0 0 1 13.054 9.297 19.02 19.02 0 0 1 2.173 15.008 20.597 20.597 0 0 1-8.4 11.502c-16.609 11.725-17.779 31.419-17.789 31.617l-.02.407z"
+          />
+          <Path
+            fill="#1b2d4f"
+            d="M541.549 311.908h-17a4.505 4.505 0 0 1-4.5-4.5v-29.5a13 13 0 1 1 26 0v29.5a4.505 4.505 0 0 1-4.5 4.5z"
+          />
+          <Path
+            fill="#ffb8b8"
+            d="M427.411 317.481a11.036 11.036 0 0 1-16.497.477c-9.687-10.159 6.148-25.413 15.87-15.232a10.678 10.678 0 0 1 .953 1.12l49.028-1.219 5.852-10.703 17.985 6.984c-3.452 5.354-7.417 26.37-16.448 25.346-1.184.032-55.533-6.687-56.744-6.773z"
+          />
+          <Path
+            fill="#1b2d4f"
+            d="m492.998 309.382-13.707-10.057a4.505 4.505 0 0 1-.965-6.29l17.454-23.783a13 13 0 1 1 20.96 15.383l-17.453 23.783a4.505 4.505 0 0 1-6.29.965z"
+          />
+          <Path
+            fill="#2f2e41"
+            d="M527.606 238.469a9.111 9.111 0 0 0-1.56-10.159c-4.62-4.658-11.84-1.55-18.084-2.007-10.402-.76-17.485-13.163-14.38-23.12 3.104-9.956 14.141-16.134 24.55-15.479 10.409.655 19.832 7.094 26.105 15.425 4.294-6.91 14.844-7.717 21.652-3.262 6.808 4.455 10.33 12.596 11.787 20.601 1.455 8.005 1.218 16.232 2.444 24.275 2.971 19.497 15.555 37.857 33.763 45.436 18.208 7.578 41.508 2.708 53.42-13.011a86.77 86.77 0 0 1-54.202 91.154c-9.867 3.905-20.763 5.979-31.15 3.808-16.77-3.504-29.814-17.846-35.498-34.008-5.685-16.161-5.004-33.894-2.244-50.802 1.7-10.415 3.584-22.748-4.011-30.073a18.243 18.243 0 0 0-7.336-3.699 9.802 9.802 0 0 1-5.588-14.423q.185-.327.332-.656z"
+          />
+          <Path
+            fill="#3f3d56"
+            d="M615.779 568.25h-228a1 1 0 0 1 0-2h228a1 1 0 1 1 0 2zM209.083 246.235a8.987 8.987 0 0 1-4.339-1.118L5.701 135.565a1 1 0 0 1 .964-1.751l199.044 109.551a6.982 6.982 0 0 0 6.64.059l202.32-106.73a1 1 0 1 1 .934 1.769l-202.32 106.73a8.992 8.992 0 0 1-4.2 1.043zM63.566 314.32h-28a8 8 0 0 1 0-16h28a8 8 0 0 1 0 16zM96.566 341.32h-61a8 8 0 0 1 0-16h61a8 8 0 0 1 0 16z"
+          />
+          <Circle cx={209.004} cy={246.32} r={32} fill="#1b2d4f" />
+          <Path
+            fill="none"
+            d="M63.623 382.96C25.084 231.803 193.14 29.996 348.01 11.303c52.944-6.39 104.307 50.984 124.66 100.276 11.572 28.022-21.736 62.446-10 90.398 26.665 63.506 155.201 59.112 162.526 127.598 8.268 77.31-75.741 153.135-148.857 179.58-70.849 25.625-150.24-19.11-222.183-41.481-66.371-20.638-173.361-17.363-190.533-84.714z"
+          />
+        </Svg>
+      ),
+      title: 'Avisos',
+      icon: 'bell-outline',
+      subtitle: 'Todos os avisos que a CGARU tem para você estarão aqui. Quando houver um novo aviso o botão ficará com uma bolinha, indicando uma nova notificação'
+    },
     {
       icon: 'star-outline',
       title: 'Favoritos',
       flatSvg: (
         <Svg
-          xmlns="http://www.w3.org/2000/svg"
-          width={718.509}
-          height={601.718}
-          scaleX={0.3}
-          scaleY={0.3}
+          width='100%'
+          height='100%'
+          viewBox='0 0 718.509 601.718'
           data-name="Layer 1"
         >
           <Path fill="#a0616a" d="m500.835 584.558-15.26-.001-7.26-58.86h22.523z" />
@@ -142,11 +212,9 @@ const OnboardingComponent = () => {
       title: 'Sugerir',
       flatSvg: (
         <Svg
-          xmlns="http://www.w3.org/2000/svg"
-          width={983.675}
-          height={502.497}
-          scaleX={0.3}
-          scaleY={0.3}
+          width='100%'
+          height='100%'
+          viewBox='0 0 983.675 502.497'
         >
           <Path
             fill="#f2f2f2"
@@ -417,11 +485,9 @@ const OnboardingComponent = () => {
       title: 'É isso...',
       flatSvg: (
         <Svg
-          xmlns="http://www.w3.org/2000/svg"
-          width={1097.59}
-          height={694.62}
-          scaleX={0.3}
-          scaleY={0.3}
+          width='100%'
+          height='100%'
+          viewBox='0 0 1097.59 694.62'
           data-name="Layer 1"
         >
           <G opacity={0.2}>
@@ -568,8 +634,8 @@ const OnboardingComponent = () => {
     },
     {
       title: 'Só mais uma coisa...',
-      flatSvg: (
-        <ScrollView contentContainerStyle={{ height: '100%', justifyContent: 'space-around' }} >
+      component: (
+        <View>
           <Style.Text style={{ marginBottom: 10 }} >
             Para você ser notificado quando houver novos avisos, nós utilizamos um serviço de notificação
             chamado OneSignal que coleta algumas informações do seu celular para manter o serviço
@@ -614,7 +680,7 @@ const OnboardingComponent = () => {
               <Style.Text style={{ color: '#fff', fontWeight: 'bold' }} >Continuar</Style.Text>
             </Style.AcceptButton>
           </View>
-        </ScrollView>
+        </View>
       ),
       // image: <View />
     }
@@ -626,44 +692,49 @@ const OnboardingComponent = () => {
         ref={refPageView}
         onPageSelected={event => setSelectedPage(event.nativeEvent.position)}>
         {pages.map(page => (
-          <Style.PageContainer key={page.title}>
+          <View key={page.title}>
             <Style.Title>{page.title}</Style.Title>
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-              {page.flatSvg}
-            </View>
-            {page.subtitle && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#1b2d4f22', paddingLeft: 15, borderRadius: 5 }}>
-              <View>
-                <Icon name={page.icon} size={30} color='#1b2d4f' />
-              </View>
-              <View style={{ flex: 1, padding: 20 }}>
-                <Style.Text style={{ flexWrap: 'wrap' }} >{page.subtitle}</Style.Text>
-              </View>
-            </View>}
-            {page.image && <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-              {page.image}
-            </View>}
-          </Style.PageContainer>
+            <Style.PageContainer contentContainerStyle={{ flexGrow: 1, padding: 20, justifyContent: 'center' }} persistentScrollbar={true} >
+              {page.flatSvg && <View style={{ aspectRatio: 1, padding: 20, alignItems: 'center', justifyContent: 'center' }}>
+                {page.flatSvg}
+              </View>}
+              {page.component && page.component}
+              {page.subtitle && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#1b2d4f22', paddingLeft: 15, borderRadius: 5 }}>
+                <View>
+                  <Icon name={page.icon} size={30} color='#1b2d4f' />
+                </View>
+                <View style={{ flex: 1, padding: 20 }}>
+                  <Style.Text style={{ flexWrap: 'wrap' }} >{page.subtitle}</Style.Text>
+                </View>
+              </View>}
+              {page.image && <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
+                {page.image}
+              </View>}
+            </Style.PageContainer>
+          </View>
         ))}
       </Style.Content>
-      {selectedPage !== pages.length - 1 && (
-        <Style.BottomContainer>
-          <Style.NavButton onPress={goToLastPage} >
-            <Style.Text>Pular</Style.Text>
-          </Style.NavButton>
-          <Style.DotsContainer>
-            {pages.map((_, index) => (
-              <Icon
-                key={index}
-                color="#1b2d4f"
-                name={`circle${selectedPage !== index ? '-medium' : ''}`} />
-            ))}
-          </Style.DotsContainer>
-          <Style.NavButton onPress={nextPage} >
-            <Style.Text>Próximo</Style.Text>
-            <Icon name='chevron-right' size={25} />
-          </Style.NavButton>
-        </Style.BottomContainer>)}
-    </Style.Container>
+      {
+        selectedPage !== pages.length - 1 && (
+          <Style.BottomContainer>
+            <Style.NavButton onPress={goToLastPage} >
+              <Style.Text>Pular</Style.Text>
+            </Style.NavButton>
+            <Style.DotsContainer>
+              {pages.map((_, index) => (
+                <Icon
+                  key={index}
+                  color="#1b2d4f"
+                  name={`circle${selectedPage !== index ? '-medium' : ''}`} />
+              ))}
+            </Style.DotsContainer>
+            <Style.NavButton onPress={nextPage} >
+              <Style.Text>Próximo</Style.Text>
+              <Icon name='chevron-right' size={25} />
+            </Style.NavButton>
+          </Style.BottomContainer>)
+      }
+    </Style.Container >
   )
 }
 

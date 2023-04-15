@@ -32,13 +32,13 @@ export const Title = styled.Text`
   color: #1b2d4f;
   font-weight: 700;
   font-size: 27px;
-  margin-bottom: 20px;
+  margin: 20px;
 `
 
 export const Text = styled.Text``
 
-export const PageContainer = styled.View`
-  padding: 20px;
+export const PageContainer = styled.ScrollView`
+  /* padding: 20px; */
 `
 
 export const DotsContainer = styled.View`

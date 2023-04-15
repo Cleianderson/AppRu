@@ -1,3 +1,5 @@
+import 'react-native-gesture-handler'
+
 /* eslint-disable max-len */
 import React, { useState, useEffect, useCallback } from 'react'
 import { View, ActivityIndicator, Text } from 'react-native'

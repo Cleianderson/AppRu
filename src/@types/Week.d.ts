@@ -23,12 +23,14 @@ declare type Week = {
 
 declare type RootState = {
     mainState: MainState,
-    requestState: RequestState
+    requestState: RequestState,
+    storageState: Storage
 }
 
 declare type MainState = {
     warns: WarningType[] | undefined, // setWarns: Dispatch<SetStateAction<WarningType[] | undefined>>
     foods: Table[] | undefined, // setFoods: Dispatch<SetStateAction<Table[] | undefined>>
+    week?: Week, // setFoods: Dispatch<SetStateAction<Table[] | undefined>>
     favorites: string[] | undefined, //  setFavorites: Dispatch<SetStateAction<string[]>>,
     day: number | undefined, // setDay: (d: number) => void,
     // homeViewPage: JSX.Element | undefined, //  setHomeViewPage: Dispatch<SetStateAction<JSX.Element | undefined>>,
@@ -40,7 +42,7 @@ declare type MainState = {
 }
 
 declare type RequestState = {
-    action: Function | undefined,
+    action: string | undefined,
     textSuccess: string,
     textFailed: string,
     isVisible: boolean,
