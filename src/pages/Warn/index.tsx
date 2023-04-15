@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react'
-import Svg, { SvgProps, G, Path } from "react-native-svg"
-import { Text, FlatList, View } from 'react-native'
+import { FlatList, Text, View } from 'react-native'
+import Svg, { Path } from "react-native-svg"
 import { useDispatch, useSelector } from 'react-redux'
 import { setItem } from '~/service/Storage'
 
-import { Container, Title, Message, Content, DateText, Header } from './style'
+import { Container, Content, DateText, Header, Message, Title } from './style'
 
 export default function Warn() {
   const dispatch = useDispatch()
-  const warns = useSelector<RootState, WarningType[] | undefined>(state => state.mainState.warns)
+  const warns = useSelector<RootState, Warning[] | undefined>(state => state.mainState.warns)
 
   const updateThereIsWarn = async (value: boolean) => {
     dispatch({ type: 'SET_THERE_IS_WARN', payload: { thereIsWarn: value } })

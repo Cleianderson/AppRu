@@ -1,26 +1,36 @@
-import styled from 'styled-components/native'
+import styled from "styled-components/native"
 
-export const Container = styled.TouchableOpacity<{nested?: boolean}>`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 40px;
-    border: 0px solid #ccc;
-    /* border-bottom-width: 1px; */
-    padding-left: ${props => props.nested ? '10px' : '0px'};
+export const Container = styled.TouchableOpacity<{ nested?: boolean }>`
+  /* display: flex; */
+  flex-direction: row;
+  align-items: center;
+  /* justify-content: center; */
+  /* height: 40px; */
+  /* border: 0px solid #ccc; */
+  margin-left: 1px;
+  margin-bottom: 20px;
 `
 
 export const Content = styled.View`
-    padding: 5px 15px;
-    padding-top: 9px;
-    flex-direction: row;
+  flex: 1;
+  flex-direction: column;
+  padding: 5px 15px;
+  padding-top: 9px;
 `
 
-export const Text = styled.Text<{disabled: boolean | undefined}>`
-    display: flex;
-    flex: 1;
-    font-size: 16px;
-    color: ${props => props.disabled ? '#ccc' : '#000'};
+export const WrapSwitch = styled.View`
+  flex-direction: column;
+  justify-content: flex-end;
 `
 
-export const Switch = styled.Switch``
+export const Text = styled.Text`
+  font-size: 18px;
+`
+
+export const Description = styled.Text`
+  color: #666;
+`
+
+export const Switch = styled.Switch`
+  /* margin-top: 10px; */
+`

@@ -1,21 +1,21 @@
-import React, { useContext, useRef, useEffect } from 'react'
-import Svg, { SvgProps, G, Path, Rect, Circle } from "react-native-svg"
-import { View } from 'react-native'
 import ViewPage from '@react-native-community/viewpager'
-
-import { Container, Content, EmptyText, EmptyContainer } from './styles'
-import WeekIndicator from './components/WeekIndicator'
-import MButton from './components/MenuButton'
-
-import Config from '~/contexts/ConfigContext'
+import React, { useEffect, useRef } from 'react'
+import { View } from 'react-native'
+import Svg, { Circle, G, Path, Rect } from "react-native-svg"
 import { useDispatch, useSelector } from 'react-redux'
 
-const Home = () => {
-  const PageFoods = useRef<ViewPage>()
+import MButton from './components/MenuButton'
+import WeekIndicator from './components/WeekIndicator'
+import { Container, Content, EmptyContainer, EmptyText } from './styles'
 
-  const { configs } = useContext(Config)
+
+const Home = () => {
+  const PageFoods = useRef<ViewPage>(null)
+
+  // const { configs } = useContext(Config)
+  const configs = useSelector<RootState, Configurations>(state => state.storageState.configurations)
   // const foods = useSelector<RootState, Table[] | undefined>(state => state.mainState.foods)
-  const week = useSelector<RootState, Week | undefined>(state => state.mainState.week)
+  const week = useSelector<RootState, Week | undefined>(state => state.storageState.week)
   const day = useSelector<RootState, number | undefined>(state => state.mainState.day)
   const dispatch = useDispatch()
 
@@ -24,13 +24,13 @@ const Home = () => {
   useEffect(() => {
     if (PageFoods.current !== undefined) {
       if (day !== undefined) {
-        PageFoods.current.setPageWithoutAnimation(day)
+        PageFoods.current?.setPageWithoutAnimation(day)
       }
       dispatch({ type: 'SET_HOME_VIEW', payload: { homeView: PageFoods.current } })
     }
   }, [week])
 
-  if ((week === undefined || week.data.length === 0) || day === undefined) {
+  if ((week === undefined || week?.data?.length === 0)) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
         <EmptyContainer>
@@ -176,8 +176,8 @@ const Home = () => {
 
     return (
       <Container>
-        {week && configs.showIndicator &&
-          <WeekIndicator press={(index) => PageFoods.current!.setPage(index)} />
+        {week && (configs.showDate || configs.showWeekDays) &&
+          <WeekIndicator press={(index) => PageFoods.current?.setPage(index)} />
         }
         <Content>
           <ViewPage

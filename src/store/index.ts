@@ -3,7 +3,7 @@ import {createLogger} from 'redux-logger'
 import createSagaMiddleware from 'redux-saga'
 
 const logger = createLogger({
-    collapsed: true
+    // collapsed: true
 })
 
 import { Reducers } from '~/reducers'

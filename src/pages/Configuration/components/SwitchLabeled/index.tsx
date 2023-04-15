@@ -1,17 +1,36 @@
-import React from 'react'
+import React from "react"
 
-import { Container, Content, Text, Switch } from './styles'
+import {
+  Container,
+  Content,
+  Text,
+  Switch,
+  Description,
+  WrapSwitch,
+} from "./styles"
 
-type Props = { label: string, isActived: boolean, nested?: boolean, onPress: () => void, disabled?: boolean }
+type Props = {
+  label: string
+  isActived?: boolean
+  onPress: () => void
+  description?: string
+}
 
-const SwitchLabeled: React.FC<Props> = ({ isActived, label, children, nested, onPress, disabled }) => {
+const SwitchLabeled: React.FC<Props> = ({
+  isActived,
+  label,
+  onPress,
+  description,
+}) => {
   return (
-    <Container disabled={disabled} nested={nested} onPress={onPress} >
+    <Container onPress={onPress}>
       <Content>
-        <Text disabled={disabled} >{label}</Text>
-        <Switch disabled={disabled} value={isActived} onValueChange={onPress} />
+        <Text>{label}</Text>
+        {description && <Description>{description}</Description>}
       </Content>
-      {children}
+      <WrapSwitch>
+        <Switch value={isActived} onValueChange={onPress} />
+      </WrapSwitch>
     </Container>
   )
 }

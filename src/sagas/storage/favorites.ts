@@ -1,10 +1,10 @@
 import Storage from "@react-native-async-storage/async-storage"
 import { call, put, select, takeEvery, takeLatest } from "redux-saga/effects"
-import { StorageActionTypes, StorageKeys } from "~/utils/enums"
+import { Actions, Keys } from "~/utils/enums"
 
 function* updateFavorites(_favorites: string[]) {
-  yield put<StorageAction>({
-    type: StorageActionTypes.setFavorites,
+  yield put<Dispatch>({
+    type: Actions.setFavorites,
     payload: { value: _favorites },
   })
   yield writeFavorites(_favorites)
@@ -13,29 +13,27 @@ function* updateFavorites(_favorites: string[]) {
 function* writeFavorites(favorites: string[]) {
   // const favorites: string[] = yield select<Select>((state) => state.storageState.favorites)
 
-  yield call(Storage.setItem, StorageKeys.favorites, JSON.stringify(favorites || []))
+  yield call(Storage.setItem, Keys.favorites, JSON.stringify(favorites || []))
 }
 
 function* getFavorites() {
-  const strFavorites: string = yield call(Storage.getItem, StorageKeys.favorites)
+  const strFavorites: string = yield call(Storage.getItem, Keys.favorites)
 
-  const favorites = JSON.parse(strFavorites || String([]))
+  const favorites = JSON.parse(strFavorites) || []
   yield updateFavorites(favorites)
 }
 
-function* addFavorites(action: StorageAction<string>) {
+function* addFavorites(action: Dispatch<string>) {
   const currentFavorites: string[] = yield select<Select>((state) => state.storageState.favorites)
-  
+
   let favorites = [...currentFavorites, action.payload.value]
   favorites = favorites.map((fav) => fav.toUpperCase().trim())
-
-  console.info(favorites)
 
   yield updateFavorites(favorites)
   // yield writeFavorites(favorites)
 }
 
-function* delFavorites(action: StorageAction<string>) {
+function* delFavorites(action: Dispatch<string>) {
   const currentFavorites: string[] = yield select<Select>((state) => state.storageState.favorites)
 
   let favorites = currentFavorites.filter(
@@ -47,7 +45,7 @@ function* delFavorites(action: StorageAction<string>) {
 }
 
 export default function* watchFavorites() {
-  yield takeLatest(StorageActionTypes.getFavorites, getFavorites)
-  yield takeEvery(StorageActionTypes.addFavorites, addFavorites)
-  yield takeEvery(StorageActionTypes.delFavorites, delFavorites)
+  yield takeLatest(Actions.getFavorites, getFavorites)
+  yield takeEvery(Actions.addFavorites, addFavorites)
+  yield takeEvery(Actions.delFavorites, delFavorites)
 }

@@ -2,7 +2,7 @@
 import { createContext, Dispatch, SetStateAction } from 'react'
 
 type ConfigType = {
-    configs: Configs
+    configs: Configurations
     configDispatch: Dispatch<ConfigAction>
 }
 

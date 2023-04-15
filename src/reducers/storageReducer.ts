@@ -1,63 +1,101 @@
 const initialState: Storage = {
   acceptedNotification: undefined,
-  configurations: {},
+  configurations: {
+    acceptedNotification: false,
+    showDate: false,
+    showWeekDays: false,
+    onBoarded: undefined,
+  },
   favorites: [],
-  isOnboarded: undefined,
-  menu: [],
+  week: undefined,
   newWarning: undefined,
   questions: [],
   warnings: [],
 }
 
-export const storageReducer = (state = initialState, action: StorageAction) => {
-  const SET_ACCEPTED_NOTIFICATION = (state: Storage, action: StorageAction) => {
-    const _state = { ...state, acceptedNotification: action.payload.value }
-    return _state
-  }
+export const storageReducer = (state = initialState, action: Dispatch) => {
+  const setAcceptedNotification = (state: Storage, action: Dispatch) => {
+    if (action.payload !== undefined) {
+      const { acceptedNotification } = action.payload
+      return { ...state, acceptedNotification }
+    }
 
-  const SET_CONFIGURATIONS = (state: Storage, action: StorageAction) => {
     return state
   }
 
-  const SET_FAVORITES = (state: Storage, action: StorageAction) => {
-    const _state = { ...state, favorites: action.payload.value }
-    // console.info(_state)
-    return _state
-  }
+  const setConfigurations = (state: Storage, action: Dispatch) => {
+    if (action.payload !== undefined) {
+      const { configurations } = action.payload
+      return {
+        ...state,
+        configurations: { ...state.configurations, ...configurations },
+      }
+    }
 
-  const SET_IS_ONBOARDED = (state: Storage, action: StorageAction) => {
     return state
   }
 
-  const SET_MENU = (state: Storage, action: StorageAction) => {
+  const setFavorites = (state: Storage, action: Dispatch) => {
+    if (action.payload !== undefined) {
+      const { favorites } = action.payload
+      return { ...state, favorites }
+    }
+
     return state
   }
 
-  const SET_NEW_WARNING = (state: Storage, action: StorageAction) => {
-    const _state = { ...state, newWarning: action.payload.value }
-    return _state
-  }
-
-  const SET_QUESTIONS = (state: Storage, action: StorageAction) => {
+  const setIsOnBoarded = (state: Storage, action: Dispatch) => {
     return state
   }
 
-  const SET_WARNINGS = (state: Storage, action: StorageAction) => {
+  const setWeek = (state: Storage, action: Dispatch) => {
+    if (action.payload !== undefined) {
+      const { week } = action.payload
+      return { ...state, week }
+    }
+
     return state
   }
 
-  const actions: MapAction = {
-    SET_ACCEPTED_NOTIFICATION,
-    SET_CONFIGURATIONS,
-    SET_FAVORITES,
-    SET_IS_ONBOARDED,
-    SET_MENU,
-    SET_NEW_WARNING,
-    SET_QUESTIONS,
-    SET_WARNINGS,
+  const setNewWarning = (state: Storage, action: Dispatch) => {
+    if (action.payload !== undefined) {
+      const { newWarning } = action.payload
+      return { ...state, newWarning }
+    }
+
+    return state
   }
 
-  let fn_action = actions[action.type]
+  const setQuestions = (state: Storage, action: Dispatch) => {
+    return state
+  }
+
+  const setWarnings = (state: Storage, action: Dispatch) => {
+    return state
+  }
+
+  const actions = new Map<StorageActionType, FNReducer>([
+    ["SET_ACCEPTED_NOTIFICATION", setAcceptedNotification],
+    ["SET_FAVORITES", setFavorites],
+    ["SET_WARNINGS", setWarnings],
+    ["SET_QUESTIONS", setQuestions],
+    ["SET_NEW_WARNING", setNewWarning],
+    ["SET_WEEK", setWeek],
+    ["SET_IS_ONBOARDED", setIsOnBoarded],
+    ["SET_CONFIGURATIONS", setConfigurations],
+  ])
+  // const actions = {
+  //   SET_ACCEPTED_NOTIFICATION,
+  // SET_CONFIGURATIONS,
+  // SET_FAVORITES,
+  // SET_IS_ONBOARDED,
+  // SET_WEEK,
+  // SET_NEW_WARNING,
+  // SET_QUESTIONS,
+  // SET_WARNINGS,
+  // }
+
+  let fn_action = actions.get(action.type)
   if (fn_action === undefined) {
     fn_action = (state, action) => state
   }

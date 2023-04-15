@@ -1,18 +1,24 @@
-import React, { useContext } from 'react'
-import { useSelector } from 'react-redux'
-import { useNavigation } from '@react-navigation/native'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import React, { useContext } from "react"
+import { useSelector } from "react-redux"
+import { useNavigation } from "@react-navigation/native"
+import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 
-import constants from '~/service/constants'
+import constants from "~/service/constants"
 
-import { MenuButton, MenuText, MenuContent, MenuContentText } from './styles'
+import { MenuButton, MenuText, MenuContent, MenuContentText } from "./styles"
 
 const MButton = ({ item, launch = false }) => {
   const navigation = useNavigation()
 
-  const favorites = useSelector<RootState, string[]>(state => state.storageState.favorites)
+  const favorites = useSelector<RootState, string[] | undefined>(
+    ({ storageState }) => storageState.favorites
+  )
 
   function itemIsInclude(item) {
+    if (favorites === undefined) {
+      return false
+    }
+    
     const arr = favorites.filter((fav) => {
       let dinner = constants.ARRAY_DINNER.map((unit) => item[unit])
       let launch = constants.ARRAY_LAUNCH.map((unit) => item[unit])
@@ -20,10 +26,9 @@ const MButton = ({ item, launch = false }) => {
       dinner = dinner.filter((unit) => unit !== undefined)
       launch = launch.filter((unit) => unit !== undefined)
 
-
       return (
-        dinner.some(v => v.toUpperCase().includes(fav.toUpperCase())) ||
-        launch.some(v => v.toUpperCase().includes(fav.toUpperCase()))
+        dinner.some((v) => v.toUpperCase().includes(fav.toUpperCase())) ||
+        launch.some((v) => v.toUpperCase().includes(fav.toUpperCase()))
       )
     })
     return arr.length > 0
@@ -32,17 +37,25 @@ const MButton = ({ item, launch = false }) => {
   return (
     <MenuButton
       onPress={() =>
-        navigation.navigate('Cardápio', {
-          type: launch ? 'almoco' : 'jantar'
+        navigation.navigate("Cardápio", {
+          type: launch ? "almoco" : "jantar",
         })
-      }>
-      <MenuText>{launch ? 'Almoço' : 'Jantar'}</MenuText>
+      }
+    >
+      <MenuText>{launch ? "Almoço" : "Jantar"}</MenuText>
       <MenuContent>
         <Icon name="clock" color="#1b2d4f" size={15} />
-        <MenuContentText>{launch ? '10:30 - 14h' : '16:30 - 19h'}</MenuContentText>
+        <MenuContentText>
+          {launch ? "10:30 - 14h" : "16:30 - 19h"}
+        </MenuContentText>
       </MenuContent>
       {itemIsInclude(launch ? item.almoco : item.jantar) && (
-        <Icon style={{ position: 'absolute', right: 20 }} name="star" size={20} color="#f9b233" />
+        <Icon
+          style={{ position: "absolute", right: 20 }}
+          name="star"
+          size={20}
+          color="#f9b233"
+        />
       )}
     </MenuButton>
   )

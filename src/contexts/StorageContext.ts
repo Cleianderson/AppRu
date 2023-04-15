@@ -3,7 +3,7 @@ import { createContext, Dispatch, SetStateAction } from 'react'
 
 type StorageType = {
     stoage: Storage
-    storageDispatch: Dispatch<StorageAction>
+    storageDispatch: Dispatch<Dispatch>
 }
 
 const StorageContext = createContext<StorageType>({} as StorageType)

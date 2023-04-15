@@ -1,29 +1,39 @@
-import React, { useRef, useState, useContext } from 'react'
-import { Image, View, ScrollView, Linking, TouchableOpacity } from 'react-native'
-import * as Style from './styles'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import CheckBox from '@react-native-community/checkbox'
-import Svg, { G, Path, Circle, Ellipse, Rect } from "react-native-svg"
+import CheckBox from "@react-native-community/checkbox"
+import ViewPager from "@react-native-community/viewpager"
+import React, { useRef, useState } from "react"
+import { Image, Linking, TouchableOpacity, View } from "react-native"
+import Svg, { Circle, Ellipse, G, Path, Rect } from "react-native-svg"
+import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import { useDispatch } from "react-redux"
 
-
-import OnboardingContext from '../../contexts/OnboardingContext'
-import { setItem } from '../../service/Storage'
-import ViewPager from '@react-native-community/viewpager'
-import FakeMenuButton from './components/FakeMenuButton'
+import { Actions } from "~/utils/enums"
+import FakeMenuButton from "./components/FakeMenuButton"
+import * as Style from "./styles"
 
 const OnboardingComponent = () => {
-  const { setOnBoarded } = useContext(OnboardingContext)
+  const dispatch = useDispatch()
+
+  const refPageView = useRef<ViewPager>(null)
   const [accepted, setAccepted] = useState(false)
-  const refPageView = useRef<ViewPager>()
   const [selectedPage, setSelectedPage] = useState(0)
 
-  const finalizeOnboaring = async () => {
-    await setItem('@RUral:oneSignal', { data: accepted })
-    await setItem('@RUral:onBoarded', { data: true })
-    setOnBoarded(true)
+  const handleAccepted = () => setAccepted(!accepted)
+
+  const finalizeOnboaring = () => {
+    dispatch<Dispatch>({
+      type: Actions.updateConfig,
+      payload: {
+        configurations: {
+          acceptedNotification: accepted,
+          onBoarded: true,
+        },
+      },
+    })
   }
 
   const nextPage = () => {
+    console.info(refPageView)
+
     if (selectedPage + 1 < pages.length) {
       refPageView.current?.setPage(selectedPage + 1)
     }
@@ -33,18 +43,25 @@ const OnboardingComponent = () => {
 
   const pages = [
     {
-      flatSvg: <Image style={{ width: 300, height: 100 }} source={require('../../assets/icon.png')} />,
-      title: 'Olá!',
-      subtitle: 'Boas-vindas ao app do melhor RU do Brasil, o app RUral, vamos conhecê-lo?'
+      flatSvg: (
+        <Image
+          style={{ width: 300, height: 100 }}
+          source={require("../../assets/icon.png")}
+        />
+      ),
+      title: "Olá!",
+      subtitle:
+        "Boas-vindas ao app do melhor RU do Brasil, o app RUral, vamos conhecê-lo?",
     },
     {
       flatSvg: (
         <View
           style={{
-            width: '90%',
-            flexDirection: 'row',
-            justifyContent: 'space-around'
-          }}>
+            width: "90%",
+            flexDirection: "row",
+            justifyContent: "space-around",
+          }}
+        >
           <Icon name="bell-outline" color="#1b2d4f" size={50} />
           <Icon name="star" color="#1b2d4f" size={50} />
           <Icon name="voice" color="#1b2d4f" size={50} />
@@ -52,16 +69,16 @@ const OnboardingComponent = () => {
           {/*<Icon name="information-outline" color="#1b2d4f" size={50} />*/}
         </View>
       ),
-      title: 'Funcionalidades',
+      title: "Funcionalidades",
       subtitle:
-        'Existem algumas funcionalidades no app além de mostrar o cardápio, vou te apresentar cada uma delas'
+        "Existem algumas funcionalidades no app além de mostrar o cardápio, vou te apresentar cada uma delas",
     },
     {
       flatSvg: (
         <Svg
-          width='100%'
-          height='100%'
-          viewBox='0 0 668 568'
+          width="100%"
+          height="100%"
+          viewBox="0 0 668 568"
           data-name="Layer 1"
         >
           <Circle cx={333.961} cy={284.125} r={284.603} fill="#c3d0fc" />
@@ -125,21 +142,25 @@ const OnboardingComponent = () => {
           />
         </Svg>
       ),
-      title: 'Avisos',
-      icon: 'bell-outline',
-      subtitle: 'Todos os avisos que a CGARU tem para você estarão aqui. Quando houver um novo aviso o botão ficará com uma bolinha, indicando uma nova notificação'
+      title: "Avisos",
+      icon: "bell-outline",
+      subtitle:
+        "Todos os avisos que a CGARU tem para você estarão aqui. Quando houver um novo aviso o botão ficará com uma bolinha, indicando uma nova notificação",
     },
     {
-      icon: 'star-outline',
-      title: 'Favoritos',
+      icon: "star-outline",
+      title: "Favoritos",
       flatSvg: (
         <Svg
-          width='100%'
-          height='100%'
-          viewBox='0 0 718.509 601.718'
+          width="100%"
+          height="100%"
+          viewBox="0 0 718.509 601.718"
           data-name="Layer 1"
         >
-          <Path fill="#a0616a" d="m500.835 584.558-15.26-.001-7.26-58.86h22.523z" />
+          <Path
+            fill="#a0616a"
+            d="m500.835 584.558-15.26-.001-7.26-58.86h22.523z"
+          />
           <Path
             fill="#2f2e41"
             d="m500.429 579.57-16.283-6.613-.48-.197-8.991 6.81a19.143 19.143 0 0 0-19.128 18.316c-.025.27-.025.554-.025.837v.628h49.206v-19.78z"
@@ -203,19 +224,15 @@ const OnboardingComponent = () => {
         </Svg>
       ),
       subtitle:
-        'Nesse você pode favoritar as preparações que mais gosta e quando alguma delas estiver no ' +
-        'cardápio o botão do almoço e/ou jantar ficará com uma estrela. ' +
-        'Também é possível favoritar preparações diretamente do menu'
+        "Nesse você pode favoritar as preparações que mais gosta e quando alguma delas estiver no " +
+        "cardápio o botão do almoço e/ou jantar ficará com uma estrela. " +
+        "Também é possível favoritar preparações diretamente do menu",
     },
     {
-      icon: 'voice',
-      title: 'Sugerir',
+      icon: "voice",
+      title: "Sugerir",
       flatSvg: (
-        <Svg
-          width='100%'
-          height='100%'
-          viewBox='0 0 983.675 502.497'
-        >
+        <Svg width="100%" height="100%" viewBox="0 0 983.675 502.497">
           <Path
             fill="#f2f2f2"
             d="m680.563 442.48-11.451 18.003 6.67-23.437c-14.084-14.696-33.58-25.446-33.58-25.446s-24.008 39.456-17.546 63.727 23.146 28.904 40.945 24.166c17.798-4.739 29.97-17.055 23.51-41.325-1.439-5.403-4.563-10.706-8.548-15.688z"
@@ -451,11 +468,11 @@ const OnboardingComponent = () => {
             d="m754.074 196.12 65.414 9.301 3.657 9.04-30.914 40.673-14.783-6.689 17.38-30.251-41.215 7.524.461-29.598z"
           />
           <Circle cx={783.113} cy={256.7} r={10} fill="#9e616a" />
-        </Svg >
+        </Svg>
       ),
       subtitle:
-        'Aqui você pode nos dar sua sugestão sobre o RU, sobre o app ou sobre o que quiser. ' +
-        'Simples, porém importantíssimo'
+        "Aqui você pode nos dar sua sugestão sobre o RU, sobre o app ou sobre o que quiser. " +
+        "Simples, porém importantíssimo",
     },
     // {
     //   image: <Icon name="reload" color="#1b2d4f" size={50} />,
@@ -471,23 +488,23 @@ const OnboardingComponent = () => {
     // },
     {
       flatSvg: (
-        <View style={{ width: '90%' }}>
+        <View style={{ width: "90%" }}>
           <FakeMenuButton title="Almoço" horary="10h30m - 14h" />
           <FakeMenuButton title="Jantar" horary="16h30m - 19h" star />
         </View>
       ),
-      title: 'A cereja do bolo',
+      title: "A cereja do bolo",
       subtitle:
-        'Cada dia útil da semana tem um par de botões que mostra o cardápio do almoço e do jantar. ' +
-        'Repare na estrelinha, isso significa que naquele horário tem algum dos seus itens favoritos'
+        "Cada dia útil da semana tem um par de botões que mostra o cardápio do almoço e do jantar. " +
+        "Repare na estrelinha, isso significa que naquele horário tem algum dos seus itens favoritos",
     },
     {
-      title: 'É isso...',
+      title: "É isso...",
       flatSvg: (
         <Svg
-          width='100%'
-          height='100%'
-          viewBox='0 0 1097.59 694.62'
+          width="100%"
+          height="100%"
+          viewBox="0 0 1097.59 694.62"
           data-name="Layer 1"
         >
           <G opacity={0.2}>
@@ -629,112 +646,167 @@ const OnboardingComponent = () => {
         </Svg>
       ),
       subtitle:
-        'Não esqueça de nos dar sua opinião/sugestão, pois esse é o modo mais fácil de sabermos onde e ' +
-        'no que devemos melhorar'
+        "Não esqueça de nos dar sua opinião/sugestão, pois esse é o modo mais fácil de sabermos onde e " +
+        "no que devemos melhorar",
     },
     {
-      title: 'Só mais uma coisa...',
+      title: "Só mais uma coisa...",
       component: (
         <View>
-          <Style.Text style={{ marginBottom: 10 }} >
-            Para você ser notificado quando houver novos avisos, nós utilizamos um serviço de notificação
-            chamado OneSignal que coleta algumas informações do seu celular para manter o serviço
-            gratuíto. Não se preocupe, não são informações sensíveis nem nada do tipo. Abaixo
+          <Style.Text style={{ marginBottom: 10 }}>
+            Para você ser notificado quando houver novos avisos, nós utilizamos
+            um serviço de notificação chamado OneSignal que coleta algumas
+            informações do seu celular para manter o serviço gratuíto. Não se
+            preocupe, não são informações sensíveis nem nada do tipo. Abaixo
             está uma lista resumida das informações coletadas
           </Style.Text>
-          <Style.Text style={{ marginBottom: 5, marginLeft: 20 }} >{'\u2022'} Modelo, operadora e sistema operacional do celular</Style.Text>
-          <Style.Text style={{ marginBottom: 5, marginLeft: 20 }} >
-            {'\u2022'} Dados de utilização do app (número de vezes aberto e duração de uso)
+          <Style.Text style={{ marginBottom: 5, marginLeft: 20 }}>
+            {"\u2022"} Modelo, operadora e sistema operacional do celular
           </Style.Text>
-          <Style.Text style={{ marginBottom: 10, marginLeft: 20 }} >{'\u2022'} País de acesso</Style.Text>
-          <Style.Text style={{ marginBottom: 10 }} >
-            Você pode conferir a lista completa{' '}
+          <Style.Text style={{ marginBottom: 5, marginLeft: 20 }}>
+            {"\u2022"} Dados de utilização do app (número de vezes aberto e
+            duração de uso)
+          </Style.Text>
+          <Style.Text style={{ marginBottom: 10, marginLeft: 20 }}>
+            {"\u2022"} País de acesso
+          </Style.Text>
+          <Style.Text style={{ marginBottom: 10 }}>
+            Você pode conferir a lista completa{" "}
             <Style.Text
               style={{
-                color: '#00c',
-                fontWeight: 'bold',
-                textDecorationLine: 'underline'
+                color: "#00c",
+                fontWeight: "bold",
+                textDecorationLine: "underline",
               }}
               onPress={async () =>
                 await Linking.openURL(
-                  'https://documentation.onesignal.com/docs/data-collected-by-the-onesignal-sdk'
+                  "https://documentation.onesignal.com/docs/data-collected-by-the-onesignal-sdk"
                 )
-              }>
+              }
+            >
               aqui
             </Style.Text>
           </Style.Text>
           <Style.Text>
-            Abaixo você pode concordar ou descordar com a coleta de dados. Ainda será possível
-            usar o aplicativo mas, você não receberá as notificaçôes
+            Abaixo você pode concordar ou descordar com a coleta de dados. Ainda
+            será possível usar o aplicativo mas, você não receberá as
+            notificaçôes
           </Style.Text>
           <TouchableOpacity
-            onPress={() => setAccepted(!accepted)}
-            style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
+            onPress={handleAccepted}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginVertical: 20,
+            }}
+          >
             <CheckBox
               value={accepted}
-              tintColors={{ true: '#1b2d4f' }} />
+              tintColors={{ true: "#1b2d4f" }}
+              onChange={handleAccepted}
+            />
             <Style.Text>Concordo com a coleta de dados</Style.Text>
           </TouchableOpacity>
-          <View style={{ alignItems: 'center' }} >
-            <Style.AcceptButton onPress={finalizeOnboaring} >
-              <Style.Text style={{ color: '#fff', fontWeight: 'bold' }} >Continuar</Style.Text>
+          <View style={{ alignItems: "center" }}>
+            <Style.AcceptButton onPress={finalizeOnboaring}>
+              <Style.Text style={{ color: "#fff", fontWeight: "bold" }}>
+                Continuar
+              </Style.Text>
             </Style.AcceptButton>
           </View>
         </View>
       ),
       // image: <View />
-    }
+    },
   ]
 
   return (
     <Style.Container>
       <Style.Content
         ref={refPageView}
-        onPageSelected={event => setSelectedPage(event.nativeEvent.position)}>
-        {pages.map(page => (
+        onPageSelected={(event) => setSelectedPage(event.nativeEvent.position)}
+      >
+        {pages.map((page) => (
           <View key={page.title}>
             <Style.Title>{page.title}</Style.Title>
-            <Style.PageContainer contentContainerStyle={{ flexGrow: 1, padding: 20, justifyContent: 'center' }} persistentScrollbar={true} >
-              {page.flatSvg && <View style={{ aspectRatio: 1, padding: 20, alignItems: 'center', justifyContent: 'center' }}>
-                {page.flatSvg}
-              </View>}
+            <Style.PageContainer
+              contentContainerStyle={{
+                flexGrow: 1,
+                padding: 20,
+                justifyContent: "center",
+              }}
+              persistentScrollbar={true}
+            >
+              {page.flatSvg && (
+                <View
+                  style={{
+                    aspectRatio: 1,
+                    padding: 20,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {page.flatSvg}
+                </View>
+              )}
               {page.component && page.component}
-              {page.subtitle && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#1b2d4f22', paddingLeft: 15, borderRadius: 5 }}>
-                <View>
-                  <Icon name={page.icon} size={30} color='#1b2d4f' />
+              {page.subtitle && (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-around",
+                    backgroundColor: "#1b2d4f22",
+                    paddingLeft: 15,
+                    borderRadius: 5,
+                  }}
+                >
+                  <View>
+                    <Icon name={page.icon} size={30} color="#1b2d4f" />
+                  </View>
+                  <View style={{ flex: 1, padding: 20 }}>
+                    <Style.Text style={{ flexWrap: "wrap" }}>
+                      {page.subtitle}
+                    </Style.Text>
+                  </View>
                 </View>
-                <View style={{ flex: 1, padding: 20 }}>
-                  <Style.Text style={{ flexWrap: 'wrap' }} >{page.subtitle}</Style.Text>
+              )}
+              {page.image && (
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {page.image}
                 </View>
-              </View>}
-              {page.image && <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-                {page.image}
-              </View>}
+              )}
             </Style.PageContainer>
           </View>
         ))}
       </Style.Content>
-      {
-        selectedPage !== pages.length - 1 && (
-          <Style.BottomContainer>
-            <Style.NavButton onPress={goToLastPage} >
-              <Style.Text>Pular</Style.Text>
-            </Style.NavButton>
-            <Style.DotsContainer>
-              {pages.map((_, index) => (
-                <Icon
-                  key={index}
-                  color="#1b2d4f"
-                  name={`circle${selectedPage !== index ? '-medium' : ''}`} />
-              ))}
-            </Style.DotsContainer>
-            <Style.NavButton onPress={nextPage} >
-              <Style.Text>Próximo</Style.Text>
-              <Icon name='chevron-right' size={25} />
-            </Style.NavButton>
-          </Style.BottomContainer>)
-      }
-    </Style.Container >
+      {selectedPage !== pages.length - 1 && (
+        <Style.BottomContainer>
+          <Style.NavButton onPress={goToLastPage}>
+            <Style.Text>Pular</Style.Text>
+          </Style.NavButton>
+          <Style.DotsContainer>
+            {pages.map((_, index) => (
+              <Icon
+                key={index}
+                color="#1b2d4f"
+                name={`circle${selectedPage !== index ? "-medium" : ""}`}
+              />
+            ))}
+          </Style.DotsContainer>
+          <Style.NavButton onPress={nextPage}>
+            <Style.Text>Próximo</Style.Text>
+            <Icon name="chevron-right" size={25} />
+          </Style.NavButton>
+        </Style.BottomContainer>
+      )}
+    </Style.Container>
   )
 }
 
@@ -892,7 +964,7 @@ export default OnboardingComponent
 //     }
 //   ]
 
-//   return (
+//    return (
 //     <Onboarding
 //       pages={pages}
 //       nextLabel="Próximo"
@@ -902,7 +974,7 @@ export default OnboardingComponent
 //       controlStatusBar={false}
 //       showDone={accepted !== undefined}
 //     />
-//   )
+//    )
 // }
 
 // export default OnboardingComponent

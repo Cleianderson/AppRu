@@ -1,4 +1,4 @@
-export enum StorageKeys {
+export enum Keys {
   acceptedNotification = "@RUral:acceptedNotification",
   configuration = "@RUral:configuration",
   favorites = "@RUral:favorites",
@@ -10,20 +10,23 @@ export enum StorageKeys {
   warnings = "@RUral:warnings",
 }
 
-export enum StorageActionTypes {
+export enum Actions {
   addFavorites = "ADD_FAVORITES",
   addWarnings = "ADD_WARNINGS",
   delFavorites = "DEL_FAVORITES",
   delWarnings = "DEL_WARNINGS",
+  getConfigs = "GET_CONFIGURATIONS",
   getFavorites = "GET_FAVORITES",
   getWeek = "GET_WEEK",
   getWarnings = "GET_WARNINGS",
+  initOneSignal = "INIT_ONE_SIGNAL",
   requestWeek = "REQUEST_WEEK",
-  setAcceptedNotification = "SET_ACCEPTED_NOTIFICATION",
+  setConfigs = "SET_CONFIGURATIONS",
   setFavorites = "SET_FAVORITES",
   setWeek = "SET_WEEK",
   setNewWarning = "SET_NEW_WARNING",
   setWarnings = "SET_WARNINGS",
   setIsRequesting = "SET_IS_REQUESTING",
-  updateWeek = "UPDATE_WEEK"
+  updateConfig = "UPDATE_CONFIG",
+  updateWeek = "UPDATE_WEEK",
 }

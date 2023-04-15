@@ -2,7 +2,7 @@
 import { createContext, Dispatch, SetStateAction } from 'react'
 
 type StateContext = {
-  warns: WarningType[] | undefined, setWarns: Dispatch<SetStateAction<WarningType[] | undefined>>
+  warns: Warning[] | undefined, setWarns: Dispatch<SetStateAction<Warning[] | undefined>>
   // foods: Table[] | undefined, setFoods: Dispatch<SetStateAction<Table[] | undefined>>
   week?: Week,
   favorites: string[] | undefined, setFavorites: Dispatch<SetStateAction<string[]>>,
