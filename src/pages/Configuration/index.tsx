@@ -15,32 +15,46 @@ const Configuration = () => {
   )
   const dispatch = useDispatch()
 
-  const handleShowWeekDays = () =>
-    dispatch<Dispatch>({
-      type: Actions.updateConfig,
-      payload: {
-        configurations: {
-          showWeekDays: !configs?.showWeekDays,
-        },
-      },
-    })
+  const handleUpdate = (key: string, value: boolean) => {
+    const configurations: Configurations = {}
+    configurations[key as keyof Configurations] = value
 
-  const handleShowDate = () =>
     dispatch<Dispatch>({
       type: Actions.updateConfig,
       payload: {
-        configurations: {
-          showDate: !configs?.showDate,
-        },
+        configurations,
       },
     })
+  }
+
+  const handleShowWeekDays = () =>
+    handleUpdate("showWeekDays", !configs?.showWeekDays)
+  // dispatch<Dispatch>({
+  //   type: Actions.updateConfig,
+  //   payload: {
+  //     configurations: {
+  //       showWeekDays: !configs?.showWeekDays,
+  //     },
+  //   },
+  // })
+
+  const handleShowDate = () => handleUpdate("showDate", !configs?.showDate)
+  // dispatch<Dispatch>({
+  //   type: Actions.updateConfig,
+  //   payload: {
+  //     configurations: {
+  //       showDate: !configs?.showDate,
+  //     },
+  //   },
+  // })
 
   const handleAcceptNotification = async () => {
     const updateAcceptedNotification = (_value: boolean) =>
-      dispatch<Dispatch>({
-        type: Actions.updateConfig,
-        payload: { acceptedNotification: _value },
-      })
+      handleUpdate("acceptedNotification", _value)
+    // dispatch<Dispatch>({
+    //   type: Actions.updateConfig,
+    //   payload: { acceptedNotification: _value },
+    // })
 
     if (configs?.acceptedNotification == false) {
       Alert.alert(

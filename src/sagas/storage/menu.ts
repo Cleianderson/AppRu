@@ -1,5 +1,6 @@
 import Storage from "@react-native-async-storage/async-storage"
 import { AxiosResponse } from "axios"
+import moment from "moment"
 import { call, put, select, takeEvery, takeLatest } from "redux-saga/effects"
 
 import Api from "~/service/Api"
@@ -14,12 +15,17 @@ function* watchWeek() {
 function* getWeek() {
   const strWeek: string = yield call(Storage.getItem, Keys.week)
   const week: Week = JSON.parse(strWeek)
+  const tomorrowIsoWeek = moment().add(1, "days").isoWeek()
+  const tomorrowYear = moment().add(1, "days").year()
 
-  if (week === null) {
+  const weekOutdated =
+    week.year === tomorrowYear && week.number_week < tomorrowIsoWeek
+
+  if (week === null || weekOutdated) {
     yield put<Dispatch>({ type: Actions.requestWeek })
-  } else {
-    yield updateWeek(week)
   }
+
+  yield updateWeek(week)
 }
 
 function* requestWeek() {

@@ -18,11 +18,11 @@ const MainScreen: React.FC = () => {
   }
 
   useEffect(() => {
-    setDay()
-
+    
     dispatch({ type: Actions.getFavorites })
     dispatch({ type: Actions.getWeek })
-    // dispatch({ type: Actions.getWarnings })
+    dispatch({ type: Actions.getWarnings })
+    setDay()
   }, [])
 
   return (

@@ -8,17 +8,19 @@ function* watchConfigs() {
 }
 
 function* updateConfig(action: Dispatch) {
-  if (action.payload !== undefined) {
+  if (action.payload.configurations !== undefined) {
+    const configs: Configurations = yield select<Select>(
+      (state) => state.storageState.configurations
+    )
     const { configurations } = action.payload
+    const _configs = { ...configs, ...configurations }
 
-    if (configurations !== undefined) {
-      yield put<Dispatch>({
-        type: Actions.setConfigs,
-        payload: { configurations },
-      })
+    yield put<Dispatch>({
+      type: Actions.setConfigs,
+      payload: { configurations: _configs },
+    })
 
-      yield writeConfig(configurations)
-    }
+    yield writeConfig(_configs)
   }
 }
 
@@ -40,6 +42,10 @@ function* getConfigs() {
 
   const configsStr: string = yield call(Storage.getItem, Keys.configuration)
   const configurations: Configurations = JSON.parse(configsStr) || defaultConfig
+
+  if (configurations.onBoarded === undefined) {
+    configurations.onBoarded = false
+  }
 
   if (configurations !== null) {
     yield updateConfig({

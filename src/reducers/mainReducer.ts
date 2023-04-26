@@ -9,16 +9,18 @@ const initialState: MainState = {
   favorites: undefined,
   day: undefined,
   homeView: undefined,
-  thereIsWarn: false
+  thereIsWarn: false,
 }
 
 export const mainReducer = (state = initialState, action: Action) => {
   switch (action.type) {
-    case 'SET_DAY':
-      return { ...state, day: action.payload.day }
-    case 'SET_FOODS':
+    case "SET_DAY":
+      const day = action.payload.day || action.payload._day
+
+      return { ...state, day }
+    case "SET_FOODS":
       return { ...state, foods: action.payload.foods }
-    case 'SET_WARNS':
+    case "SET_WARNS":
       return { ...state, warns: action.payload.warns }
     // case 'SET_FAVORITES':
     //   return { ...state, favorites: action.payload.favorites }
@@ -30,13 +32,15 @@ export const mainReducer = (state = initialState, action: Action) => {
     //   }
     //   return state
     // }
-    case 'REMOVE_FAVORITES': {
-      const favs = state.favorites?.filter(fav => fav !== action.payload.favItem)
+    case "REMOVE_FAVORITES": {
+      const favs = state.favorites?.filter(
+        (fav) => fav !== action.payload.favItem
+      )
       return { ...state, favorites: favs }
     }
-    case 'SET_HOME_VIEW':
+    case "SET_HOME_VIEW":
       return { ...state, homeView: action.payload.homeView }
-    case 'SET_THERE_IS_WARN':
+    case "SET_THERE_IS_WARN":
       return { ...state, thereIsWarn: action.payload.thereIsWarn }
     default:
       return state

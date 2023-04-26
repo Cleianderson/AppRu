@@ -36,7 +36,7 @@ type MainState = {
   favorites: string[] | undefined //  setFavorites: Dispatch<SetStateAction<string[]>>,
   day: number | undefined // setDay: (d: number) => void,
   // homeViewPage: JSX.Element | undefined, //  setHomeViewPage: Dispatch<SetStateAction<JSX.Element | undefined>>,
-  homeView: JSX.Element | undefined //  setHomeViewPage: Dispatch<SetStateAction<JSX.Element | undefined>>,
+  homeView: any //  setHomeViewPage: Dispatch<SetStateAction<JSX.Element | undefined>>,
   // addFavorites: (str: string) => Promise<void>,
   // removeFavorites: (str: string) => void,
   thereIsWarn: boolean // setThereIsWarn: Dispatch<SetStateAction<boolean>>,
