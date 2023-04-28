@@ -216,7 +216,7 @@ const Menu = ({ route }) => {
         </TouchableOpacity> */}
       </Container>
     )
-  }, [day, homeViewPage])
+  }, [day, homeViewPage, favorites])
 
   return render()
 }

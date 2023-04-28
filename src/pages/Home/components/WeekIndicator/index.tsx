@@ -9,10 +9,12 @@ import { getDate } from "~/service/DateUtils"
 import { View } from "react-native"
 
 export default function WeekIndicator(props) {
-  const configs = useSelector<RootState, Configurations>(
+  const configs = useSelector<RootState, Configurations | undefined>(
     (state) => state.storageState.configurations
   )
-  const day = useSelector<RootState, number>((state) => state.mainState.day)
+  const day = useSelector<RootState, number | undefined>(
+    (state) => state.mainState.day
+  )
 
   return (
     <Container>
@@ -23,8 +25,10 @@ export default function WeekIndicator(props) {
               onPress={() => props.press(index)}
               hitSlop={{ top: 5, bottom: 10, left: 5, right: 5 }}
             >
-              <BText selected={day === index}>{strDay}</BText>
-              {configs.showDate && (
+              {configs?.showWeekDays && (
+                <BText selected={day === index}>{strDay}</BText>
+              )}
+              {configs?.showDate && (
                 <TxtDate selected={day === index}>{getDate(index)}</TxtDate>
               )}
             </Button>

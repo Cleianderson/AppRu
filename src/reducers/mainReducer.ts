@@ -15,7 +15,9 @@ const initialState: MainState = {
 export const mainReducer = (state = initialState, action: Action) => {
   switch (action.type) {
     case "SET_DAY":
-      const day = action.payload.day || action.payload._day
+      const day = action.payload.day
+
+      console.info(day)
 
       return { ...state, day }
     case "SET_FOODS":

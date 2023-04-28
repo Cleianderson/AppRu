@@ -19,12 +19,14 @@ function* writeFavorites(favorites: string[]) {
 function* getFavorites() {
   const strFavorites: string = yield call(Storage.getItem, Keys.favorites)
 
-  const favorites = JSON.parse(strFavorites) || []
+  const favorites = JSON.parse(strFavorites || "[]")
   yield updateFavorites(favorites)
 }
 
 function* addFavorites(action: Dispatch<string>) {
-  const currentFavorites: string[] = yield select<Select>((state) => state.storageState.favorites)
+  const currentFavorites: string[] = yield select<Select>(
+    (state) => state.storageState.favorites
+  )
 
   let favorites = [...currentFavorites, action.payload.value]
   favorites = favorites.map((fav) => fav.toUpperCase().trim())
@@ -34,7 +36,9 @@ function* addFavorites(action: Dispatch<string>) {
 }
 
 function* delFavorites(action: Dispatch<string>) {
-  const currentFavorites: string[] = yield select<Select>((state) => state.storageState.favorites)
+  const currentFavorites: string[] = yield select<Select>(
+    (state) => state.storageState.favorites
+  )
 
   let favorites = currentFavorites.filter(
     (fav) => fav.toUpperCase() !== action.payload.value.toUpperCase()

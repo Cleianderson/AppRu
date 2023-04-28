@@ -19,9 +19,11 @@ function* getWeek() {
   const tomorrowYear = moment().add(1, "days").year()
 
   const weekOutdated =
-    week.year === tomorrowYear && week.number_week < tomorrowIsoWeek
+    week === undefined ||
+    week === null ||
+    (week.year === tomorrowYear && week.number_week < tomorrowIsoWeek)
 
-  if (week === null || weekOutdated) {
+  if (weekOutdated) {
     yield put<Dispatch>({ type: Actions.requestWeek })
   }
 

@@ -14,7 +14,7 @@ const MainScreen: React.FC = () => {
     let _day = new Date(Date.now()).getDay() - 1
     _day = _day > 4 || _day < 0 ? 0 : _day
 
-    dispatch({ type: "SET_DAY", payload: { _day } })
+    dispatch({ type: "SET_DAY", payload: { day: _day } })
   }
 
   useEffect(() => {

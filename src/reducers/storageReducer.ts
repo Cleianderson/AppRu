@@ -37,8 +37,8 @@ export const storageReducer = (state = initialState, action: Dispatch) => {
 
   const setFavorites = (state: Storage, action: Dispatch) => {
     if (action.payload !== undefined) {
-      const { favorites } = action.payload
-      return { ...state, favorites }
+      const { value } = action.payload
+      return { ...state, favorites: value }
     }
 
     return state
