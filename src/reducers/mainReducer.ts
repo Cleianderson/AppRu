@@ -17,8 +17,6 @@ export const mainReducer = (state = initialState, action: Action) => {
     case "SET_DAY":
       const day = action.payload.day
 
-      console.info(day)
-
       return { ...state, day }
     case "SET_FOODS":
       return { ...state, foods: action.payload.foods }

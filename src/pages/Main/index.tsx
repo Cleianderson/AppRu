@@ -1,5 +1,6 @@
 import React, { useEffect } from "react"
 import { useDispatch } from "react-redux"
+import Requesting from "~/components/Requesting"
 
 import Main from "~/routes/Main"
 import { Container } from "~/styles"
@@ -28,6 +29,7 @@ const MainScreen: React.FC = () => {
   return (
     <Container>
       <Main />
+      <Requesting />
     </Container>
   )
 }

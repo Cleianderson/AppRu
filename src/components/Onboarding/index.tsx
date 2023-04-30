@@ -32,7 +32,7 @@ const OnboardingComponent = () => {
   }
 
   const nextPage = () => {
-    console.info(refPageView)
+    // console.info(refPageView)
 
     if (selectedPage + 1 < pages.length) {
       refPageView.current?.setPage(selectedPage + 1)

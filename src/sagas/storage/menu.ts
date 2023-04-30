@@ -31,9 +31,9 @@ function* getWeek() {
 }
 
 function* requestWeek() {
-  yield put<Dispatch<boolean>>({
+  yield put<Dispatch>({
     type: Actions.setIsRequesting,
-    payload: true,
+    payload: { isRequesting: true },
   })
   const { data: week, status }: AxiosResponse<Week> = yield call(
     Api.get,
@@ -44,7 +44,7 @@ function* requestWeek() {
     yield updateWeek(week)
   }
 
-  yield put({ type: Actions.setIsRequesting, payload: { value: false } })
+  yield put({ type: Actions.setIsRequesting, payload: { isRequesting: false } })
 }
 
 function* updateWeek(week: Week) {
