@@ -19,11 +19,11 @@ const Configuration = () => {
     const configurations: Configurations = {}
     configurations[key as keyof Configurations] = value
 
-    dispatch<Dispatch>({
+    dispatch({
       type: Actions.updateConfig,
-      payload: {
-        configurations,
-      },
+      // payload: {
+      configs: configurations,
+      // },
     })
   }
 

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux"
 
 import OnboardingComponent from "~/components/Onboarding"
 import Main from "~/pages/Main"
-import { Actions } from "./utils/enums"
+import { Creators } from "~/store/actions"
 
 const App: React.FC = () => {
   // const [onBoarded, setOnBoarded] = useState<boolean | undefined>(undefined)
@@ -15,14 +15,14 @@ const App: React.FC = () => {
   )
 
   useEffect(() => {
-    dispatch({ type: Actions.getConfigs })
+    dispatch(Creators.getConfigs())
   }, [])
 
   const render = useCallback(() => {
     if (onBoarded) {
-       return <Main />
+      return <Main />
     } else if (onBoarded !== undefined) {
-       return <OnboardingComponent />
+      return <OnboardingComponent />
     }
 
     return (

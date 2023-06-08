@@ -6,8 +6,8 @@ const logger = createLogger({
     // collapsed: true
 })
 
-import { Reducers } from '~/reducers'
-import storageSaga from '~/sagas/Storage'
+import { Reducers } from '~/store/reducers'
+import storageSaga from '~/store/sagas/Storage'
 
 const sagaMiddleware = createSagaMiddleware()
 

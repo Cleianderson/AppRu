@@ -3,26 +3,24 @@ import Storage from "@react-native-async-storage/async-storage"
 import { all, call, put, takeEvery, takeLatest } from "redux-saga/effects"
 
 import { Actions, Keys } from "~/utils/enums"
-import watchFavorites from "./storage/favorites"
-import watchMenu from "./storage/menu"
-import watchWarnings from "./storage/warnings"
-import watchConfigs from "./storage/configs"
+import watchFavorites from "~/store/sagas/storage/favorites"
+import watchMenu from "~/store/sagas/storage/menu"
+import watchWarnings from "~/store/sagas/storage/warnings"
+import watchConfigs from "~/store/sagas/storage/configs"
 
-function* setAcceptedNotification(action: Dispatch) {
-  yield put({ type: "" })
-}
+import {Types} from '~/store/actions'
 
 function* watchOneSingal() {
-  yield takeLatest(Actions.initOneSignal, initOneSignal)
+  yield takeLatest(Types.INIT_ONE_SIGNAL, initOneSignal)
 }
 
 function* storageSaga() {
   yield all([
-    watchConfigs(), 
-    watchFavorites(), 
-    watchMenu(), 
+    watchConfigs(),
+    watchFavorites(),
+    watchMenu(),
     watchOneSingal(),
-    watchWarnings(), 
+    watchWarnings(),
   ])
 }
 
@@ -30,9 +28,13 @@ function* initOneSignal() {
   OneSignal.setRequiresUserPrivacyConsent(true)
 
   const configsStr: string = yield call(Storage.getItem, Keys.configuration)
-  const configs: Configs = JSON.parse(configsStr)
+  const configs: Configurations = JSON.parse(configsStr)
 
-  OneSignal.provideUserConsent(configs.acceptedNotification)
+  if (typeof configs.acceptedNotification === "boolean") {
+    OneSignal.provideUserConsent(configs.acceptedNotification)
+  } else {
+    OneSignal.provideUserConsent(false)
+  }
 
   const appId = __DEV__
     ? "9cf90441-8151-4e1a-91a5-ce90b102410c"

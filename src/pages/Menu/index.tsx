@@ -18,6 +18,7 @@ import {
   Footer,
 } from "./styles"
 import constants from "../../service/constants"
+import { Creators } from "~/store/actions"
 
 const extensive = {
   p1: "Prato Principal 1",
@@ -55,10 +56,14 @@ const Menu = ({ route }) => {
   const dynamicArray =
     type === "almoco" ? constants.ARRAY_LAUNCH : constants.ARRAY_DINNER
 
-  const addFavorites = (favItem: string) =>
-    dispatch({ type: "ADD_FAVORITES", payload: { value: favItem } })
-  const removeFavorites = (favItem: string) =>
-    dispatch({ type: "DEL_FAVORITES", payload: { value: favItem } })
+  const addFavorites = (favItem: string) => {
+    // dispatch({ type: "ADD_FAVORITES", payload: { value: favItem } })
+    dispatch(Creators.addFavorites(favItem))
+  }
+  const removeFavorites = (favItem: string) => {
+    // dispatch({ type: "DEL_FAVORITES", payload: { value: favItem } })
+    dispatch(Creators.delFavorites(favItem))
+  }
 
   const previousPage = () => {
     if (day !== undefined && day > 0 && homeViewPage !== undefined) {
@@ -178,7 +183,9 @@ const Menu = ({ route }) => {
               >
                 <Icon
                   name="star"
-                  color={checkItem(_menu[strFood]) ? constants.SECOND_COLOR : "#ccc"}
+                  color={
+                    checkItem(_menu[strFood]) ? constants.SECOND_COLOR : "#ccc"
+                  }
                   size={25}
                 />
               </TouchableOpacity>

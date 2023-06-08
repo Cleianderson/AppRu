@@ -44,7 +44,7 @@ type MainState = {
 }
 
 type RequestState = {
-  action: string | undefined
+  action: () => Promise<boolean> | undefined
   textSuccess: string
   textFailed: string
   isVisible: boolean
@@ -73,8 +73,9 @@ type Storage = {
 
 type Select<T = any> = (state: RootState, ...args: any) => T
 
-type StorageActionType =
-  | "REQUEST_WEEK"
+type ActionsType =
+  | "ADD_FAVORITE"
+  | "DEL_FAVORITE"
   | "SET_ACCEPTED_NOTIFICATION"
   | "SET_CONFIGURATIONS"
   | "SET_IS_REQUESTING"
@@ -87,14 +88,14 @@ type StorageActionType =
   | "SET_WARNINGS"
 
 type Dispatch<T = any> = {
-  type: StorageActionType
+  type: ActionsType
   payload?: Storage | T
 }
 
 type FNReducer = (state: Storage, action: Dispatch) => Storage
 
 type MapAction = {
-  [key in StorageActionType]: (state: Storage, action: Dispatch) => Storage
+  [key in ActionsType]: (state: Storage, action: Dispatch) => Storage
 }
 
 type Warning = {

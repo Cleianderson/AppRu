@@ -37,6 +37,7 @@
     "redux": "^4.1.2",
     "redux-logger": "^3.0.6",
     "redux-saga": "^1.2.3",
+    "reduxsauce": "^1.2.1",
     "styled-components": "^5.1.0"
   },
   "devDependencies": {

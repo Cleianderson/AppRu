@@ -2,11 +2,10 @@ import Storage from "@react-native-async-storage/async-storage"
 import { call, put, select, takeEvery, takeLatest } from "redux-saga/effects"
 import { Actions, Keys } from "~/utils/enums"
 
+import { Creators, Types } from "~/store/actions"
+
 function* updateFavorites(_favorites: string[]) {
-  yield put<Dispatch>({
-    type: Actions.setFavorites,
-    payload: { value: _favorites },
-  })
+  yield put(Creators.setFavorites(_favorites))
   yield writeFavorites(_favorites)
 }
 
@@ -23,25 +22,25 @@ function* getFavorites() {
   yield updateFavorites(favorites)
 }
 
-function* addFavorites(action: Dispatch<string>) {
+function* addFavorites(action: any) {
   const currentFavorites: string[] = yield select<Select>(
     (state) => state.storageState.favorites
   )
 
-  let favorites = [...currentFavorites, action.payload.value]
+  let favorites = [...currentFavorites, action.favorite]
   favorites = favorites.map((fav) => fav.toUpperCase().trim())
 
   yield updateFavorites(favorites)
   // yield writeFavorites(favorites)
 }
 
-function* delFavorites(action: Dispatch<string>) {
+function* delFavorites(action: any) {
   const currentFavorites: string[] = yield select<Select>(
     (state) => state.storageState.favorites
   )
 
   let favorites = currentFavorites.filter(
-    (fav) => fav.toUpperCase() !== action.payload.value.toUpperCase()
+    (fav) => fav.toUpperCase() !== action.favorite.toUpperCase()
   )
 
   yield updateFavorites(favorites)
@@ -49,7 +48,7 @@ function* delFavorites(action: Dispatch<string>) {
 }
 
 export default function* watchFavorites() {
-  yield takeLatest(Actions.getFavorites, getFavorites)
-  yield takeEvery(Actions.addFavorites, addFavorites)
-  yield takeEvery(Actions.delFavorites, delFavorites)
+  yield takeLatest(Types.GET_FAVORITES, getFavorites)
+  yield takeEvery(Types.ADD_FAVORITES, addFavorites)
+  yield takeEvery(Types.DEL_FAVORITES, delFavorites)
 }

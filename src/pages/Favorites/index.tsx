@@ -4,6 +4,7 @@ import { FlatList } from "react-native"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { useDispatch, useSelector } from "react-redux"
 
+import { Creators } from "~/store/actions"
 import {
   Container,
   Inputs,
@@ -26,12 +27,13 @@ const Favorites = () => {
   const dispatch = useDispatch()
 
   const addFavorites = (favItem: string) =>
-    dispatch({ type: "ADD_FAVORITES", payload: { value: favItem } })
-  const removeFavorites = (favItem: string) =>
-    dispatch({ type: "DEL_FAVORITES", payload: { value: favItem } })
+    dispatch(Creators.addFavorites(favItem))
+    const removeFavorites = (favItem: string) =>
+    dispatch(Creators.delFavorites(favItem))
 
   const submitFood = () => {
-    // if (textFavorite.trim().length < 3) return 0
+    if (textFavorite.trim().length === 0) return 0
+
     addFavorites(textFavorite.trim())
     setTextFavorite("")
     setTimeout(() => ListFav.current?.scrollToEnd(), 500)

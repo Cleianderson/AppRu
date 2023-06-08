@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react"
+import React, { useEffect, useCallback, useState } from "react"
 import {
   ActivityIndicator,
   Modal,
@@ -13,9 +13,10 @@ import constants from "~/service/constants"
 import { updateWeekStorage } from "~/service/Storage"
 import api from "~/service/Api"
 import { Container, Content, Text, ContainerText } from "./styles"
+import { Creators } from "~/store/actions"
 
 const Requesting: React.FC = () => {
-  // const [success, setSuccess] = useState<boolean | undefined>(undefined)
+  const [success, setSuccess] = useState<boolean | undefined>(undefined)
   // const [textSuccess, setTextSuccess] = useState<string | undefined>(undefined)
   // const [textFailed, setTextFailed] = useState<string | undefined>(undefined)
   // const [isVisible, setIsVisible] = useState<boolean | undefined>()
@@ -24,7 +25,9 @@ const Requesting: React.FC = () => {
 
   // const textSuccess = useSelector<RootState, string>(state => state.requestState.textSuccess)
   // const textFailed = useSelector<RootState, string>(state => state.requestState.textFailed)
-  // const action = useSelector<RootState, string | undefined>(state => state.requestState.action)
+  const action = useSelector<RootState, () => Promise<boolean> | undefined>(
+    (state) => state.requestState.action
+  )
   const isRequesting = useSelector<RootState, boolean | undefined>(
     (state) => state.requestState.isRequesting
   )
@@ -32,7 +35,7 @@ const Requesting: React.FC = () => {
 
   // const opacityValue = useRef(new Animated.Value(0)).current
   const setIsRequesting = (isRequesting: boolean | undefined) =>
-    dispatch({ type: "SET_IS_REQUESTING", payload: { isRequesting } })
+    dispatch(Creators.setIsRequesting(isRequesting))
   // const setFoods = (foods: any) => dispatch({ type: 'SET_FOODS', payload: { foods } })
   // const setAction = (fn: string | undefined) => dispatch({ type: 'SET_ACTION', payload: { action: fn } })
   // const setTextFailed = (str: string) => dispatch({ type: 'SET_TEXT_FAILED', payload: { textFailed: str } })
@@ -93,6 +96,24 @@ const Requesting: React.FC = () => {
   //   }
   // }, [action])
 
+  useEffect(() => {
+    const runAction = async () => {
+      if (action !== undefined) {
+        try {
+          const response = await action()
+  
+          console.info(response)
+  
+          setSuccess(response)
+        } catch (error) {
+          setSuccess(false)
+        }
+      }
+    }
+
+    runAction()
+  }, [action])
+
   // useEffect(() => {
   //   if (success) {
   //     setTimeout(closeModal, 2000)
@@ -101,33 +122,33 @@ const Requesting: React.FC = () => {
   //   }
   // }, [success])
 
-  // const renderContent = useCallback(() => {
-  //   if (success) {
-  //     return (
-  //       <ContainerText>
-  //         <Text>{textSuccess}</Text>
-  //       </ContainerText>
-  //     )
-  //   } else if (success === undefined) {
-  //     return (
-  //       <>
-  //         <ActivityIndicator color={constants.SECOND_COLOR} size={72} />
-  //         <ContainerText>
-  //           <Text>Fazendo requisição ao servidor</Text>
-  //         </ContainerText>
-  //       </>
-  //     )
-  //   } else {
-  //     return (
-  //       <ContainerText>
-  //         <Text>{textFailed}</Text>
-  //         {/* <Text>{isRequesting?.toString()}</Text> */}
-  //         {/* <Text>{textFailed}</Text> */}
-  //         {/* <Text>{textSuccess}</Text> */}
-  //       </ContainerText>
-  //     )
-  //   }
-  // }, [isRequesting, textSuccess, textFailed, success])
+  const renderContent = useCallback(() => {
+    if (success) {
+      return (
+        <ContainerText>
+          <Text>sucesso</Text>
+        </ContainerText>
+      )
+    } else if (success === undefined) {
+      return (
+        <>
+          <ActivityIndicator color={constants.SECOND_COLOR} size={72} />
+          <ContainerText>
+            <Text>Fazendo requisição ao servidor</Text>
+          </ContainerText>
+        </>
+      )
+    } else {
+      return (
+        <ContainerText>
+          <Text>falhou</Text>
+          {/* <Text>{isRequesting?.toString()}</Text> */}
+          {/* <Text>{textFailed}</Text> */}
+          {/* <Text>{textSuccess}</Text> */}
+        </ContainerText>
+      )
+    }
+  }, [success])
 
   return (
     <Modal
@@ -140,10 +161,11 @@ const Requesting: React.FC = () => {
         <Container>
           <View onStartShouldSetResponder={() => true}>
             <Content>
-              <ActivityIndicator color={constants.SECOND_COLOR} size={72} />
+              {renderContent()}
+              {/* <ActivityIndicator color={constants.SECOND_COLOR} size={72} />
               <ContainerText>
                 <Text>Carregando</Text>
-              </ContainerText>
+              </ContainerText> */}
             </Content>
           </View>
         </Container>

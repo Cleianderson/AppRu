@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux"
 import { Actions } from "~/utils/enums"
 import FakeMenuButton from "./components/FakeMenuButton"
 import * as Style from "./styles"
+import { Creators } from "~/store/actions"
 
 const OnboardingComponent = () => {
   const dispatch = useDispatch()
@@ -20,15 +21,12 @@ const OnboardingComponent = () => {
   const handleAccepted = () => setAccepted(!accepted)
 
   const finalizeOnboaring = () => {
-    dispatch<Dispatch>({
-      type: Actions.updateConfig,
-      payload: {
-        configurations: {
-          acceptedNotification: accepted,
-          onBoarded: true,
-        },
-      },
-    })
+    dispatch<Dispatch>(
+      Creators.updateConfig({
+        acceptedNotification: accepted,
+        onBoarded: true,
+      })
+    )
   }
 
   const nextPage = () => {

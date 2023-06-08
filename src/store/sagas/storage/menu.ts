@@ -4,11 +4,12 @@ import moment from "moment"
 import { call, put, select, takeEvery, takeLatest } from "redux-saga/effects"
 
 import Api from "~/service/Api"
+import { Creators, Types } from "~/store/actions"
 import { Actions, Keys } from "~/utils/enums"
 
 function* watchWeek() {
-  yield takeEvery(Actions.getWeek, getWeek)
-  yield takeLatest(Actions.requestWeek, requestWeek)
+  yield takeEvery(Types.GET_WEEK, getWeek)
+  yield takeLatest(Types.REQUEST_WEEK, requestWeek)
   // yield takeEvery(Actions.updateWeek, updateWeek)
 }
 
@@ -24,31 +25,50 @@ function* getWeek() {
     (week.year === tomorrowYear && week.number_week < tomorrowIsoWeek)
 
   if (weekOutdated) {
-    yield put<Dispatch>({ type: Actions.requestWeek })
+    yield put(Creators.requestWeek())
   }
 
   yield updateWeek(week)
 }
 
 function* requestWeek() {
-  yield put<Dispatch>({
-    type: Actions.setIsRequesting,
-    payload: { isRequesting: true },
-  })
-  const { data: week, status }: AxiosResponse<Week> = yield call(
-    Api.get,
-    "/thisweek"
-  )
+  yield put(Creators.setIsRequesting(true))
+  // const _action = async () => {
+  const { data: week, status } = yield call(Api.get, "/thisweek")
 
-  if (week.data.length > 0 && status.toString().startsWith("2")) {
+  const checkWeek = week.data.length > 0 && status.toString().startsWith("2")
+  // console.info(checkWeek, week)
+
+  if (checkWeek) {
+    // yield call(updateWeek, week)
     yield updateWeek(week)
+
+    // call(_putFn)
+    yield put(Creators.setIsRequesting(false))
+
+    // for await(const i of _fn()){
+    //   console.log(i)
+    // }
+    // while (fn.next().done === false) {
+    //   fn.next()
+    // }
+
+    // const _put = _putFn()
+    // while (_put.next().done === false) {
+    //   _put.next()
+    // }
   }
 
-  yield put({ type: Actions.setIsRequesting, payload: { isRequesting: false } })
+  // return checkWeek
+  // }
+
+  // yield put(Creators.setAction(_action))
+  // yield put({ type: Actions.setIsRequesting, payload: { isRequesting: false } })
 }
 
 function* updateWeek(week: Week) {
-  yield put<Dispatch>({ type: Actions.setWeek, payload: { week } })
+  // yield put({ type: Actions.setWeek, payload: { week } })
+  yield put(Creators.setWeek(week))
   yield writeWeek(week)
 }
 

@@ -20,8 +20,9 @@ const RouteHome = () => {
 
   const thereIsWarn = useSelector<RootState, boolean>((state) => state.mainState.thereIsWarn)
 
-  const setAction = (fn: string | undefined) =>
-    dispatch({ type: "SET_ACTION", payload: { action: fn } })
+  const setAction = (fn: string | undefined) =>{
+    // dispatch({ type: "SET_ACTION", payload: { action: fn } })
+  }
 
   const reload = () => {
     setAction("requestWeek")

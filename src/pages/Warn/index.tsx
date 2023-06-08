@@ -5,14 +5,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setItem } from '~/service/Storage'
 
 import { Container, Content, DateText, Header, Message, Title } from './style'
+import { Creators } from '~/store/actions'
 
 export default function Warn() {
   const dispatch = useDispatch()
   const warns = useSelector<RootState, Warning[] | undefined>(state => state.mainState.warns)
 
   const updateThereIsWarn = async (value: boolean) => {
-    dispatch({ type: 'SET_THERE_IS_WARN', payload: { thereIsWarn: value } })
-    await setItem('@thereIsWarn', { data: value })
+    // dispatch({ type: 'SET_THERE_IS_WARN', payload: { thereIsWarn: value } })
+    // dispatch(Creators.setThereIsWarn(value))
+    // await setItem('@thereIsWarn', { data: value })
   }
 
   const formatDate = (date: string) => {

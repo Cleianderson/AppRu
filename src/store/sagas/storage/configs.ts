@@ -2,23 +2,22 @@ import Storage from "@react-native-async-storage/async-storage"
 import { call, put, select, takeEvery } from "redux-saga/effects"
 import { Actions, Keys } from "~/utils/enums"
 
+import { Creators, Types } from "~/store/actions"
+
 function* watchConfigs() {
-  yield takeEvery(Actions.updateConfig, updateConfig)
-  yield takeEvery(Actions.getConfigs, getConfigs)
+  yield takeEvery(Types.UPDATE_CONFIG, updateConfig)
+  yield takeEvery(Types.GET_CONFIGS, getConfigs)
 }
 
-function* updateConfig(action: Dispatch) {
-  if (action.payload.configurations !== undefined) {
+function* updateConfig(action: any) {
+  if (action.configs !== undefined) {
     const configs: Configurations = yield select<Select>(
       (state) => state.storageState.configurations
     )
-    const { configurations } = action.payload
+    const configurations = action.configs
     const _configs = { ...configs, ...configurations }
 
-    yield put<Dispatch>({
-      type: Actions.setConfigs,
-      payload: { configurations: _configs },
-    })
+    yield put(Creators.setConfigs(_configs))
 
     yield writeConfig(_configs)
   }
@@ -48,12 +47,7 @@ function* getConfigs() {
   }
 
   if (configurations !== null) {
-    yield updateConfig({
-      type: Actions.setConfigs,
-      payload: {
-        configurations,
-      },
-    })
+    yield updateConfig(Creators.setConfigs(configurations))
   }
 }
 

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import MButton from './components/MenuButton'
 import WeekIndicator from './components/WeekIndicator'
 import { Container, Content, EmptyContainer, EmptyText } from './styles'
+import { Creators } from '~/store/actions'
 
 
 const Home = () => {
@@ -19,14 +20,18 @@ const Home = () => {
   const day = useSelector<RootState, number | undefined>(state => state.mainState.day)
   const dispatch = useDispatch()
 
-  const setDay = (num: number) => dispatch({ type: 'SET_DAY', payload: { day: num } })
+  const setDay = (num: number) => {
+    // dispatch({ type: 'SET_DAY', payload: { day: num } })
+    dispatch(Creators.setDay(num))
+  }
 
   useEffect(() => {
     if (PageFoods.current !== undefined) {
       if (day !== undefined) {
         PageFoods.current?.setPageWithoutAnimation(day)
       }
-      dispatch({ type: 'SET_HOME_VIEW', payload: { homeView: PageFoods.current } })
+      // dispatch({ type: 'SET_HOME_VIEW', payload: { homeView: PageFoods.current } })
+      dispatch(Creators.setHomeView(PageFoods.current))
     }
   }, [week])
 

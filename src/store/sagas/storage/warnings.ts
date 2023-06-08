@@ -2,10 +2,11 @@ import Storage from "@react-native-async-storage/async-storage"
 import { call, put, select, takeEvery, takeLatest } from "redux-saga/effects"
 
 import Api from "~/service/Api"
+import { Types } from "~/store/actions"
 import { Actions, Keys } from "~/utils/enums"
 
 function* updateWarnings(_warnings: Warning[]) {
-  yield put<Dispatch>({
+  yield put({
     type: Actions.setWarnings,
     payload: { value: _warnings },
   })
@@ -13,7 +14,7 @@ function* updateWarnings(_warnings: Warning[]) {
 }
 
 function* updateNewWarning(value: boolean) {
-  yield put<Dispatch>({
+  yield put({
     type: Actions.setNewWarning,
     payload: { value },
   })
@@ -44,7 +45,7 @@ function* getWarnings() {
 }
 
 export default function* watchWarnings() {
-  yield takeLatest(Actions.getWarnings, getWarnings)
+  yield takeLatest(Types.GET_WARNINGS, getWarnings)
 }
 
 function* checkNewWarnings() {

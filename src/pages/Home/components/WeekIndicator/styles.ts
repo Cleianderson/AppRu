@@ -33,3 +33,8 @@ export const BText = styled.Text<CommonProps>`
 export const TxtDate = styled.Text<CommonProps>`
   color: ${({ selected }) => (selected ? '#f9b233' : '#999')};
 `
+
+export const WeekText = styled.Text`
+  text-align: center;
+  color: #999;
+`
